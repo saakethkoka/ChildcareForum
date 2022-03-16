@@ -1,43 +1,154 @@
-import React, { Component } from 'react';
+import React, {Component, Fragment, useEffect} from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./post.css";
-import { Box } from'@mui/material';
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import CardActions from "@mui/material/CardActions";
-import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import EditIcon from '@mui/icons-material/Edit';
+import CardActionArea from '@mui/material/CardActionArea';
+import Fab from "@mui/material/Fab";
+import Chip from "@mui/material/Chip";
+import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@mui/material";
+import Button from "@mui/material/Button";
 
 
 
-export class Post extends React.Component{
-    constructor(props){
-        super(props);
-        this.state = {
-            title: '',
-            content: '',
-            restricted: false
+export default function Post(props) {
+
+    let post = props.post;
+
+    let [VotesColor, setVotesColor] = React.useState("warning");
+    let [upvoteColor, setUpvoteColor] = React.useState("inherit");
+    let [downvoteColor, setDownvoteColor] = React.useState("inherit");
+    let [dialogOpen, setDialogOpen] = React.useState(false);
+
+    useEffect(() => {
+        handleButtonColor();
+        if(post.userVote === 0){
+            setUpvoteColor("inherit");
+            setDownvoteColor("inherit");
+        }
+        else if(post.userVote === 1){
+            setUpvoteColor("primary");
+            setDownvoteColor("inherit");
+        }
+        else if(post.userVote === -1){
+            setUpvoteColor("inherit");
+            setDownvoteColor("primary");
+        }
+    });
+
+
+    const handleButtonColor = () => {
+        if(post.votes === 0){
+            setVotesColor("warning");
+        }
+        else if(post.votes > 0){
+            setVotesColor("primary");
+        }
+        else{
+            setVotesColor("error");
         }
     }
 
-    render() {
-        return(
-            <Card sx={{ minWidth: 275 }}>
-                <CardContent>
-                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                        Author goes here
-                    </Typography>
+    const handleDownvoteClick = () => {
+        props.downvotePost(post.id);
+    }
+
+    const handleUpvoteClick = () => {
+        props.upvotePost(post.id);
+    }
+
+    const handleDialogCancel = () =>{
+        setDialogOpen(false);
+    }
+
+    const handleDialogConfirm = () =>{
+        setDialogOpen(false);
+        props.deletePost(post.id);
+    }
+
+    const handleDialogOpen = () =>{
+        setDialogOpen(true);
+    }
+
+
+    let fab_styles = {
+        margin: "0 1rem",
+        display: "inline-block"
+    }
+
+    return(
+        <Fragment>
+            <Card sx={{
+                margin: "1rem",
+                padding: 2,
+                backgroundColor: '#ffe5d9',
+                boxShadow: '0px 0px 5px 0px rgba(0,0,0,0.2)',
+                borderRadius: '10px',
+            }}>
+                <CardContent sx={{
+                    minHeight: 150,
+                    maxHeight: 300,
+                    overflow: 'auto',
+                }}>
                     <Typography variant="h5" component="div">
-                        {this.props.title}
+                        {post.title}
+                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                            Author goes here - 09/12/2021
+                        </Typography>
                     </Typography>
                     <Typography variant="body1">
-                        {this.props.content}
+                        {post.content}
                     </Typography>
                 </CardContent>
                 <CardActions>
-                    <Button size="small">Learn More</Button>
+                    <Chip label={post.votes} color={VotesColor} />
+                    <Fab color={upvoteColor}
+                         sx={fab_styles}
+                         onClick={handleUpvoteClick}
+                         aria-label="Upvote">
+                        <ThumbUpIcon/>
+                    </Fab>
+                    <Fab color={downvoteColor}
+                         sx={fab_styles}
+                         onClick={handleDownvoteClick}
+                         aria-label="Downvote">
+                        <ThumbDownIcon/>
+                    </Fab>
+                    <Fab color="secondary"
+                         sx={fab_styles}
+                         aria-label="Edit">
+                        <EditIcon/>
+                    </Fab>
+                    <Fab color="secondary"
+                         sx={fab_styles}
+                         onClick={handleDialogOpen}
+                         aria-label="Delete">
+                        <DeleteForeverIcon/>
+                    </Fab>
                 </CardActions>
             </Card>
-        )
-    }
+            <Dialog
+                open={dialogOpen}
+                onClose={handleDialogCancel}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {"Are you sure you want to delete this post?"}
+                </DialogTitle>
+                <DialogActions>
+                    <Button onClick={handleDialogCancel}>Cancel</Button>
+                    <Button onClick={handleDialogConfirm} autoFocus>
+                        Delete it
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </Fragment>
+    )
 }

@@ -47,6 +47,7 @@ export class CreatePost extends React.Component{
 
     onCancel = (event) =>{
         console.log("Cancel");
+        this.clearForm();
     }
 
   render() {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Post} from "./Post/post";
+import Post from "./Post/post";
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 
@@ -12,9 +12,12 @@ export class PostList extends React.Component{
     }
 
     render() {
-        console.log(this.props);
         const listItems = this.props.posts.map((post) =>
-            <Post title={post.title} content={post.content}/>
+            <Post post={post}
+                  deletePost={this.props.deletePost}
+                  downvotePost={this.props.downvotePost}
+                  upvotePost={this.props.upvotePost}
+            />
         );
         return(
             <div>
