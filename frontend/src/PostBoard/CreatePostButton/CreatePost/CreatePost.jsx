@@ -30,7 +30,10 @@ export default function CreatePost(props){
         props.addPost({
             title: title,
             content: content,
-            restricted: restricted
+            restricted: restricted,
+            time: Date(),
+            votes: 0,
+            userVote: 0
         });
         clearForm();
         handleClose();
@@ -76,17 +79,8 @@ export default function CreatePost(props){
                                     color="primary"
                                 />
                             }
-                            label="Restrict Post"
+                            label="Restrict Post (Only verified users can comment)"
                             className="mb-16"/>
-                    </Grid>
-                    <Grid xs={6} item>
-                        <Button variant="contained"
-                                color="primary"
-                                type="button"
-                                onClick={onPostSubmit}
-                                fullWidth>
-                            Post
-                        </Button>
                     </Grid>
                     <Grid xs={6} item>
                         <Button variant="contained"
@@ -95,6 +89,16 @@ export default function CreatePost(props){
                                 fullWidth
                                 onClick={onCancel}>
                             Cancel
+                        </Button>
+
+                    </Grid>
+                    <Grid xs={6} item>
+                        <Button variant="contained"
+                                color="primary"
+                                type="button"
+                                onClick={onPostSubmit}
+                                fullWidth>
+                            Post
                         </Button>
                     </Grid>
                 </Grid>

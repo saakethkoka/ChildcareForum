@@ -99,7 +99,7 @@ export default function Post(props) {
                     <Typography variant="h5" component="div">
                         {post.title}
                         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                            Author goes here - 09/12/2021
+                            {post.username} - {post.time}
                         </Typography>
                     </Typography>
                     <Typography variant="body1">
