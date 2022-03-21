@@ -1,6 +1,5 @@
-import React, {Component, Fragment, useEffect} from 'react';
+import React, { Fragment, useEffect} from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./post.css";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import CardActions from "@mui/material/CardActions";
@@ -9,12 +8,13 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
-import CardActionArea from '@mui/material/CardActionArea';
 import Fab from "@mui/material/Fab";
 import Chip from "@mui/material/Chip";
-import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@mui/material";
+import CommentIcon from '@mui/icons-material/Comment';
+import {Dialog, DialogActions, DialogTitle} from "@mui/material";
 import Button from "@mui/material/Button";
-
+import CommentList from "./CommentList/CommentList";
+import EditPost from "./EditPost/EditPost";
 
 
 export default function Post(props) {
@@ -25,6 +25,8 @@ export default function Post(props) {
     let [upvoteColor, setUpvoteColor] = React.useState("inherit");
     let [downvoteColor, setDownvoteColor] = React.useState("inherit");
     let [dialogOpen, setDialogOpen] = React.useState(false);
+    let [editDialogOpen, setEditDialogOpen] = React.useState(false);
+    let [commentDialogOpen, setCommentDialogOpen] = React.useState(false);
 
     useEffect(() => {
         handleButtonColor();
@@ -76,7 +78,21 @@ export default function Post(props) {
         setDialogOpen(true);
     }
 
+    const handleCommentOpen = () =>{
+        setCommentDialogOpen(true);
+    }
 
+    const handleCommentClose = () =>{
+        setCommentDialogOpen(false);
+    }
+
+    const handleEditDialogOpen = () =>{
+        setEditDialogOpen(true);
+    }
+
+    const handleEditDialogClose = () =>{
+        setEditDialogOpen(false);
+    }
     let fab_styles = {
         margin: "0 1rem",
         display: "inline-block"
@@ -120,8 +136,15 @@ export default function Post(props) {
                          aria-label="Downvote">
                         <ThumbDownIcon/>
                     </Fab>
+                    <Fab color="primary"
+                         sx={fab_styles}
+                         onClick={handleCommentOpen}
+                         aria-label="Comment">
+                        <CommentIcon/>
+                    </Fab>
                     <Fab color="secondary"
                          sx={fab_styles}
+                         onClick={handleEditDialogOpen}
                          aria-label="Edit">
                         <EditIcon/>
                     </Fab>
@@ -149,6 +172,8 @@ export default function Post(props) {
                     </Button>
                 </DialogActions>
             </Dialog>
+            <CommentList postId={post.id} open={commentDialogOpen} onClose={handleCommentClose}/>
+            <EditPost updatePost={props.updatePost} post={post} open={editDialogOpen} onClose={handleEditDialogClose}/>
         </Fragment>
     )
 }

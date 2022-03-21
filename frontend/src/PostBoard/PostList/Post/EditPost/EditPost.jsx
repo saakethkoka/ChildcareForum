@@ -1,51 +1,28 @@
-import React, {Component, Fragment, useState} from 'react';
-import "bootstrap/dist/css/bootstrap.min.css";
-import "./CreatePost.css"
-// import posts from "../../PostList/PostList.jsx";
-import Button from '@mui/material/Button';
-import {InputLabel, Grid, TextField, FormControl, Select, MenuItem, FormControlLabel, Checkbox, Dialog} from "@mui/material/";
-
-export default function CreatePost(props){
+import {Checkbox, Dialog, FormControlLabel, TextField} from "@mui/material";
+import Button from "@mui/material/Button";
+import React from "react";
+import Grid from "@mui/material/Grid/Grid";
 
 
-    const handleClose = () => {
+export default function EditPost(props){
+
+
+    let [title, setTitle] = React.useState(props.post.title);
+    let [content, setContent] = React.useState(props.post.content);
+    let [restricted, setRestricted] = React.useState(props.post.restricted);
+
+    const onCancel = () => {
         props.onClose();
-    };
+    }
 
+    const onSave = () => {
+        //TODO: save post
+        props.updatePost(props.post.id, title, content, restricted);
+        props.onClose();
+    }
 
-
-    const [title, setTitle] = useState("");
-    const [content, setContent] = useState("");
-    const [restricted, setRestricted] = useState(false);
-
-
-    const clearForm = () => {
-        setTitle("");
-        setContent("");
-        setRestricted(false);
-    };
-
-    // Sending this to the backend here
-    const onPostSubmit = (event) =>{
-        props.addPost({
-            title: title,
-            content: content,
-            restricted: restricted,
-            time: Date(),
-            votes: 0,
-            userVote: 0
-        });
-        clearForm();
-        handleClose();
-    };
-
-    const onCancel = (event) =>{
-        clearForm();
-        handleClose();
-    };
-
-    return (
-        <Dialog onClose={onCancel} open={props.open}>
+    return(
+        <Dialog open={props.open} onClose={props.onClose}>
             <form noValidate
                   autoComplete="off">
                 <Grid container spacing={1}>
@@ -73,8 +50,8 @@ export default function CreatePost(props){
                         <FormControlLabel
                             control={
                                 <Checkbox
-                                    value={true}
-                                    onChange={restricted => setRestricted(restricted.target.checked)}
+                                    checked={restricted}
+                                    onChange={(e) => setRestricted(e.target.checked)}
                                     color="primary"
                                 />
                             }
@@ -95,15 +72,14 @@ export default function CreatePost(props){
                         <Button variant="contained"
                                 color="primary"
                                 type="button"
-                                onClick={onPostSubmit}
+                                onClick={onSave}
                                 fullWidth>
-                            Post
+                            Update
                         </Button>
                     </Grid>
                 </Grid>
             </form>
         </Dialog>
     )
-
 
 }

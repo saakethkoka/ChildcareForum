@@ -1,7 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Post from "./Post/post";
-import Fab from '@mui/material/Fab';
-import AddIcon from '@mui/icons-material/Add';
 
 
 
@@ -16,6 +14,7 @@ export class PostList extends React.Component{
             <Post post={post}
                   deletePost={this.props.deletePost}
                   downvotePost={this.props.downvotePost}
+                  updatePost={this.props.updatePost}
                   upvotePost={this.props.upvotePost}
             />
         );
