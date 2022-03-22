@@ -6,16 +6,16 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
 const sample_comments = [
-    {title: "Comment 1", author:"john", content: "This is the first comment", userVote: 1, votes: 0, id: 1},
-    {title: "Comment 2", author:"bob", content: "This is the second comment", userVote: 0, votes: 0, id: 2},
-    {title: "Comment 3", author:"bob", content: "This is the third comment", userVote: -1, votes: 0, id: 3},
-    {title: "Comment 4", author:"bob", content: "This is the fourth comment", userVote: 0, votes: 0, id: 4},
-    {title: "Comment 5", author:"bob", content: "This is the fifth comment", userVote: 0, votes: 0, id: 5},
-    {title: "Comment 6", author:"bob", content: "This is the sixth comment", userVote: 0, votes: 0, id: 6},
-    {title: "Comment 7", author:"bob", content: "This isThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first comment the seventh comment", userVote: 0, votes: 0, id: 7},
-    {title: "Comment 8", author:"bob", content: "This is the eighth comment", userVote: 0, votes: 0, id: 8},
-    {title: "Comment 9", author:"bob", content: "This is the ninth comment", userVote: 0, votes: 0, id: 9},
-    {title: "Comment 10", author:"bob", content: "This is the tenth comment", userVote: 0, votes: 0, id: 10},
+    {author:"john", content: "This is the first comment", userVote: 1, votes: 0, id: 1},
+    {author:"bob", content: "This is the second comment", userVote: 0, votes: 0, id: 2},
+    {author:"bob", content: "This is the third comment", userVote: -1, votes: 0, id: 3},
+    {author:"bob", content: "This is the fourth comment", userVote: 0, votes: 0, id: 4},
+    {author:"bob", content: "This is the fifth comment", userVote: 0, votes: 0, id: 5},
+    {author:"bob", content: "This is the sixth comment", userVote: 0, votes: 0, id: 6},
+    {author:"bob", content: "This isThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first comment the seventh comment", userVote: 0, votes: 0, id: 7},
+    {author:"bob", content: "This is the eighth comment", userVote: 0, votes: 0, id: 8},
+    {author:"bob", content: "This is the ninth comment", userVote: 0, votes: 0, id: 9},
+    {author:"bob", content: "This is the tenth comment", userVote: 0, votes: 0, id: 10},
 ]
 
 export default function CommentList(props){
@@ -32,16 +32,15 @@ export default function CommentList(props){
     const onCommentSubmit = () => {
         console.log(comment);
         setComment("");
-    }
-
-    const addComment = (comment) => {
-        props.addComment({
+        let new_comments = comments.push({
             author: "bob",
             content: comment,
             userVote: 0,
             votes: 0,
+            id: comments.length + 1
         });
     }
+
 
     const onUpvote = (id) => {
         let new_comments = comments.map(comment => {
