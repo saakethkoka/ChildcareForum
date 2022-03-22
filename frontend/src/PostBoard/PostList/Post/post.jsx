@@ -94,7 +94,7 @@ export default function Post(props) {
         setEditDialogOpen(false);
     }
     let fab_styles = {
-        margin: "0 1rem",
+        margin: "0 .5rem",
         display: "inline-block"
     }
 
