@@ -26,7 +26,6 @@ export class Login extends React.Component {
                     </Grid>
                     <TextField 
                         label = "Username" 
-                        placeholder = "Username"
                         value={ this.state.username } 
                         fullWidth required
                         onChange={ e => this.setState({ username: e.target.value })}
@@ -34,7 +33,6 @@ export class Login extends React.Component {
                     />
                     <TextField 
                         label = "Password" 
-                        placeholder = "Password"
                         value={ this.state.password } 
                         type = 'password'
                         fullWidth required

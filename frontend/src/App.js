@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import axios from 'axios';
-import Login from './Accounts/Login';
-import Register from './Accounts/Register'
+import Routing from './Routing';
 
 // React functional component
 function App () {
@@ -71,7 +70,7 @@ function App () {
   }, [])
 
   return (
-    <Login/>
+    <Routing/>
     /*<div className="App">
       <header className="App-header">
         <button onClick={fetchBase} style={{marginBottom: '1rem'}}> {`GET: http://${url}:8000/`} </button>
