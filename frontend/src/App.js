@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import axios from 'axios';
+import Login from './Accounts/Login';
+import Register from './Accounts/Register'
 
 // React functional component
 function App () {
@@ -69,7 +71,8 @@ function App () {
   }, [])
 
   return (
-    <div className="App">
+    <Login/>
+    /*<div className="App">
       <header className="App-header">
         <button onClick={fetchBase} style={{marginBottom: '1rem'}}> {`GET: http://${url}:8000/`} </button>
         <button onClick={reset}> Reset DB </button>
@@ -82,7 +85,7 @@ function App () {
           { values.map((value, i) => <li key={i}>{value.value}</li>) }
         </ul>
       </header>
-    </div>
+    </div>*/
   );
 }
 
