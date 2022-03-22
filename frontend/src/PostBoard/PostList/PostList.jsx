@@ -1,5 +1,6 @@
 import React from 'react';
 import Post from "./Post/post";
+import Grid from "@mui/material/Grid/Grid";
 
 
 
@@ -19,9 +20,15 @@ export class PostList extends React.Component{
             />
         );
         return(
-            <div>
+            <Grid container
+                  sx={{
+                      padding: '1rem',
+                      backgroundColor: '#F3F6F9',
+                      height: '100%',
+                  }}
+                  spacing={1}>
                 {listItems}
-            </div>
+            </Grid>
 
         )
     }

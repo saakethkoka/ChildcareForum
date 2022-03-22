@@ -15,6 +15,7 @@ import {Dialog, DialogActions, DialogTitle} from "@mui/material";
 import Button from "@mui/material/Button";
 import CommentList from "./CommentList/CommentList";
 import EditPost from "./EditPost/EditPost";
+import Grid from "@mui/material/Grid/Grid";
 
 
 export default function Post(props) {
@@ -99,13 +100,12 @@ export default function Post(props) {
     }
 
     return(
-        <Fragment>
+        <Grid md={6} sm={12} containers>
             <Card sx={{
                 margin: "1rem",
                 padding: 2,
-                backgroundColor: '#ffe5d9',
-                boxShadow: '0px 0px 5px 0px rgba(0,0,0,0.2)',
-                borderRadius: '10px',
+                backgroundColor: '#fff',
+                boxShadow: '0px 0px 5px 0px rgba(0,0,0,0.3)',
             }}>
                 <CardContent sx={{
                     minHeight: 150,
@@ -174,6 +174,6 @@ export default function Post(props) {
             </Dialog>
             <CommentList postId={post.id} open={commentDialogOpen} onClose={handleCommentClose}/>
             <EditPost updatePost={props.updatePost} post={post} open={editDialogOpen} onClose={handleEditDialogClose}/>
-        </Fragment>
+        </Grid>
     )
 }
