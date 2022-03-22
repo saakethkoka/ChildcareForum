@@ -9,11 +9,11 @@ const connectToDatabase = async () => {
     try {
         // Change these parameters to whatever your credentials may be
         const DBConnection = mysql.createConnection({
-            host: 'localhost',
-            user: 'root',
-            password: 'password',
-            insecureAuth: true,
-            database: 'smu'
+            host: process.env.MYSQL_CLOUD_HOST,
+            user: process.env.MYSQL_CLOUD_USER,
+            password: process.env.MYSQL_CLOUD_PASS,
+            port: process.env.MYSQL_PORT,
+            database: process.env.MYSQL_DB
         });
 
         // Actually create the connection
