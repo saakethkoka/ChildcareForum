@@ -19,21 +19,22 @@ module.exports = function SWroutes(app, logger) {
                         'first_name = ', request.body.first_name,
                         'last_name = ', request.body.last_name,
                         'email = ', request.body.email);
+            let queryString;
+            if (typeof request.body.email !== 'undefined')
+                queryString = 'INSERT INTO userLogin (username, password, first_name, last_name, email) VALUES (\'' + 
+                                request.body.username + '\', \'' + 
+                                request.body.password + '\', \'' +
+                                request.body.first_name + '\', \'' +
+                                request.body.last_name + '\', \'' +
+                                request.body.email + '\')';
+            else
+                queryString = 'INSERT INTO userLogin (username, password, first_name, last_name) VALUES (\'' + 
+                                request.body.username + '\', \'' + 
+                                request.body.password + '\', \'' +
+                                request.body.first_name + '\', \'' +
+                                request.body.last_name + '\')';
             const {DBQuery, disconnect} = await connectToDatabase();
-            let results;
-            //if (request.body.email !== null)
-                results = await DBQuery('INSERT INTO userLogin (username, password, first_name, last_name, email) VALUES (\'', 
-                                            request.body.username, '\', \'', 
-                                            request.body.password, '\', \'', 
-                                            request.body.first_name, '\', \'', 
-                                            request.body.last_name, '\', \'', 
-                                            request.body.email, '\')');
-            /* else
-                results = await DBQuery('INSERT INTO userLogin (username, password, first_name, last_name, email) VALUES (\'', 
-                                            request.body.username, '\', \'', 
-                                            request.body.password, '\', \'', 
-                                            request.body.first_name, '\', \'', 
-                                            request.body.last_name, '\')'); */
+            const results = await DBQuery(queryString);
             console.log('Results of INSERT statement:', results);
             disconnect();
             response.status(201).json(results);
