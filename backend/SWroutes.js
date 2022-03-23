@@ -6,8 +6,49 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 
 
-module.exports = function BSroutes(app, logger) {
-    app.post('/newUser', async (request, response) => {
+module.exports = function SWroutes(app, logger) {
+
+    //registration API call
+
+    //login API call
+    //GET /logincheck?username=...&password=...
+    app.get('/logincheck', async (request, response) => {
+        try {
+            console.log('Initiating GET /logincheck request');
+            // console.log('Request query is an object containing:', request.query);
+            // console.log('Username = ', [request.query.username], 'password = ', [request.query.password]);
+            const queryString = 'SELECT password FROM userLogin WHERE username = \'' + request.query.username +'\'';
+            console.log(queryString);
+            const {DBQuery, disconnect} = await connectToDatabase();
+            const dataPacket = await DBQuery(queryString);
+            // console.log('Retrieved data packet:', dataPacket);
+            const targetPassword = JSON.parse(JSON.stringify(dataPacket))[0].password;
+            if (targetPassword == request.query.password)
+                console.log('Log in success!');
+            else
+                console.log('Log in failure!');
+            disconnect;
+            response.json(targetPassword);
+        } catch (err) {
+            console.error('There was an error in GET /logincheck', err);
+            response.status(500).json({message: err.message});
+        }
+    });
+    
+    /* app.get('/password', async (request, response) => {
+        try {
+            console.log('Initiating GET /password request for just passwords');
+            const {DBQuery, disconnect} = await connectToDatabase();
+            const results = await DBQuery('SELECT password FROM userLogin');
+            disconnect();
+            response.json(results);
+        } catch (err) {
+            console.error('There was an error in GET /password', err);
+            response.status(500).json({messge: err.message});
+        }
+    }); */
+
+    /* app.post('/newUser', async (request, response) => {
         try {
             console.log('Initiating POST /newUser request');
             console.log('Request has a body / payload containing:', request.body);
@@ -27,28 +68,32 @@ module.exports = function BSroutes(app, logger) {
             console.error('There was an error in POST /newUser', err);
             response.status(500).json({message: err.message});
         }
-    });
+    }); */
 
-// when user enters username, retrieve corresponding password to match with records
-//GET /password?username= ...
-    app.get('/password', async (request, response) => {
+    // when user enters username, retrieve corresponding password to match with records
+    //GET /password?username= ...
+    /* app.get('/password', async (request, response) => {
         try {
             console.log('Initiating GET /password request');
             console.log('Request query arguments is an object containing:', request.body);
             const payload = request.body;
             const {DBQuery, disconnect} = await connectToDatabase();
-            const results = await DBQuery('SELECT password FROM userLogin WHERE username = ?', [payload.username]);
+            let results;
+            if (payload === null)
+                results = await DBQuery('SELECT * FROM userLogin');
+            else
+                results = await DBQuery('SELECT password FROM userLogin WHERE username = ?', [payload.username]);
             disconnect;
             response.json(results);
         } catch (err) {
             console.error('There was an error in GET /password', err);
             response.status(500).json({message: err.message});
         }
-    });
+    }); */
 
-//retrieve user's first and last name, eg. for displaying on profile, from userID
-//GET /fullname?userID= ...
-    app.get('/fullname', async (request, response) => {
+    //retrieve user's first and last name, eg. for displaying on profile, from userID
+    //GET /fullname?userID= ...
+    /* app.get('/fullname', async (request, response) => {
         try {
             console.log('Initiating GET /fullname request');
             console.log('Request query arguments is an object containing:', request.body);
@@ -61,11 +106,11 @@ module.exports = function BSroutes(app, logger) {
             console.error('There was an error in GET /fullname', err);
             response.status(500).json({message: err.message});
         }
-    });
+    }); */
 
-//retrieve user's email
-//GET /useremail?userID= ...
-    app.get('/useremail', async (request, response) => {
+    //retrieve user's email
+    //GET /useremail?userID= ...
+    /* app.get('/useremail', async (request, response) => {
         try {
             console.log('Initiating GET /useremail request');
             console.log('Request query arguments is an object containing:', request.body);
@@ -78,5 +123,5 @@ module.exports = function BSroutes(app, logger) {
             console.error('There was an error in GET /useremail', err);
             response.status(500).json({message: err.message});
         }
-    });
+    }); */
 }
