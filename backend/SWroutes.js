@@ -9,16 +9,16 @@ app.use(bodyParser.json());
 module.exports = function SWroutes(app, logger) {
 
     //registration API call
-    //POST /newuser
+    //POST /newuser - takes JSON object request, throws ER_DUP_ENTRY if username isn't unique
     app.post('/newuser', async (request, response) => {
         try {
             console.log('Initiating POST /newuser request');
-            console.log('Request has a body containing:', request.body);
-            console.log('Username = ', request.body.username,
-                        'password = ', request.body.password,
-                        'first_name = ', request.body.first_name,
-                        'last_name = ', request.body.last_name,
-                        'email = ', request.body.email);
+            // console.log('Request has a body containing:', request.body);
+            // console.log('Username = ', request.body.username,
+            //             'password = ', request.body.password,
+            //             'first_name = ', request.body.first_name,
+            //             'last_name = ', request.body.last_name,
+            //             'email = ', request.body.email);
             let queryString;
             if (typeof request.body.email !== 'undefined')
                 queryString = 'INSERT INTO userLogin (username, password, first_name, last_name, email) VALUES (\'' + 
@@ -35,7 +35,7 @@ module.exports = function SWroutes(app, logger) {
                                 request.body.last_name + '\')';
             const {DBQuery, disconnect} = await connectToDatabase();
             const results = await DBQuery(queryString);
-            console.log('Results of INSERT statement:', results);
+            // console.log('Results of INSERT statement:', results);
             disconnect();
             response.status(201).json(results);
         } catch (err) {
