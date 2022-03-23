@@ -9,6 +9,34 @@ app.use(bodyParser.json());
 module.exports = function SWroutes(app, logger) {
 
     //registration API call
+    //POST /newuser
+    app.get('/newuser', async (request, response) => {
+        try {
+            console.log('Initiating POST /newuser request');
+            console.log('Request has a body containing:', request.body);
+            const {DBQuery, disconnect} = await connectToDatabase();
+            let results;
+            if (request.body.email !== null)
+                results = await DBQuery('INSERT INTO userLogin (username, password, first_name, last_name, email) VALUES (\'', 
+                                            request.body.username, '\', \'', 
+                                            request.body.password, '\', \'', 
+                                            request.body.first_name, '\', \'', 
+                                            request.body.last_name, '\', \'', 
+                                            request.body.email, '\')');
+            else
+                results = await DBQuery('INSERT INTO userLogin (username, password, first_name, last_name, email) VALUES (\'', 
+                                            request.body.username, '\', \'', 
+                                            request.body.password, '\', \'', 
+                                            request.body.first_name, '\', \'', 
+                                            request.body.last_name, '\')');
+            console.log('Results of INSERT statement:', results);
+            disconnect();
+            response.status(201).json(results);
+        } catch (err) {
+            console.error('There was an error in POST /newuser', err);
+            response.status(500).json({message: err.message});
+        }
+    });
 
     //login API call
     //GET /logincheck?username=...&password=...
