@@ -10,25 +10,30 @@ module.exports = function SWroutes(app, logger) {
 
     //registration API call
     //POST /newuser
-    app.get('/newuser', async (request, response) => {
+    app.post('/newuser', async (request, response) => {
         try {
             console.log('Initiating POST /newuser request');
             console.log('Request has a body containing:', request.body);
+            console.log('Username = ', request.body.username,
+                        'password = ', request.body.password,
+                        'first_name = ', request.body.first_name,
+                        'last_name = ', request.body.last_name,
+                        'email = ', request.body.email);
             const {DBQuery, disconnect} = await connectToDatabase();
             let results;
-            if (request.body.email !== null)
+            //if (request.body.email !== null)
                 results = await DBQuery('INSERT INTO userLogin (username, password, first_name, last_name, email) VALUES (\'', 
                                             request.body.username, '\', \'', 
                                             request.body.password, '\', \'', 
                                             request.body.first_name, '\', \'', 
                                             request.body.last_name, '\', \'', 
                                             request.body.email, '\')');
-            else
+            /* else
                 results = await DBQuery('INSERT INTO userLogin (username, password, first_name, last_name, email) VALUES (\'', 
                                             request.body.username, '\', \'', 
                                             request.body.password, '\', \'', 
                                             request.body.first_name, '\', \'', 
-                                            request.body.last_name, '\')');
+                                            request.body.last_name, '\')'); */
             console.log('Results of INSERT statement:', results);
             disconnect();
             response.status(201).json(results);
