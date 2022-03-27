@@ -2,6 +2,7 @@ import React, {Fragment} from 'react';
 import {PostList} from "./PostList/PostList";
 import CreatePostButton from "./CreatePostButton/CreatePostButton";
 import Grid from "@mui/material/Grid/Grid";
+import PostFilters from "./PostFilters/PostFilters";
 
 
 export default class PostBoard extends React.Component {
@@ -108,6 +109,7 @@ export default class PostBoard extends React.Component {
     render() {
         return(
             <Fragment>
+                <PostFilters/>
                 <PostList posts={this.state.posts}
                           deletePost={this.deletePost}
                           downvotePost={this.downvotePost}
