@@ -5,6 +5,7 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "-": "^0.0.1",
     "@rama41222/node-logger": "^1.0.1",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
