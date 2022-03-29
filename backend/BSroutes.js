@@ -99,7 +99,7 @@ module.exports = function BSroutes(app, logger) {
 
 
     //This will get all the reviews for a specific service.
-    app.get('/review', async(request, response) => {
+    app.get('/rshoweview', async(request, response) => {
         try {
             console.log('Initiating getReview...');
             const{DBQuery, disconnect}  = await connectToDatabase();
@@ -118,7 +118,7 @@ module.exports = function BSroutes(app, logger) {
             //response.json(results);
 
         } catch (err) {
-            console.error('There was an error in GET /review', err);
+            console.error('There was an error in GET /showreview', err);
             response.status(500).json({message: err.message});
         }
     });
