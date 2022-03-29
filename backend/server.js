@@ -6,11 +6,12 @@ const cors = require('cors');
 const { log, ExpressAPILogMiddleware } = require('@rama41222/node-logger');
 // const mysqlConnect = require('./db');
 const routes = require('./routes');
+const SWroutes = require('./SWroutes');
 
 // set up some configs for express.
 const config = {
   name: 'sample-express-app',
-  port: 8000,
+  port: 5000,
   host: '0.0.0.0',
 };
 
