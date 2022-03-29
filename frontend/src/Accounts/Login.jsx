@@ -25,12 +25,12 @@ export class Login extends React.Component {
 			return;
 		}
 
-		const response = await this.repository.login(this.state.username, this.state.password);
-
+		const response = await this.repository.login(this.state.username, this.state.password)
+        console.log(response.status)
 		if (!response || response === 'error') {
 			return;
 		}
-        console.log(response.status)
+        
 		if (response.status) {
 			sessionStorage.setItem("isAuthenticated", "true");
 			//sessionStorage.setItem("userId", response.account.ID);

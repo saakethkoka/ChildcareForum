@@ -18,8 +18,7 @@ export class Repository {
 				}
 			})
 				.then(response => {
-					resolve({ status: response.data.status});
-					console.log(response)
+					resolve({ status: "test"});
 				})
 				.catch(err => {
 					error(err);
