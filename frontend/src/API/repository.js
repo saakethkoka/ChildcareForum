@@ -9,9 +9,14 @@ function error(err) {
 
 export class Repository {
 
-	login(username, password) {
+	login(usernameInput, passwordInput) {
 		return new Promise((resolve, reject) => {
-			axios.get(hostname + '/logincheck', { username, password })
+			axios.get(hostname + '/logincheck', { 
+				params: {
+					username: usernameInput,
+					password: passwordInput
+				}
+			})
 				.then(response => {
 					resolve({ status: response.data.status});
 					console.log(response)

@@ -30,9 +30,8 @@ export class Login extends React.Component {
 		if (!response || response === 'error') {
 			return;
 		}
-
+        console.log(response.status)
 		if (response.status) {
-
 			sessionStorage.setItem("isAuthenticated", "true");
 			//sessionStorage.setItem("userId", response.account.ID);
             console.log("login works")
