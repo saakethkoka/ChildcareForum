@@ -57,10 +57,8 @@ module.exports = function SWroutes(app, logger) {
             const dataPacket = await DBQuery(queryString);
             // console.log('Retrieved data packet:', dataPacket);
             const targetPassword = JSON.parse(JSON.stringify(dataPacket))[0].password;
-            if (targetPassword == request.query.password){
+            if (targetPassword == request.query.password)
                 console.log('Log in success!');
-                response.send({ status: true});
-            }
             else
                 console.log('Log in failure!');
             disconnect;
