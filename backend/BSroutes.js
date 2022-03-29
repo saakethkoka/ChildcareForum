@@ -8,7 +8,6 @@ const port = 3000;
 
 //Request Query for all Disscussion Board 
 const connectToDatabase = require('./database-helpers');
-
 module.exports = function BSroutes(app, logger) {
     app.get('/health', (request, response) => {
         const responseBody = { status: 'up' };
@@ -99,7 +98,7 @@ module.exports = function BSroutes(app, logger) {
 
 
     //This will get all the reviews for a specific service.
-    app.get('/rshoweview', async(request, response) => {
+    app.get('/showeview', async(request, response) => {
         try {
             console.log('Initiating getReview...');
             const{DBQuery, disconnect}  = await connectToDatabase();
@@ -169,6 +168,58 @@ module.exports = function BSroutes(app, logger) {
             response.status(201).json(results);
         } catch (err) {
             console.error('There was an error in POST /newreview', err);
+            response.status(500).json({message: err.message});
+        }
+    });
+
+    //searchposts api by keyword
+    app.get('/searchposts', async(request, response) => {
+        try {
+            console.log('Initiating seachposts...');
+            const{DBQuery, disconnect}  = await connectToDatabase();
+            const searchWord = request.query.searchWord;
+
+            let results;
+            if(searchWord){
+                const results = await DBQuery('SELECT * from discussionBoard WHERE postEntry LIKE ' + '\'% ' + searchWord + ' %\'' );
+                response.json(results);
+            }
+
+            else{
+                const results = await DBQuery('SELECT * from discussionBoard');
+                response.json(results);
+            }
+            disconnect();
+            //response.json(results);
+
+        } catch (err) {
+            console.error('There was an error in GET /seachposts', err);
+            response.status(500).json({message: err.message});
+        }
+    });
+
+    app.get('/verifiedpostusers', async (request, response) => {
+        try {
+            console.log('Initiating GET /verifiedpostusers request');
+            const {DBQuery, disconnect} = await connectToDatabase();
+            const results = await DBQuery('SELECT * from discussionBoard JOIN statusTable ON discussionBoard.f_userID = statusTable.userID WHERE statusTable.isVerified = true');
+            disconnect();
+            response.json(results);
+        } catch (err) {
+            console.error('There was an error in GET /verifiedpostusers', err);
+            response.status(500).json({message: err.message});
+        }
+    });
+
+    app.get('/orderedbylike', async (request, response) => {
+        try {
+            console.log('Initiating GET /orderedbylike request');
+            const {DBQuery, disconnect} = await connectToDatabase();
+            const results = await DBQuery('SELECT postEntry from discussionBoard JOIN postStats pS on discussionBoard.postID = pS.f_postID GROUP BY numLikes;');
+            disconnect();
+            response.json(results);
+        } catch (err) {
+            console.error('There was an error in GET /orderedbylike', err);
             response.status(500).json({message: err.message});
         }
     });
