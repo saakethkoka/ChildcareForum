@@ -1,5 +1,8 @@
 import React from 'react'
+import { Navigate } from 'react-router-dom';
 import { Grid, Paper, Avatar, TextField, Button } from '@mui/material/'
+import { Repository } from '../API/repository';
+
 export class Login extends React.Component {
 
     state = {
@@ -9,13 +12,46 @@ export class Login extends React.Component {
         jwtValue: "",
     }
 
-    //api login
-    /*async login(event) {
-        
+    repository = new Repository();
+    
+    async login(event) {
+        console.log("test")
+        console.log(this.state.username, this.state.password)
+		event.preventDefault();
+		event.stopPropagation();
 
-    }*/
+		if (!(this.state.username && this.state.password)) {
+			this.setState({ invalidCred: true });
+			return;
+		}
+
+		const response = await this.repository.login(this.state.username, this.state.password);
+
+		if (!response || response === 'error') {
+			return;
+		}
+
+		if (response.status) {
+
+			sessionStorage.setItem("isAuthenticated", "true");
+			//sessionStorage.setItem("userId", response.account.ID);
+            console.log("login works")
+			this.setState({
+				username: "",
+				password: "",
+				invalidCred: false
+			});
+		}
+		else {
+			this.setState({ invalidCred: true });
+		}
+	}
+
 
     render(){
+        if (sessionStorage.getItem("isAuthenticated") === "true") {
+			return <Navigate to="/" />;
+		}
         const formStyle = {padding: 20, height: '50vh', width: 290, margin: "20px auto"}
         const textStyle = {margin: "10px auto"}
         return(
@@ -44,6 +80,7 @@ export class Login extends React.Component {
                         color = "primary" 
                         variant='contained' 
                         fullWidth
+                        onClick={e => this.login(e)}
                     >
                         Sign in
                     </Button>
