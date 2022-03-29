@@ -98,7 +98,7 @@ module.exports = function BSroutes(app, logger) {
     });
 
 
-    //
+    //This will get all the reviews for a specific service.
     app.get('/review', async(request, response) => {
         try {
             console.log('Initiating getReview...');
@@ -118,7 +118,32 @@ module.exports = function BSroutes(app, logger) {
             //response.json(results);
 
         } catch (err) {
-            console.error('There was an error in GET /services', err);
+            console.error('There was an error in GET /review', err);
+            response.status(500).json({message: err.message});
+        }
+    });
+
+    //This will get the price and servicename based on which user/company they want to look at. 
+    app.get('/price', async(request, response) => {
+        try {
+            console.log('Initiating getPrice...');
+            const{DBQuery, disconnect}  = await connectToDatabase();
+            const userID = request.query.userID;
+            let results;
+            if(userID){
+                const results = await DBQuery('SELECT serviceName,addPrice FROM addService WHERE f_userID = ?', [userID]);
+                response.json(results);
+            }
+
+            else{
+                const results = await DBQuery('SELECT * FROM addService');
+                response.json(results);
+            }
+            disconnect();
+            //response.json(results);
+
+        } catch (err) {
+            console.error('There was an error in GET /price', err);
             response.status(500).json({message: err.message});
         }
     });
