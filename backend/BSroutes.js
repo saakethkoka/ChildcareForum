@@ -148,6 +148,31 @@ module.exports = function BSroutes(app, logger) {
         }
     });
 
+    //This will allow a user to leave a new review
+    app.get('/newreview', async (request, response) => {
+        try {
+            console.log('Initiating POST /newreview request');
+            let queryString;
+            const f_serviceID = request.query.f_serviceID;
+            const f_userID_reviwer = request.query.f_userID_reviwer;
+            const review = request.query.review;
+            queryString = 'INSERT INTO reviewService (f_serviceID, f_userID_reviwer, review) VALUES (' + 
+            f_serviceID + ',' +
+            f_userID_reviwer+ ', \'' +
+            review +  '\')';
+
+            console.log(queryString);
+        
+            const {DBQuery, disconnect} = await connectToDatabase();
+            const results = await DBQuery(queryString);
+            disconnect();
+            response.status(201).json(results);
+        } catch (err) {
+            console.error('There was an error in POST /newreview', err);
+            response.status(500).json({message: err.message});
+        }
+    });
+
 }
 
 
