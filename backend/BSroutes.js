@@ -8,7 +8,6 @@ const port = 3000;
 
 //Request Query for all Disscussion Board 
 const connectToDatabase = require('./database-helpers');
-
 module.exports = function BSroutes(app, logger) {
     app.get('/health', (request, response) => {
         const responseBody = { status: 'up' };
@@ -169,6 +168,32 @@ module.exports = function BSroutes(app, logger) {
             response.status(201).json(results);
         } catch (err) {
             console.error('There was an error in POST /newreview', err);
+            response.status(500).json({message: err.message});
+        }
+    });
+
+    //searchposts api by keyword
+    app.get('/searchposts', async(request, response) => {
+        try {
+            console.log('Initiating seachposts...');
+            const{DBQuery, disconnect}  = await connectToDatabase();
+            const searchWord = request.query.searchWord;
+
+            let results;
+            if(searchWord){
+                const results = await DBQuery('SELECT * from discussionBoard WHERE postEntry LIKE ' + '\'% ' + searchWord + ' %\'' );
+                response.json(results);
+            }
+
+            else{
+                const results = await DBQuery('SELECT * from discussionBoard');
+                response.json(results);
+            }
+            disconnect();
+            //response.json(results);
+
+        } catch (err) {
+            console.error('There was an error in GET /seachposts', err);
             response.status(500).json({message: err.message});
         }
     });
