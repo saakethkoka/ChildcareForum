@@ -224,6 +224,18 @@ module.exports = function BSroutes(app, logger) {
         }
     });
 
+    app.get('/builduserprofile', async (request, response) => {
+        try {
+            console.log('Initiating GET /builduserprofile request');
+            const {DBQuery, disconnect} = await connectToDatabase();
+            const results = await DBQuery('SELECT username, first_name, last_name, email FROM userLogin');
+            disconnect();
+            response.json(results);
+        } catch (err) {
+            console.error('There was an error in GET /builduserprofile', err);
+            response.status(500).json({message: err.message});
+        }
+    });
 }
 
 
