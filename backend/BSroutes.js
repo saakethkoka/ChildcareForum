@@ -235,7 +235,7 @@ module.exports = function BSroutes(app, logger) {
             console.error('There was an error in GET /builduserprofile', err);
             response.status(500).json({message: err.message});
         }
-    
+    });
 
 }
 
