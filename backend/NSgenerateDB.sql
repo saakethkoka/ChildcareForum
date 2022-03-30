@@ -76,7 +76,7 @@ CREATE TABLE addService(
     FOREIGN KEY (f_userID) REFERENCES userLogin(userID),
     serviceName varchar(225),
     addPrice float
-)
+);
 
 INSERT INTO addService (f_userID, serviceName, addPrice) VALUES
 (1, 'Babysitting', 54.34), (1, 'Dance Class', 15.99), (3, 'nightime caretaker', 88.99)
@@ -88,7 +88,11 @@ CREATE TABLE reviewService(
     f_userID_reviwer int,
     FOREIGN KEY (f_userID_reviwer) REFERENCES userLogin(userID),
     review varchar(225)
-)
+);
 
 INSERT INTO reviewService (f_serviceID, f_userID_reviwer, review) VALUES
 (1, 2, 'Great babysitter, would totally reccomend'), (2, 2, 'not the greatest dance teacher but my kids loved it');
+
+-- up script for city tags
+ALTER TABLE userLogin
+ADD COLUMN city VARCHAR(30);
