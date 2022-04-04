@@ -3,10 +3,44 @@ const app = express();
 const port = 3000;
 const connectToDatabase = require('./database-helpers');
 const bodyParser = require('body-parser');
+const { request, response } = require('express');
 app.use(bodyParser.json());
 
 
 module.exports = function SWroutes(app, logger) {
+    //JSON format for comments:
+    //{
+    //  author:"john",
+    //  content: "This is the first comment",
+    //  userVote: 1, = if user is not logged in, 0. else, what the user has voted on this comment - -1,0,1
+    //  votes: 0, = net votes on a post
+    //  id: 1
+    //}
+
+    //adding a comment
+    //POST /comment
+
+    //retrieve all comments for a given discussion post
+    //GET /comment?postID=...userID=... (specifying the id is optional)
+    app.get('/comment', async (request, response) => {
+        try {
+            console.log('Initiating GET /comment request');
+            if (typeof request.query.userID !== 'undefined') {
+                
+            } else {
+                queryString = 'SELECT username, comment, commentID FROM comments JOIN userLogin uL on uL.userID = comments.f_userID WHERE f_postID ='
+                                + request.query.postID;
+                const {DBQuery, disconnect} = await connectToDatabase();
+                const dataPacket = await DBQuery(queryString);
+                const dataObject = JSON.parse(JSON.stringify(dataPacket));
+                
+            }
+
+        } catch (err) {
+            console.error('There was an errror in GET /comment', err);
+            response.status(500).json({message: err.message});
+        }
+    });
 
     //registration API call
     //POST /newuser - takes JSON object request, throws ER_DUP_ENTRY if username isn't unique
