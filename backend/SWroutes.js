@@ -26,14 +26,25 @@ module.exports = function SWroutes(app, logger) {
         try {
             console.log('Initiating GET /comment request');
             if (typeof request.query.userID !== 'undefined') {
-                
+                //TODO: implement returning only a single comment
             } else {
                 queryString = 'SELECT username, comment, commentID FROM comments JOIN userLogin uL on uL.userID = comments.f_userID WHERE f_postID ='
                                 + request.query.postID;
                 const {DBQuery, disconnect} = await connectToDatabase();
                 const dataPacket = await DBQuery(queryString);
                 const dataObject = JSON.parse(JSON.stringify(dataPacket));
-                
+                let formattedComments = [];
+                for (row in dataObject)
+                    formattedComments.push({
+                        author: row.username,
+                        content: row.comment,
+                        //userVote: row.userVote
+                        //votes: row.votes
+                        id: row.commentID
+                    });
+                console.log(formattedComments);
+                response.json(formattedComments);
+                disconnect();
             }
 
         } catch (err) {
