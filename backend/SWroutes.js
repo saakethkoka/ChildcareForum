@@ -45,11 +45,19 @@ module.exports = function SWroutes(app, logger) {
                         userVote = voteValueObj[0].value;
                 }
 
+                let votes;
+                const voteCountRaw = await DBQuery('SELECT SUM(value) AS total FROM votes WHERE f_commentID = ' + dataObject[row].commentID);
+                const voteCountObj = JSON.parse(JSON.stringify(voteCountRaw));
+                if (voteCountObj.total === null)
+                    votes = 0;
+                else
+                    votes = voteCountObj.total;
+
                 formattedComments.push({
                     author: dataObject[row].username,
                     content: dataObject[row].comment,
                     userVote: userVote,
-                    //votes:,
+                    votes: votes,
                     id: dataObject[row].commentID
                 });
             }
