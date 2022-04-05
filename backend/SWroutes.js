@@ -8,7 +8,35 @@ app.use(bodyParser.json());
 
 
 module.exports = function SWroutes(app, logger) {
-    //JSON format for comments:
+    //adding a comment
+    //JSON format input:
+    //{
+    //  content:
+    //  postID:
+    //  userID:
+    //  date: (optional)
+    //}
+    //POST /comment
+    app.post('/comment', async (request, response) => {
+        try {
+            console.log('Initiating POST /comment request');
+            queryString = 'INSERT INTO comments (comment, f_postID, f_userID) VALUES (\''
+                            + request.body.content + '\', '
+                            + request.body.postID + ','
+                            + request.body.userID + ')';
+            const {DBQuery, disconnect} = await connectToDatabase();
+            const dataPacket = await DBQuery(queryString);
+            console.log('Results of INSERT statement: ' + dataPacket);
+            disconnect();
+            response.status(201).json(dataPacket);
+        } catch (err) {
+            console.error('There was an errror in POST /comment', err);
+            response.status(500).json({message: err.message});
+        }
+    });
+
+    //retrieve all comments for a given discussion post
+    //JSON format output:
     //{
     //  author:"john",
     //  content: "This is the first comment",
@@ -16,11 +44,6 @@ module.exports = function SWroutes(app, logger) {
     //  votes: 0, -> net votes on a post
     //  id: 1
     //}
-
-    //adding a comment
-    //POST /comment
-
-    //retrieve all comments for a given discussion post
     //GET /comment?postID=...curruserID=...
     app.get('/comment', async (request, response) => {
         try {
@@ -70,6 +93,10 @@ module.exports = function SWroutes(app, logger) {
         }
     });
 
+    //POST /upvote?commentID=...
+
+    //POST /downvote?commentID=...
+
     //registration API call
     //POST /newuser - takes JSON object request, throws ER_DUP_ENTRY if username isn't unique
     app.post('/newuser', async (request, response) => {
@@ -114,7 +141,7 @@ module.exports = function SWroutes(app, logger) {
             // console.log('Request query is an object containing:', request.query);
             // console.log('Username = ', [request.query.username], 'password = ', [request.query.password]);
             const queryString = 'SELECT password, userID FROM userLogin WHERE username = \'' + request.query.username +'\'';
-            console.log(queryString);
+            //console.log(queryString);
             const {DBQuery, disconnect} = await connectToDatabase();
             const dataPacket = await DBQuery(queryString);
             // console.log('Retrieved data packet:', dataPacket);
