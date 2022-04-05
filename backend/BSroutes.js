@@ -1,6 +1,7 @@
 //Brad Sigety (Plus Nicole who slide in...)
 //March 22, 2022
 
+const { request, response } = require('express');
 const express = require('express');
 
 const app = express();
@@ -236,6 +237,32 @@ module.exports = function BSroutes(app, logger) {
             response.status(500).json({message: err.message});
         }
     });
+
+    //Get the average rating for a service
+    app.get('/govermentservicerating', async(request, response) => {
+        try {
+            console.log('Initiating governmentservice rating...');
+            const{DBQuery, disconnect}  = await connectToDatabase();
+            const govID = request.query.govID;
+            let results;
+            if(govID){
+                const results = await DBQuery('SELECT avg(addRating) FROM ratingGovServices WHERE f_govID = ?', [govID]);
+                response.json(results);
+            }
+
+            else{
+                const results = await DBQuery('SELECT * FROM ratingGovServices');
+                response.json(results);
+            }
+            disconnect();
+
+        } catch (err) {
+            console.error('There was an error in GET /governmentservicerating', err);
+            response.status(500).json({message: err.message});
+        }
+
+
+    })
 
 }
 
