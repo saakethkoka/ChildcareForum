@@ -21,14 +21,11 @@ module.exports = function SWroutes(app, logger) {
     //POST /comment
 
     //retrieve all comments for a given discussion post
-    //GET /comment?postID=...userID=... (specifying the id is optional)
+    //GET /comment?postID=...
     app.get('/comment', async (request, response) => {
         try {
             console.log('Initiating GET /comment request');
-            if (typeof request.query.userID !== 'undefined') {
-                //TODO: implement single comment
-            } else
-                queryString = 'SELECT username, comment, commentID FROM comments JOIN userLogin uL on uL.userID = comments.f_userID WHERE f_postID ='
+            queryString = 'SELECT username, comment, commentID FROM comments JOIN userLogin uL on uL.userID = comments.f_userID WHERE f_postID ='
                                 + request.query.postID;
             const {DBQuery, disconnect} = await connectToDatabase();
             console.log(queryString);
