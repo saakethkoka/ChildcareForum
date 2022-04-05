@@ -47,7 +47,7 @@ module.exports = function SWroutes(app, logger) {
 
                 let votes;
                 const voteCountRaw = await DBQuery('SELECT SUM(value) AS total FROM votes WHERE f_commentID = ' + dataObject[row].commentID);
-                const voteCountObj = JSON.parse(JSON.stringify(voteCountRaw));
+                const voteCountObj = JSON.parse(JSON.stringify(voteCountRaw))[0];
                 if (voteCountObj.total === null)
                     votes = 0;
                 else
