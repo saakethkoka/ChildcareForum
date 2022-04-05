@@ -28,7 +28,7 @@ module.exports = function SWroutes(app, logger) {
             queryString = 'SELECT username, comment, commentID FROM comments JOIN userLogin uL on uL.userID = comments.f_userID WHERE f_postID ='
                                 + request.query.postID;
             const {DBQuery, disconnect} = await connectToDatabase();
-            console.log(queryString);
+            //console.log(queryString);
             const dataPacket = await DBQuery(queryString);
             const dataObject = JSON.parse(JSON.stringify(dataPacket));
             let formattedComments = [];
@@ -37,9 +37,9 @@ module.exports = function SWroutes(app, logger) {
                 if (typeof request.query.curruserID == 'undefined')
                     userVote = 0;
                 else {
-                    const voteValueRaw = await DBQuery('SELECT value FROM votes WHERE f_commentID =' + dataObject[row].commentID + 'AND f_userID =' + request.query.curruserID);
+                    const voteValueRaw = await DBQuery('SELECT value FROM votes WHERE f_commentID = ' + dataObject[row].commentID + ' AND f_userID = ' + request.query.curruserID);
                     const voteValueObj = JSON.parse(JSON.stringify(voteValueRaw));
-                    if (typeof voteValueObj[0].value == 'undefined')
+                    if (typeof voteValueObj[0] == 'undefined')
                         userVote = 0;
                     else
                         userVote = voteValueObj[0].value;
