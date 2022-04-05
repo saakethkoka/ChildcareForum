@@ -93,9 +93,38 @@ module.exports = function SWroutes(app, logger) {
         }
     });
 
-    //POST /upvote?commentID=...
+    //function to check if a user has previously voted on a comment before
+    //GET /votestatus?commentID=...curruserID=...
+    app.get('/votestatus', async (request, response) => {
+        try {
 
-    //POST /downvote?commentID=...
+        } catch (err) {
+            console.error('There was an error in GET /votestatus', err);
+            response.status(500).json({message: err.message});
+        }
+    });
+
+    //if user has not voted on the given comment before, add a new vote
+    //POST /newvote?value=...commentID=...curruserID=....
+    app.post('/newvote', async (request, response) => {
+        try {
+
+        } catch (err) {
+            console.error('There was an error in POST /newuser', err);
+            response.status(500).json({message: err.message});
+        }
+    });
+
+    //if user has voted on the given comment before, update their vote
+    //PUT /updatevote?value=...commentID=...curruserID=...
+    app.put('/updatevote', async (request, response) => {
+        try {
+
+        } catch (err) {
+            console.error('There was an error in PUT /updatevote', err);
+            response.status(500).json({message: err.message});
+        }
+    });
 
     //registration API call
     //POST /newuser - takes JSON object request, throws ER_DUP_ENTRY if username isn't unique
