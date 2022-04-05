@@ -97,7 +97,14 @@ module.exports = function SWroutes(app, logger) {
     //GET /votestatus?commentID=...curruserID=...
     app.get('/votestatus', async (request, response) => {
         try {
-
+            console.log('Initiating GET /votestatus request');
+            queryString = 'SELECT * FROM votes WHERE f_commentID = ' + request.query.commentID + ' AND f_userID = ' + request.query.userID;
+            const {DBQuery, disconnect} = await connectToDatabase();
+            const dataPacket = await DBQuery(queryString);
+            const dataObject = JSON.parse(JSON.stringify(dataPacket));
+            console.log(dataObject);
+            disconnect();
+            response.json(dataObject);
         } catch (err) {
             console.error('There was an error in GET /votestatus', err);
             response.status(500).json({message: err.message});
