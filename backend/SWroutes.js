@@ -121,7 +121,17 @@ module.exports = function SWroutes(app, logger) {
     //POST /newvote?value=...commentID=...curruserID=....
     app.post('/newvote', async (request, response) => {
         try {
-
+            console.log('Initiating POST /newvote request');
+            queryString = 'INSERT INTO votes (value, f_commentID, f_userID) VALUES (' 
+                            + request.query.value + ', '
+                            + request.query.commentID + ', '
+                            + request.query.curruserID + ')';
+            console.log(queryString);
+            const {DBQuery, disconnect} = await connectToDatabase();
+            const dataPacket = await DBQuery(queryString);
+            const dataObject = JSON.parse(JSON.stringify(dataPacket));
+            disconnect();
+            response.status(201).json(dataObject);
         } catch (err) {
             console.error('There was an error in POST /newuser', err);
             response.status(500).json({message: err.message});
@@ -132,7 +142,16 @@ module.exports = function SWroutes(app, logger) {
     //PUT /updatevote?value=...commentID=...curruserID=...
     app.put('/updatevote', async (request, response) => {
         try {
-
+            console.log('Initiating PUT /updatevote request');
+            queryString = 'UPDATE votes SET value = ' + request.query.value
+                            + ' WHERE f_userID = ' + request.query.curruserID
+                            + ' AND f_commentID = ' + request.query.commentID;
+            console.log(queryString);
+            const {DBQuery, disconnect} = await connectToDatabase();
+            const dataPacket = await DBQuery(queryString);
+            const dataObject = JSON.parse(JSON.stringify(dataPacket));
+            disconnect();
+            response.status(200).json(dataObject);
         } catch (err) {
             console.error('There was an error in PUT /updatevote', err);
             response.status(500).json({message: err.message});
