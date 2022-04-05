@@ -6,7 +6,13 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
 const sample_comments = [
-    {author:"john", content: "This is the first comment", userVote: 1, votes: 0, id: 1},
+    {
+        author:"john", // username of commenter
+        content: "This is the first comment", // content of comment
+        userVote: 1, // What the user (if the user is logged in, else 0) has voted on this post (-1, 0 or 1)
+        votes: 0, // Net votes on this post (upvotes - downvotes)
+        id: 1 // Unique id of comment
+    },
     {author:"bob", content: "This is the second comment", userVote: 0, votes: 0, id: 2},
     {author:"bob", content: "This is the third comment", userVote: -1, votes: 0, id: 3},
     {author:"bob", content: "This is the fourth comment", userVote: 0, votes: 0, id: 4},

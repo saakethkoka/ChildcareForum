@@ -6,6 +6,7 @@ const express = require('express');
 const app = express();
 const port = 3000;
 
+
 //Request Query for all Disscussion Board 
 const connectToDatabase = require('./database-helpers');
 module.exports = function BSroutes(app, logger) {

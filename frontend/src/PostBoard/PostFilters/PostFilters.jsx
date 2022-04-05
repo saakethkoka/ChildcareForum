@@ -12,6 +12,7 @@ export default function PostFilters(props){
 
     const handleSearchChange = (event) => {
         setSearch(event.target.value);
+        props.searchPosts(event.target.value);
     };
 
     const handleSortChange = (event) => {
