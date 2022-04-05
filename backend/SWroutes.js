@@ -18,15 +18,31 @@ module.exports = function SWroutes(app, logger) {
             //             'password = ', request.body.password,
             //             'first_name = ', request.body.first_name,
             //             'last_name = ', request.body.last_name,
-            //             'email = ', request.body.email);
+            //             'email = ', request.body.email,
+            //              'city = ', request.body.city);
             let queryString;
-            if (typeof request.body.email !== 'undefined')
+            if (typeof request.body.email !== 'undefined' && typeof request.body.city !== 'undefined')
+                queryString = 'INSERT INTO userLogin (username, password, first_name, last_name, email, city) VALUES (\'' + 
+                                request.body.username + '\', \'' + 
+                                request.body.password + '\', \'' +
+                                request.body.first_name + '\', \'' +
+                                request.body.last_name + '\', \'' +
+                                request.body.email + '\', \'' +
+                                request.body.city + '\')';
+            else if (typeof request.body.email !== 'undefined')
                 queryString = 'INSERT INTO userLogin (username, password, first_name, last_name, email) VALUES (\'' + 
                                 request.body.username + '\', \'' + 
                                 request.body.password + '\', \'' +
                                 request.body.first_name + '\', \'' +
                                 request.body.last_name + '\', \'' +
                                 request.body.email + '\')';
+            else if (typeof request.body.city !== ' undefined')
+                queryString = 'INSERT INTO userLogin (username, password, first_name, last_name, city) VALUES (\'' + 
+                                request.body.username + '\', \'' + 
+                                request.body.password + '\', \'' +
+                                request.body.first_name + '\', \'' +
+                                request.body.last_name + '\', \'' +
+                                request.body.city + '\')';
             else
                 queryString = 'INSERT INTO userLogin (username, password, first_name, last_name) VALUES (\'' + 
                                 request.body.username + '\', \'' + 
@@ -51,18 +67,18 @@ module.exports = function SWroutes(app, logger) {
             console.log('Initiating GET /logincheck request');
             // console.log('Request query is an object containing:', request.query);
             // console.log('Username = ', [request.query.username], 'password = ', [request.query.password]);
-            const queryString = 'SELECT password FROM userLogin WHERE username = \'' + request.query.username +'\'';
+            const queryString = 'SELECT password, userID FROM userLogin WHERE username = \'' + request.query.username +'\'';
             console.log(queryString);
             const {DBQuery, disconnect} = await connectToDatabase();
             const dataPacket = await DBQuery(queryString);
             // console.log('Retrieved data packet:', dataPacket);
             const targetPassword = JSON.parse(JSON.stringify(dataPacket))[0].password;
-            if (targetPassword == request.query.password)
+            if (targetPassword == request.query.password){
                 console.log('Log in success!');
-            else
+                response.json(JSON.parse(JSON.stringify(dataPacket))[0].userID);
+            } else
                 console.log('Log in failure!');
             disconnect;
-            response.json(targetPassword);
         } catch (err) {
             console.error('There was an error in GET /logincheck', err);
             response.status(500).json({message: err.message});
