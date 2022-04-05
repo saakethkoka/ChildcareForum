@@ -26,26 +26,26 @@ module.exports = function SWroutes(app, logger) {
         try {
             console.log('Initiating GET /comment request');
             if (typeof request.query.userID !== 'undefined') {
-                //TODO: implement returning only a single comment
-            } else {
+                //TODO: implement single comment
+            } else
                 queryString = 'SELECT username, comment, commentID FROM comments JOIN userLogin uL on uL.userID = comments.f_userID WHERE f_postID ='
                                 + request.query.postID;
-                const {DBQuery, disconnect} = await connectToDatabase();
-                const dataPacket = await DBQuery(queryString);
-                const dataObject = JSON.parse(JSON.stringify(dataPacket));
-                let formattedComments = [];
-                for (row in dataObject)
-                    formattedComments.push({
-                        author: row.username,
-                        content: row.comment,
-                        //userVote: row.userVote
-                        //votes: row.votes
-                        id: row.commentID
-                    });
-                console.log(formattedComments);
-                response.json(formattedComments);
-                disconnect();
+            const {DBQuery, disconnect} = await connectToDatabase();
+            console.log(queryString);
+            const dataPacket = await DBQuery(queryString);
+            const dataObject = JSON.parse(JSON.stringify(dataPacket));
+            let formattedComments = [];
+            for (const row in dataObject) {
+                formattedComments.push({
+                    author: dataObject[row].username,
+                    content: dataObject[row].comment,
+                    //userVote:,
+                    //votes:,
+                    id: dataObject[row].commentID
+                });
             }
+            disconnect();
+            response.json(formattedComments);
 
         } catch (err) {
             console.error('There was an errror in GET /comment', err);
