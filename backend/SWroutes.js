@@ -12,8 +12,8 @@ module.exports = function SWroutes(app, logger) {
     //{
     //  author:"john",
     //  content: "This is the first comment",
-    //  userVote: 1, = if user is not logged in, 0. else, what the user has voted on this comment - -1,0,1
-    //  votes: 0, = net votes on a post
+    //  userVote: 1, -> if user is not logged in, 0. else, what the user has voted on this comment - -1,0,1
+    //  votes: 0, -> net votes on a post
     //  id: 1
     //}
 
@@ -21,7 +21,7 @@ module.exports = function SWroutes(app, logger) {
     //POST /comment
 
     //retrieve all comments for a given discussion post
-    //GET /comment?postID=...
+    //GET /comment?postID=...curruserID=...
     app.get('/comment', async (request, response) => {
         try {
             console.log('Initiating GET /comment request');
@@ -33,10 +33,22 @@ module.exports = function SWroutes(app, logger) {
             const dataObject = JSON.parse(JSON.stringify(dataPacket));
             let formattedComments = [];
             for (const row in dataObject) {
+                let userVote;
+                if (typeof request.query.curruserID == 'undefined')
+                    userVote = 0;
+                else {
+                    const voteValueRaw = await DBQuery('SELECT value FROM votes WHERE f_commentID =' + dataObject[row].commentID + 'AND f_userID =' + request.query.curruserID);
+                    const voteValueObj = JSON.parse(JSON.stringify(voteValueRaw));
+                    if (typeof voteValueObj[0].value == 'undefined')
+                        userVote = 0;
+                    else
+                        userVote = voteValueObj[0].value;
+                }
+
                 formattedComments.push({
                     author: dataObject[row].username,
                     content: dataObject[row].comment,
-                    //userVote:,
+                    userVote: userVote,
                     //votes:,
                     id: dataObject[row].commentID
                 });
