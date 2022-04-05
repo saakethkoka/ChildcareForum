@@ -260,9 +260,34 @@ module.exports = function BSroutes(app, logger) {
             console.error('There was an error in GET /governmentservicerating', err);
             response.status(500).json({message: err.message});
         }
+    });
 
+    //List of government services, filtered by type. 
+        app.get('/listofgovservices', async(request, response) =>{
+            try {
+                console.log('Initiating listofgovservices rating...');
+                const{DBQuery, disconnect}  = await connectToDatabase();
+                const serviceType = request.query.serviceType;
+                const city = request.query.city;
 
-    })
+                let results;
+                if(serviceType){
+                    const results = await DBQuery('SELECT serviceName FROM governmentServices WHERE serviceType = ?', [serviceType]);
+                    response.json(results);
+                }
+    
+                else{
+                    const results = await DBQuery('SELECT serviceName FROM governmentServices');
+                    response.json(results);
+                }
+                disconnect();
+    
+            } catch (err) {
+                console.error('There was an error in GET /listofgovservices', err);
+                response.status(500).json({message: err.message});
+            }
+
+    });
 
 }
 
