@@ -27,6 +27,20 @@ export class Repository {
 		});
 	}
 
+
+	register(account) {
+        return new Promise((resolve, reject) => {
+            axios.post(hostname + '/newuser', { ...account })
+                .then(response => {
+                    resolve(response.data);
+                })
+                .catch(err => {
+                    error(err);
+                    resolve(undefined);
+                });
+        });
+    }
+
 }
 
 export default Repository;

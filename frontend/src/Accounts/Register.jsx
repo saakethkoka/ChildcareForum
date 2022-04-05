@@ -1,6 +1,8 @@
 import React from 'react'
 import { useState } from 'react';
 import { Grid, Paper, Avatar, TextField, Button } from '@mui/material/'
+import { Navigate } from 'react-router-dom';
+import { Repository } from '../API/repository';
 
 export const Register=()=>{
     const [firstName, setFirstName] = useState("");
@@ -8,6 +10,7 @@ export const Register=()=>{
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [passwordConfirm, setPasswordConfirm] = useState("");
     const [validFirstName, setValidFirstName] = useState(true);
     const [validLastName, setValidLastName] = useState(true);
     const [validEmail, setValidEmail] = useState(true);
@@ -16,17 +19,21 @@ export const Register=()=>{
     const [complete, setComplete] = useState(false);
 
 
-    /*function register(event) {
+    const accountRepository = new Repository();
+
+
+    function register(event) {
         event.preventDefault();
         event.stopPropagation();
 
-        if (!(firstName && lastName && email && username && password)) {
+        if (!(firstName && lastName && email && username && password) || (password !== passwordConfirm)) {
             return;
         }
 
         let account = {
-            name: `${firstName} ${lastName}`,
-            userName: username,
+            username: username,
+            first_name: firstName,
+            last_name: lastName,
             email,
             password
         };
@@ -34,6 +41,7 @@ export const Register=()=>{
         accountRepository.register(account);
 
         setComplete(true);
+        
     }
     
     function validateEmail() {
@@ -45,9 +53,9 @@ export const Register=()=>{
     }
 
     if (complete) {
-        return (<Redirect to="/login" push/>)
+        return (<Navigate to="/" push/>)
     }
-    */
+    
 
     const formStyle = {padding: 20, height: '80vh', width: 290, margin: "20px auto"}
     const textStyle = {margin: "10px auto"}
@@ -97,9 +105,9 @@ export const Register=()=>{
                 /> 
                 <TextField 
                         label = "Confrim Password" 
-                        value={ password }
+                        value={ passwordConfirm }
                         type="password"
-                        onChange={ e => setPassword(e.target.value) }
+                        onChange={ e => setPasswordConfirm(e.target.value) }
                         style = {textStyle}
                 />
                 </form>
@@ -108,6 +116,7 @@ export const Register=()=>{
                         color = "primary" 
                         variant='contained' 
                         fullWidth
+                        onClick={ e => register(e)}
                     >
                         Register
                     </Button>
