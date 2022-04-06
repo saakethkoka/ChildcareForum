@@ -8,11 +8,11 @@ app.use(bodyParser.json());
 
 
 module.exports = function SWroutes(app, logger) {
-    //get all users with a certain city tag
-    //GET /localusers?city=...
-    app.get('/localusers', async (request, response) => {
+    //get all boards written by users with a certain city tag
+    //GET /localboards?city=...
+    app.get('/localboards', async (request, response) => {
         try {
-            console.log('Initiating GET /localusers request');
+            console.log('Initiating GET /localboards request');
             queryString = 'SELECT * FROM discussionBoard JOIN userLogin uL on uL.userID = discussionBoard.f_userID WHERE city LIKE \'%' + request.query.city + '%\'';
             const {DBQuery, disconnect} = await connectToDatabase();
             const dataPacket = await DBQuery(queryString);
@@ -20,18 +20,18 @@ module.exports = function SWroutes(app, logger) {
             disconnect();
             response.status(200).json(dataObject);
         } catch (err) {
-            console.error('There was an errror in GET /localusers', err);
+            console.error('There was an errror in GET /localboards', err);
             response.status(500).json({message: err.message});
         }
     });
 
-    //get all discussion boards posted by users with a certain city tag
-    //GET /localboards?city=...
-    app.get('/localboards', async (request, response) => {
+    //get all users with a certain city tag
+    //GET /localusers?city=...
+    app.get('/localusers', async (request, response) => {
         try {
-            console.log('Initiating GET /localboards request');
+            console.log('Initiating GET /localusers request');
         } catch (err) {
-            console.error('There was an errror in GET /localboards', err);
+            console.error('There was an errror in GET /localusers', err);
             response.status(500).json({message: err.message});
         }
     });
