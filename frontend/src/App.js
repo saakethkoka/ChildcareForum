@@ -3,10 +3,14 @@ import './App.css';
 import axios from 'axios';
 import Routing from './Routing';
 import PostBoard from "./PostBoard/PostBoard";
+<<<<<<< HEAD
 import {AppBar, Toolbar} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import {Nav} from "react-bootstrap";
 import NavBar from "./NavBar/NavBar";
+=======
+import UserProfile from "./Profiles/UserProfile"
+>>>>>>> b6e433c (profile page)
 
 // React functional component
 function App () {
