@@ -17,11 +17,6 @@ import { ProfileDislikedPosts } from "./Profiles/ProfileComponents/Views/Profile
 
 
 
-
-
-import ProfileView from "./Profiles/ProfileComponents/Views/ViewOtherUser/OtherProfileView";
-
-
 export default function Routing(){
 	const checkLogin = () =>{
 		console.log()
