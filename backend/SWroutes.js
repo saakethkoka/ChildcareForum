@@ -41,6 +41,24 @@ module.exports = function SWroutes(app, logger) {
             response.status(500).json({message: err.message});
         }
     });
+
+    //change a user's city tag
+    //PUT /usercity?userID=...city=...
+    app.put('/usercity', async (request, response) => {
+        try {
+            console.log('Initiating PUT /usercity request');
+            queryString = 'UPDATE userLogin SET city = ' + request.query.city
+                            + ' WHERE userID = ' + request.query.userID;
+            const {DBQuery, disconnect} = await connectToDatabase();
+            const dataPacket = await DBQuery(queryString);
+            const dataObject = JSON.parse(JSON.stringify(dataPacket));
+            disconnect();
+            response.status(200).json(dataObject);
+        } catch (err) {
+            console.error('There was an errror in PUT /usercity', err);
+            response.status(500).json({message: err.message});
+        }
+    });
     
     //adding a comment
     //JSON format input:
