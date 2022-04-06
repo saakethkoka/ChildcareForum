@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import axios from 'axios';
 import PostBoard from "./PostBoard/PostBoard";
+import UserProfile from "./Profiles/UserProfile"
 
 // React functional component
 function App () {
@@ -70,7 +71,7 @@ function App () {
   }, [])
 
   return (
-      <PostBoard/>
+      <UserProfile/>
 
     // <div className="App">
     //   <header className="App-header">
