@@ -287,7 +287,6 @@ module.exports = function BSroutes(app, logger) {
                 response.json(results);
             }
 
-
             else{
                 const results = await DBQuery('SELECT serviceName FROM governmentServices', [serviceType]);
                 response.json(results);
