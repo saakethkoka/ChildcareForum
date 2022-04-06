@@ -13,6 +13,12 @@ module.exports = function SWroutes(app, logger) {
     app.get('/localusers', async (request, response) => {
         try {
             console.log('Initiating GET /localusers request');
+            queryString = 'SELECT * FROM discussionBoard JOIN userLogin uL on uL.userID = discussionBoard.f_userID WHERE city LIKE \'%' + request.query.city + '%\'';
+            const {DBQuery, disconnect} = await connectToDatabase();
+            const dataPacket = await DBQuery(queryString);
+            const dataObject = JSON.parse(JSON.stringify(dataPacket));
+            disconnect();
+            response.status(200).json(dataObject);
         } catch (err) {
             console.error('There was an errror in GET /localusers', err);
             response.status(500).json({message: err.message});
