@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import './App.css';
 import axios from 'axios';
 import Routing from './Routing';
@@ -49,7 +49,7 @@ function App () {
       fetchVals();
     }).catch(err => {
       console.log(err)
-    });;
+    });
     setNumber("");
   }
 
@@ -60,7 +60,7 @@ function App () {
       fetchVals();
     }).catch(err => {
       console.log(err)
-    });;
+    });
   }
 
   // tell app to fetch values from db on first load (if initialized)
@@ -71,9 +71,10 @@ function App () {
   }, [])
 
   return (
-    <Routing/>
-    <PostBoard/>
-
+      <Fragment>
+        <Routing/>
+        <PostBoard/>
+      </Fragment>
   );
 }
 
