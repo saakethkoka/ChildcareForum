@@ -8,6 +8,28 @@ app.use(bodyParser.json());
 
 
 module.exports = function SWroutes(app, logger) {
+    //get all users with a certain city tag
+    //GET /localusers?city=...
+    app.get('/localusers', async (request, response) => {
+        try {
+            console.log('Initiating GET /localusers request');
+        } catch (err) {
+            console.error('There was an errror in GET /localusers', err);
+            response.status(500).json({message: err.message});
+        }
+    });
+
+    //get all discussion boards posted by users with a certain city tag
+    //GET /localboards?city=...
+    app.get('/localboards', async (request, response) => {
+        try {
+            console.log('Initiating GET /localboards request');
+        } catch (err) {
+            console.error('There was an errror in GET /localboards', err);
+            response.status(500).json({message: err.message});
+        }
+    });
+    
     //adding a comment
     //JSON format input:
     //{
