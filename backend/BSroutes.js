@@ -262,32 +262,46 @@ module.exports = function BSroutes(app, logger) {
         }
     });
 
-    //List of government services, filtered by type. 
-        app.get('/listofgovservices', async(request, response) =>{
-            try {
-                console.log('Initiating listofgovservices rating...');
-                const{DBQuery, disconnect}  = await connectToDatabase();
-                const serviceType = request.query.serviceType;
-                const city = request.query.city;
+    //List of government services, filtered by type.
+    //Government services by type and city
+    app.get('/govservstypecity', async(request, response) =>{
+        try {
+            console.log('Initiating listofgovservices rating...');
+            const{DBQuery, disconnect}  = await connectToDatabase();
+            const serviceType = request.query.serviceType;
+            const city = request.query.city;
+            let results;
 
-                let results;
-                if(serviceType){
-                    const results = await DBQuery('SELECT serviceName FROM governmentServices WHERE serviceType = ?', [serviceType]);
-                    response.json(results);
-                }
-    
-                else{
-                    const results = await DBQuery('SELECT serviceName FROM governmentServices');
-                    response.json(results);
-                }
-                disconnect();
-    
-            } catch (err) {
-                console.error('There was an error in GET /listofgovservices', err);
-                response.status(500).json({message: err.message});
+            if(serviceType && city){
+                const results = await DBQuery('SELECT serviceName FROM governmentServices JOIN ratingGovServices rGS on governmentServices.g_ID = rGS.f_govID WHERE city = ? AND serviceType = ?', [city, serviceType]);
+                response.json(results);
             }
 
-    });
+            else if (city){
+                const results = await DBQuery('SELECT serviceName FROM governmentServices WHERE city = ?', [city]);
+                response.json(results);
+            }
+
+            else if(serviceType){
+                const results = await DBQuery('SELECT serviceName FROM governmentServices WHERE serviceType = ?', [serviceType]);
+                response.json(results);
+            }
+
+
+            else{
+                const results = await DBQuery('SELECT serviceName FROM governmentServices', [serviceType]);
+                response.json(results);
+            }
+
+            disconnect();
+
+        } catch (err) {
+            console.error('There was an error in GET /listofgovservices', err);
+            response.status(500).json({message: err.message});
+        }
+});
+
+
 
 }
 
