@@ -1,4 +1,3 @@
-
 -- Nicole Sood
 -- These the scripts used to generate our database.
 -- It also includes some sample input statements so we have some data to test our apis with
