@@ -76,7 +76,7 @@ function App () {
 
   return (
       <Fragment>
-        <NavBar/>
+        <Routing/>
         <PostBoard/>
       </Fragment>
   );

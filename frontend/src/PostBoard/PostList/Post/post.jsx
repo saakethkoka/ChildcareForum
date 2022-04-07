@@ -184,7 +184,7 @@ export default function Post(props) {
                     </Button>
                 </DialogActions>
             </Dialog>
-            <CommentList postId={post.id} open={commentDialogOpen} onClose={handleCommentClose}/>
+            <CommentList postId={post.postID} open={commentDialogOpen} onClose={handleCommentClose}/>
             <EditPost updatePost={props.updatePost} post={post} open={editDialogOpen} onClose={handleEditDialogClose}/>
         </Grid>
     )
