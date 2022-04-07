@@ -8,6 +8,58 @@ app.use(bodyParser.json());
 
 
 module.exports = function SWroutes(app, logger) {
+    //get all boards written by users with a certain city tag
+    //GET /localboards?city=...
+    app.get('/localboards', async (request, response) => {
+        try {
+            console.log('Initiating GET /localboards request');
+            queryString = 'SELECT * FROM discussionBoard JOIN userLogin uL on uL.userID = discussionBoard.f_userID WHERE city LIKE \'%' + request.query.city + '%\'';
+            const {DBQuery, disconnect} = await connectToDatabase();
+            const dataPacket = await DBQuery(queryString);
+            const dataObject = JSON.parse(JSON.stringify(dataPacket));
+            disconnect();
+            response.status(200).json(dataObject);
+        } catch (err) {
+            console.error('There was an errror in GET /localboards', err);
+            response.status(500).json({message: err.message});
+        }
+    });
+
+    //get all users with a certain city tag
+    //GET /localusers?city=...
+    app.get('/localusers', async (request, response) => {
+        try {
+            console.log('Initiating GET /localusers request');
+            queryString = 'SELECT * FROM userLogin WHERE city LIKE \'%' + request.query.city + '%\'';
+            const {DBQuery, disconnect} = await connectToDatabase();
+            const dataPacket = await DBQuery(queryString);
+            const dataObject = JSON.parse(JSON.stringify(dataPacket));
+            disconnect();
+            response.status(200).json(dataObject);
+        } catch (err) {
+            console.error('There was an errror in GET /localusers', err);
+            response.status(500).json({message: err.message});
+        }
+    });
+
+    //change a user's city tag
+    //PUT /usercity?userID=...city=...
+    app.put('/usercity', async (request, response) => {
+        try {
+            console.log('Initiating PUT /usercity request');
+            queryString = 'UPDATE userLogin SET city = ' + request.query.city
+                            + ' WHERE userID = ' + request.query.userID;
+            const {DBQuery, disconnect} = await connectToDatabase();
+            const dataPacket = await DBQuery(queryString);
+            const dataObject = JSON.parse(JSON.stringify(dataPacket));
+            disconnect();
+            response.status(200).json(dataObject);
+        } catch (err) {
+            console.error('There was an errror in PUT /usercity', err);
+            response.status(500).json({message: err.message});
+        }
+    });
+    
     //adding a comment
     //JSON format input:
     //{
