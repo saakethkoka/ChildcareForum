@@ -1,6 +1,7 @@
 import React, { useEffect, useState, Fragment } from 'react';
 import './App.css';
 import axios from 'axios';
+import Routing from './Routing';
 import PostBoard from "./PostBoard/PostBoard";
 import {AppBar, Toolbar} from "@mui/material";
 import Typography from "@mui/material/Typography";
@@ -52,7 +53,7 @@ function App () {
       fetchVals();
     }).catch(err => {
       console.log(err)
-    });;
+    });
     setNumber("");
   }
 
@@ -63,7 +64,7 @@ function App () {
       fetchVals();
     }).catch(err => {
       console.log(err)
-    });;
+    });
   }
 
   // tell app to fetch values from db on first load (if initialized)

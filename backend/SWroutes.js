@@ -8,6 +8,58 @@ app.use(bodyParser.json());
 
 
 module.exports = function SWroutes(app, logger) {
+    //get all boards written by users with a certain city tag
+    //GET /localboards?city=...
+    app.get('/localboards', async (request, response) => {
+        try {
+            console.log('Initiating GET /localboards request');
+            queryString = 'SELECT * FROM discussionBoard JOIN userLogin uL on uL.userID = discussionBoard.f_userID WHERE city LIKE \'%' + request.query.city + '%\'';
+            const {DBQuery, disconnect} = await connectToDatabase();
+            const dataPacket = await DBQuery(queryString);
+            const dataObject = JSON.parse(JSON.stringify(dataPacket));
+            disconnect();
+            response.status(200).json(dataObject);
+        } catch (err) {
+            console.error('There was an errror in GET /localboards', err);
+            response.status(500).json({message: err.message});
+        }
+    });
+
+    //get all users with a certain city tag
+    //GET /localusers?city=...
+    app.get('/localusers', async (request, response) => {
+        try {
+            console.log('Initiating GET /localusers request');
+            queryString = 'SELECT * FROM userLogin WHERE city LIKE \'%' + request.query.city + '%\'';
+            const {DBQuery, disconnect} = await connectToDatabase();
+            const dataPacket = await DBQuery(queryString);
+            const dataObject = JSON.parse(JSON.stringify(dataPacket));
+            disconnect();
+            response.status(200).json(dataObject);
+        } catch (err) {
+            console.error('There was an errror in GET /localusers', err);
+            response.status(500).json({message: err.message});
+        }
+    });
+
+    //change a user's city tag
+    //PUT /usercity?userID=...city=...
+    app.put('/usercity', async (request, response) => {
+        try {
+            console.log('Initiating PUT /usercity request');
+            queryString = 'UPDATE userLogin SET city = ' + request.query.city
+                            + ' WHERE userID = ' + request.query.userID;
+            const {DBQuery, disconnect} = await connectToDatabase();
+            const dataPacket = await DBQuery(queryString);
+            const dataObject = JSON.parse(JSON.stringify(dataPacket));
+            disconnect();
+            response.status(200).json(dataObject);
+        } catch (err) {
+            console.error('There was an errror in PUT /usercity', err);
+            response.status(500).json({message: err.message});
+        }
+    });
+    
     //adding a comment
     //JSON format input:
     //{
@@ -122,7 +174,7 @@ module.exports = function SWroutes(app, logger) {
     app.post('/newvote', async (request, response) => {
         try {
             console.log('Initiating POST /newvote request');
-            queryString = 'INSERT INTO votes (value, f_commentID, f_userID) VALUES (' 
+            queryString = 'INSERT INTO votes (value, f_commentID, f_userID) VALUES ('
                             + request.query.value + ', '
                             + request.query.commentID + ', '
                             + request.query.curruserID + ')';
@@ -168,21 +220,37 @@ module.exports = function SWroutes(app, logger) {
             //             'password = ', request.body.password,
             //             'first_name = ', request.body.first_name,
             //             'last_name = ', request.body.last_name,
-            //             'email = ', request.body.email);
+            //             'email = ', request.body.email,
+            //              'city = ', request.body.city);
             let queryString;
-            if (typeof request.body.email !== 'undefined')
-                queryString = 'INSERT INTO userLogin (username, password, first_name, last_name, email) VALUES (\'' + 
-                                request.body.username + '\', \'' + 
-                                request.body.password + '\', \'' +
-                                request.body.first_name + '\', \'' +
-                                request.body.last_name + '\', \'' +
-                                request.body.email + '\')';
+            if (typeof request.body.email !== 'undefined' && typeof request.body.city !== 'undefined')
+                queryString = 'INSERT INTO userLogin (username, password, first_name, last_name, email, city) VALUES (\'' +
+                    request.body.username + '\', \'' +
+                    request.body.password + '\', \'' +
+                    request.body.first_name + '\', \'' +
+                    request.body.last_name + '\', \'' +
+                    request.body.email + '\', \'' +
+                    request.body.city + '\')';
+            else if (typeof request.body.email !== 'undefined')
+                queryString = 'INSERT INTO userLogin (username, password, first_name, last_name, email) VALUES (\'' +
+                    request.body.username + '\', \'' +
+                    request.body.password + '\', \'' +
+                    request.body.first_name + '\', \'' +
+                    request.body.last_name + '\', \'' +
+                    request.body.email + '\')';
+            else if (typeof request.body.city !== ' undefined')
+                queryString = 'INSERT INTO userLogin (username, password, first_name, last_name, city) VALUES (\'' +
+                    request.body.username + '\', \'' +
+                    request.body.password + '\', \'' +
+                    request.body.first_name + '\', \'' +
+                    request.body.last_name + '\', \'' +
+                    request.body.city + '\')';
             else
-                queryString = 'INSERT INTO userLogin (username, password, first_name, last_name) VALUES (\'' + 
-                                request.body.username + '\', \'' + 
-                                request.body.password + '\', \'' +
-                                request.body.first_name + '\', \'' +
-                                request.body.last_name + '\')';
+                queryString = 'INSERT INTO userLogin (username, password, first_name, last_name) VALUES (\'' +
+                    request.body.username + '\', \'' +
+                    request.body.password + '\', \'' +
+                    request.body.first_name + '\', \'' +
+                    request.body.last_name + '\')';
             const {DBQuery, disconnect} = await connectToDatabase();
             const results = await DBQuery(queryString);
             // console.log('Results of INSERT statement:', results);
@@ -218,7 +286,7 @@ module.exports = function SWroutes(app, logger) {
             response.status(500).json({message: err.message});
         }
     });
-    
+
     /* app.get('/password', async (request, response) => {
         try {
             console.log('Initiating GET /password request for just passwords');

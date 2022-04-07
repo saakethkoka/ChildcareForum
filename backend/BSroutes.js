@@ -9,6 +9,7 @@ const port = 3000;
 
 //Request Query for all Disscussion Board 
 const connectToDatabase = require('./database-helpers');
+
 module.exports = function BSroutes(app, logger) {
     app.get('/health', (request, response) => {
         const responseBody = { status: 'up' };
@@ -239,6 +240,4 @@ module.exports = function BSroutes(app, logger) {
     });
 
 }
-
-
 
