@@ -18,13 +18,7 @@ const ProfileBanned = () => {
 
     return (
         
-        <Grid container
-                  sx={{
-                      padding: '1rem',
-                      backgroundColor: '#F3F6F9',
-                      height: '100%',
-                  }}
-                  spacing={1}>
+        <Grid container>
                 {console.log(listItems)}
                 <ProfileNavbar/>
                 {listItems.map((user) =>
