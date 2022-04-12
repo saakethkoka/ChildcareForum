@@ -11,12 +11,66 @@ import EditIcon from '@mui/icons-material/Edit';
 import Fab from "@mui/material/Fab";
 import Chip from "@mui/material/Chip";
 import CommentIcon from '@mui/icons-material/Comment';
-import {Dialog, DialogActions, DialogTitle} from "@mui/material";
+import {CardHeader, Dialog, DialogActions, DialogTitle} from "@mui/material";
 import Button from "@mui/material/Button";
 import CommentList from "./CommentList/CommentList";
 import EditPost from "./EditPost/EditPost";
 import Grid from "@mui/material/Grid/Grid";
+import IconButton from '@mui/material/IconButton';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
+
+const ITEM_HEIGHT = 48;
+// https://mui.com/material-ui/react-menu/
+function LongMenu() {
+    let [options, setOptions] = React.useState(["Save Post"]);
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    return (
+        <div style={{float: "right"}}>
+            <IconButton
+                aria-label="more"
+                id="long-button"
+                aria-controls={open ? 'long-menu' : undefined}
+                aria-expanded={open ? 'true' : undefined}
+                aria-haspopup="true"
+                onClick={handleClick}
+            >
+                <MoreVertIcon />
+            </IconButton>
+            <Menu
+                id="long-menu"
+                MenuListProps={{
+                    'aria-labelledby': 'long-button',
+                }}
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                PaperProps={{
+                    style: {
+                        maxHeight: ITEM_HEIGHT * 4.5,
+                        width: '20ch',
+                    },
+                }}
+            >
+                {options.map((option) => (
+                    <MenuItem key={option} selected={option === 'Pyxis'} onClick={handleClose}>
+                        {option}
+                    </MenuItem>
+                ))}
+            </Menu>
+        </div>
+    );
+}
 
 export default function Post(props) {
 
@@ -99,6 +153,10 @@ export default function Post(props) {
         display: "inline-block"
     }
 
+    const savePost = (post) =>{
+        console.log("save");
+    }
+
     return(
         <Grid md={6} sm={12} containers>
             <Card sx={{
@@ -112,6 +170,7 @@ export default function Post(props) {
                     maxHeight: 300,
                     overflow: 'auto',
                 }}>
+                    <LongMenu/>
                     <Typography variant="h5" component="div">
                         {post.title}
                         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
