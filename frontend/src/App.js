@@ -3,6 +3,11 @@ import './App.css';
 import axios from 'axios';
 import PostBoard from "./PostBoard/PostBoard";
 import UserProfile from "./Profiles/UserProfile"
+import UserNavBar from "./Profiles/ProfileComponents/UserNavBar"
+import ProfilePosts from './Profiles/ProfileComponents/ProfilePosts';
+import InteractiveList from './Profiles/ProfileComponents/ProfileBanned';
+import UserBan from './Profiles/ProfileComponents/ProfileBanned'
+
 
 // React functional component
 function App () {
@@ -71,7 +76,8 @@ function App () {
   }, [])
 
   return (
-      <UserProfile/>
+      //<UserNavBar auth = {true}/>
+      <UserBan/>
 
     // <div className="App">
     //   <header className="App-header">
