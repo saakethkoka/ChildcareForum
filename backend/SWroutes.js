@@ -53,10 +53,26 @@ module.exports = function SWroutes(app, logger) {
             const {DBQuery, disconnect} = await connectToDatabase();
             const dataPacket = await DBQuery(queryString);
             const dataObject = JSON.parse(JSON.stringify(dataPacket));
-            response.status(200).josn(dataObject);
-
+            response.status(200).json(dataObject);
         } catch (err) {
             console.error('There was an error in GET /bannedStatus', err);
+            response.status(500).json({message: err.message});
+        }
+    });
+
+    //GET /bannedUsers
+    app.get('bannedUsers', async (request, response) => {
+        try {
+            console.log('Initiating GET /bannedUsers request');
+            const queryString = 'SELECT userID, username, password, first_name, last_name, email, city FROM userLogin '
+                                + 'JOIN statusTable sT ON sT.userID = userLogin.userID '
+                                + 'WHERE isBanned = 1';
+            const {DBQuery, disconnect} = await connectToDatabase();
+            const dataPacket = await DBQuery(queryString);
+            const dataObject = JSON.parse(JSON.stringify(dataPacket));
+            response.status(200).json(dataObject);
+        } catch (err) {
+            console.error('There was an error in GET /bannedUsers', err);
             response.status(500).json({message: err.message});
         }
     });
