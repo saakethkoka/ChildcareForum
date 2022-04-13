@@ -61,10 +61,10 @@ module.exports = function SWroutes(app, logger) {
     });
 
     //GET /bannedUsers
-    app.get('bannedUsers', async (request, response) => {
+    app.get('/bannedUsers', async (request, response) => {
         try {
             console.log('Initiating GET /bannedUsers request');
-            const queryString = 'SELECT userID, username, password, first_name, last_name, email, city FROM userLogin '
+            const queryString = 'SELECT userLogin.userID, username, password, first_name, last_name, email, city FROM userLogin '
                                 + 'JOIN statusTable sT ON sT.userID = userLogin.userID '
                                 + 'WHERE isBanned = 1';
             const {DBQuery, disconnect} = await connectToDatabase();
