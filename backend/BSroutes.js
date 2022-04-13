@@ -55,11 +55,11 @@ module.exports = function BSroutes(app, logger) {
         try {
             console.log('Initiating GET /discussionBoard request');
             console.log('Request query arguements is an object containing:', request.query);
-            const username = request.query.username;
+            const userID = request.query.userID;
             const {DBQuerry, disconnect} = await connectToDatabase();
             let results;
-            if (username) {
-                results = await DBQuerry('SELECT * FROM discussionBoard WHERE username = ?', [username]);
+            if (userID) {
+                results = await DBQuerry('SELECT * FROM discussionBoard WHERE userID = ?', [userID]);
             } else {
                 results = await DBQuerry('SELECT * FROM discussionBoard');
             }
@@ -300,9 +300,4 @@ module.exports = function BSroutes(app, logger) {
         }
 });
 
-
-
 }
-
-
-
