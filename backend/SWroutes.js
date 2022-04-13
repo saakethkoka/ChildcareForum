@@ -41,7 +41,25 @@ module.exports = function SWroutes(app, logger) {
             console.error('There was an error in PUT /toggleban', err);
             response.status(500).json({message: err.message});
         }
-    })
+    });
+
+    //GET /bannedStatus?userID=...
+    app.get('/bannedStatus', async (request, response) => {
+        try {
+            console.log('Initiating GET /bannedStatus request');
+            const queryString = 'SELECT isBanned FROM statusTable '
+                                + 'JOIN userLogin uL ON uL.userID = statusTable.userID '
+                                + 'WHERE uL.userID = ' + request.query.userID;
+            const {DBQuery, disconnect} = await connectToDatabase();
+            const dataPacket = await DBQuery(queryString);
+            const dataObject = JSON.parse(JSON.stringify(dataPacket));
+            response.status(200).josn(dataObject);
+
+        } catch (err) {
+            console.error('There was an error in GET /bannedStatus', err);
+            response.status(500).json({message: err.message});
+        }
+    });
 
     //get all boards written by users with a certain city tag
     //GET /localboards?city=...
