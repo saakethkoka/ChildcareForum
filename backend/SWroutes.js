@@ -170,14 +170,15 @@ module.exports = function SWroutes(app, logger) {
     });
 
     //if user has not voted on the given comment before, add a new vote
-    //POST /newvote?value=...commentID=...curruserID=....
-    app.post('/newvote', async (request, response) => {
+    //POST /commentVote?value=...commentID=...curruserID=....
+    app.post('/commentVote', async (request, response) => {
         try {
             console.log('Initiating POST /newvote request');
             queryString = 'INSERT INTO votes (value, f_commentID, f_userID) VALUES ('
                             + request.query.value + ', '
                             + request.query.commentID + ', '
-                            + request.query.curruserID + ')';
+                            + request.query.curruserID + ')' +
+                'ON DUPLICATE KEY UPDATE value = ' + request.query.value;
             console.log(queryString);
             const {DBQuery, disconnect} = await connectToDatabase();
             const dataPacket = await DBQuery(queryString);

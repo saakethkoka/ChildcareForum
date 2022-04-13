@@ -4,7 +4,7 @@ import Comment from './Comment/Comment';
 import Grid from "@mui/material/Grid/Grid";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import {getComments, postComment} from "../../../../kokaAPI";
+import {getComments, postComment, commentEngadgement} from "../../../../kokaAPI";
 
 // const sample_comments = [
 //     {
@@ -57,15 +57,24 @@ export default function CommentList(props){
         let new_comments = comments.map(comment => {
             if(comment.id === id){
                 if(comment.userVote === -1) {
-                    comment.userVote = 1;
-                    comment.votes += 2;
+                    commentEngadgement(id, 1).then(res => {
+                        getComments(props.postId).then(res => {
+                            setComments(res);
+                        })
+                    });
                 } else if(comment.userVote === 0) {
-                    comment.userVote = 1;
-                    comment.votes += 1;
+                    commentEngadgement(id, 1).then(res => {
+                        getComments(props.postId).then(res => {
+                            setComments(res);
+                        })
+                    });
                 }
                 else{
-                    comment.userVote = 0;
-                    comment.votes -= 1;
+                    commentEngadgement(id, 0).then(res => {
+                        getComments(props.postId).then(res => {
+                            setComments(res);
+                        })
+                    });
                 }
             }
             return comment;
@@ -76,16 +85,25 @@ export default function CommentList(props){
     const onDownvote = (id) => {
         let new_comments = comments.map(comment => {
             if(comment.id === id){
-                if(comment.userVote === 1) {
-                    comment.userVote = -1;
-                    comment.votes -= 2;
+                if(comment.userVote === -1) {
+                    commentEngadgement(id, 0).then(res => {
+                        getComments(props.postId).then(res => {
+                            setComments(res);
+                        })
+                    });
                 } else if(comment.userVote === 0) {
-                    comment.userVote = -1;
-                    comment.votes -= 1;
+                    commentEngadgement(id, -1).then(res => {
+                        getComments(props.postId).then(res => {
+                            setComments(res);
+                        })
+                    });
                 }
                 else{
-                    comment.userVote = 0;
-                    comment.votes += 1;
+                    commentEngadgement(id, -1).then(res => {
+                        getComments(props.postId).then(res => {
+                            setComments(res);
+                        })
+                    });
                 }
             }
             return comment;

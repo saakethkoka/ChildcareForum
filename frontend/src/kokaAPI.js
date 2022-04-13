@@ -29,12 +29,23 @@ export const searchPosts = (searchWord) => new Promise((resolve, reject) => {
 });
 
 export const getComments = (id) => new Promise((resolve, reject) => {
-    axios.get(`${base_url}/comment?postID=${id}`)
-        .then(res => resolve(res.data))
-        .catch(err =>{
-            alert(err)
-            reject(err)
-        });
+    if (sessionStorage.getItem('userID')){
+        axios.get(`${base_url}/comment?postID=${id}&curruserID=${sessionStorage.getItem('userID')}`)
+            .then(res => resolve(res.data))
+            .catch(err =>{
+                alert(err)
+                reject(err)
+            });
+    }
+    else{
+        axios.get(`${base_url}/comment?postID=${id}`)
+            .then(res => resolve(res.data))
+            .catch(err =>{
+                alert(err)
+                reject(err)
+            });
+    }
+
 });
 
 
@@ -50,4 +61,21 @@ export const postComment = (userID, postID, content) => new Promise((resolve, re
             alert(err)
             reject(err)
         });
+});
+
+
+export const commentEngadgement = (commentID, value) => new Promise((resolve, reject) => {
+    let params = {
+        commentID: commentID,
+        value: value
+    };
+    if (sessionStorage.getItem("userID")){
+        axios.post(`${base_url}/commentVote?value=${value}&curruserID=${sessionStorage.getItem("userID")}&commentID=${commentID}`, params)
+            .then(res => resolve(res.data))
+            .catch(err =>{
+                alert(err)
+                reject(err)
+            });
+    }
+
 });
