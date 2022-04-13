@@ -8,6 +8,41 @@ app.use(bodyParser.json());
 
 
 module.exports = function SWroutes(app, logger) {
+    //toggle whether a user with a given userID is banned
+    //PUT /toggleban?userID=...
+    app.put('/toggleban', async (request, response) => {
+        try {
+            console.log('Initiating PUT /toggleban request');
+            const selectQueryString = 'SELECT isBanned FROM statusTable '
+                            + 'JOIN userLogin uL ON uL.userID = statusTable.userID '
+                            + 'WHERE uL.userID = ' + request.query.userID;
+            const {DBQuery, disconnect} = await connectToDatabase();
+            const bannedData = await DBQuery(selectQueryString);
+            const bannedObject = JSON.parse(JSON.stringify(bannedData));
+            let updateQueryString;
+            if (bannedObject[0].isBanned == 0)
+                updateQueryString = 'UPDATE statusTable '
+                                    + 'JOIN userLogin uL ON uL.userID = statusTable.userID '
+                                    + 'SET isBanned = 1 '
+                                    + 'WHERE uL.userID = ' + request.query.userID;
+            else if (bannedObject[0].isBanned == 1)
+                updateQueryString = 'UPDATE statusTable '
+                                    + 'JOIN userLogin uL ON uL.userID = statusTable.userID '
+                                    + 'SET isBanned = 0 '
+                                    + 'WHERE uL.userID = ' + request.query.userID;
+            else {
+                console.error('Could not find user data');
+                response.status(500);
+                return;
+            }
+            const results = await DBQuery(updateQueryString);
+            response.status(200).json(results);
+        } catch (err) {
+            console.error('There was an error in PUT /toggleban', err);
+            response.status(500).json({message: err.message});
+        }
+    })
+
     //get all boards written by users with a certain city tag
     //GET /localboards?city=...
     app.get('/localboards', async (request, response) => {
