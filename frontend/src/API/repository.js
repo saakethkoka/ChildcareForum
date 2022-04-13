@@ -18,7 +18,10 @@ export class Repository {
 				}
 			})
 				.then(response => {
-					resolve({ status: "test"});
+					resolve({
+						status: "test",
+						userID: response.data
+					});
 				})
 				.catch(err => {
 					error(err);

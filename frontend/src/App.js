@@ -77,7 +77,7 @@ function App () {
   return (
       <Fragment>
         <Routing/>
-        <PostBoard/>
+        {/*<PostBoard/>*/}
       </Fragment>
   );
 }
