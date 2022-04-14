@@ -1,6 +1,6 @@
-import  UserBan from './BanTemplate'
+import  UserBan from '../BanTemplate'
 import { Grid, Button } from '@mui/material'
-import  ProfileNavbar  from './UserNavBar'
+import  ProfileNavbar  from '../UserNavBar'
 
 const ProfileBanned = () => {
 

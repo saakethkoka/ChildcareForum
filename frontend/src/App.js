@@ -1,12 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, {Fragment, useEffect, useState } from 'react';
 import './App.css';
 import axios from 'axios';
 import PostBoard from "./PostBoard/PostBoard";
-import UserProfile from "./Profiles/UserProfile"
-import UserNavBar from "./Profiles/ProfileComponents/UserNavBar"
-import ProfilePosts from './Profiles/ProfileComponents/ProfilePosts';
-import InteractiveList from './Profiles/ProfileComponents/ProfileBanned';
-import UserBan from './Profiles/ProfileComponents/ProfileBanned'
+import Routing from './Routing';
+import  {ProfilePosts}  from './Profiles/ProfileComponents/Views/ProfilePosts'
 
 
 // React functional component
@@ -77,7 +74,9 @@ function App () {
 
   return (
       //<UserNavBar auth = {true}/>
-      <UserBan/>
+      <Fragment>
+        <Routing/>
+      </Fragment>
 
     // <div className="App">
     //   <header className="App-header">
