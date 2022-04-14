@@ -29,11 +29,16 @@ export default function Post(props) {
     let [editDialogOpen, setEditDialogOpen] = React.useState(false);
     let [commentDialogOpen, setCommentDialogOpen] = React.useState(false);
 
+<<<<<<< HEAD
     let [postEffect, setPostEffect] = React.useState("0px 0px 5px 0px rgba(0,0,0,0.3)");
 
     useEffect(() => {
         handleButtonColor();
         handlePostEffect();
+=======
+    useEffect(() => {
+        handleButtonColor();
+>>>>>>> 7a4857e (Added styling to user update)
         if(post.userVote === 0){
             setUpvoteColor("inherit");
             setDownvoteColor("inherit");
@@ -48,6 +53,7 @@ export default function Post(props) {
         }
     });
 
+<<<<<<< HEAD
     const handlePostEffect = () => {
         if(post.verified){
             setPostEffect("0px 0px 10px 0px rgba(255,0,0,3)");
@@ -57,6 +63,8 @@ export default function Post(props) {
         }
     }
 
+=======
+>>>>>>> 7a4857e (Added styling to user update)
 
     const handleButtonColor = () => {
         if(post.votes === 0){
@@ -71,11 +79,19 @@ export default function Post(props) {
     }
 
     const handleDownvoteClick = () => {
+<<<<<<< HEAD
         props.downvotePost(post.postID);
     }
 
     const handleUpvoteClick = () => {
         props.upvotePost(post.postID);
+=======
+        props.downvotePost(post.id);
+    }
+
+    const handleUpvoteClick = () => {
+        props.upvotePost(post.id);
+>>>>>>> 7a4857e (Added styling to user update)
     }
 
     const handleDialogCancel = () =>{
@@ -84,7 +100,11 @@ export default function Post(props) {
 
     const handleDialogConfirm = () =>{
         setDialogOpen(false);
+<<<<<<< HEAD
         props.deletePost(post.postID);
+=======
+        props.deletePost(post.id);
+>>>>>>> 7a4857e (Added styling to user update)
     }
 
     const handleDialogOpen = () =>{
@@ -112,12 +132,20 @@ export default function Post(props) {
     }
 
     return(
+<<<<<<< HEAD
         <Grid md={6} sm={12} containers>
+=======
+        <Grid  containers>
+>>>>>>> 7a4857e (Added styling to user update)
             <Card sx={{
                 margin: "1rem",
                 padding: 2,
                 backgroundColor: '#fff',
+<<<<<<< HEAD
                 boxShadow: postEffect,
+=======
+                boxShadow: '0px 0px 5px 0px rgba(0,0,0,0.3)',
+>>>>>>> 7a4857e (Added styling to user update)
             }}>
                 <CardContent sx={{
                     minHeight: 150,
@@ -125,6 +153,7 @@ export default function Post(props) {
                     overflow: 'auto',
                 }}>
                     <Typography variant="h5" component="div">
+<<<<<<< HEAD
                         {post.postTitle}
                         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                             {post.username} - {post.date.substr(0,10)}
@@ -132,6 +161,15 @@ export default function Post(props) {
                     </Typography>
                     <Typography variant="body1">
                         {post.postEntry}
+=======
+                        {post.title}
+                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                            {post.username} - {post.time}
+                        </Typography>
+                    </Typography>
+                    <Typography variant="body1">
+                        {post.content}
+>>>>>>> 7a4857e (Added styling to user update)
                     </Typography>
                 </CardContent>
                 <CardActions>
@@ -184,7 +222,11 @@ export default function Post(props) {
                     </Button>
                 </DialogActions>
             </Dialog>
+<<<<<<< HEAD
             <CommentList postId={post.postID} open={commentDialogOpen} onClose={handleCommentClose}/>
+=======
+            <CommentList postId={post.id} open={commentDialogOpen} onClose={handleCommentClose}/>
+>>>>>>> 7a4857e (Added styling to user update)
             <EditPost updatePost={props.updatePost} post={post} open={editDialogOpen} onClose={handleEditDialogClose}/>
         </Grid>
     )
