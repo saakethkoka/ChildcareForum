@@ -6,6 +6,7 @@ import BuildIcon from '@mui/icons-material/Build';
 import { Avatar } from "@mui/material";
 import { spacing } from '@mui/system';
 import SendIcon from '@mui/icons-material/Send';
+import CloseIcon from '@mui/icons-material/Close';
 import VerifiedIcon from '@mui/icons-material/Verified';
 // react-bootstrap components
 
@@ -34,6 +35,9 @@ function UserProfile() {
   const [emptyConfirmPassword, setEmptyConfirmPassword] = useState(false);
   const [verificationStatus, setVerificationStatus] = useState("");
 
+  const [emptyStatus, setEmptyStatus] = useState(false);
+  const [matchPasswords, setMatchPasswords] = useState(true);
+
 
 
   useEffect(() => {
@@ -44,13 +48,20 @@ function UserProfile() {
           setPassword(testUser[0].password)
           setConfirmPassword(testUser[0].password)
           setVerificationStatus("verified")
-          console.log(first_Name)
+          
   }, []);
 
   function updateProfile(){
     if (!first_Name || !last_Name || !email || !username || !password || !confirmPassword) {
+      setEmptyStatus(true)
       return;
     }
+    else if(confirmPassword !== password){
+      setMatchPasswords(false)
+      console.log("mismatched passwords")
+      return;
+    }
+    console.log("passed")
   }
 
 
@@ -66,9 +77,37 @@ function UserProfile() {
           </Grid>
         <div>
 
-          <Alert variant="filled" severity="error" onClose={() => {}}>
+          {emptyStatus && <Alert variant="filled" severity="error"  action={
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              size="small"
+              onClick={() => {
+                setEmptyStatus(false);
+              }}
+            >
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
+          }>
             All required fields must be filled!
-          </Alert>
+          </Alert>}
+
+          {!matchPasswords && <Alert variant="filled" severity="error"  action={
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              size="small"
+              onClick={() => {
+                setMatchPasswords(true);
+              }}
+            >
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
+          }>
+            Passwords must match!
+          </Alert>}
+
+
           <FormControl sx={{ m: 2, width: '25ch' }} variant="outlined" required = {true} error = {emptyUsername}>
             <InputLabel >Username</InputLabel>
             <OutlinedInput
@@ -201,7 +240,7 @@ function UserProfile() {
               </item>}
 
               <item>
-              <Button variant="contained" color="primary" sx={{ m: 2, width: '15ch' }} >
+              <Button variant="contained" color="primary" sx={{ m: 2, width: '15ch' }} onClick={ e => updateProfile(e)}>
                 Submit
               </Button>
               </item>
