@@ -1,4 +1,3 @@
-
 import React, {Fragment, useEffect, useState } from 'react';
 import PostBoard from '../Common/PostBoard/PostBoard'
 import  ProfileNavbar  from '../UserNavBar'
