@@ -7,6 +7,7 @@ const ProfileNavbar = (props) => {
             <Toolbar>
                 <Typography variant = 'h6' component='div' sx={{ flexGrow: 1}}>
 <<<<<<< HEAD
+<<<<<<< HEAD
                     <Button href="/" color = 'inherit'>
                         Home
                     </Button>
@@ -26,11 +27,21 @@ const ProfileNavbar = (props) => {
                      <Button href="/accounts/verification" color = 'inherit'>Verification Requests</Button>
 =======
                     <Button color = 'inherit'>Home</Button>
+=======
+                    <Button href="/" color = 'inherit'>
+                        Home
+                    </Button>
+>>>>>>> 7a4857e (Added styling to user update)
                 </Typography>
                 <Stack direction='row' spacing={2}>
                     {props.auth && <Button color = 'inherit'>Verification Requests</Button>}
-                    <Button color = 'inherit'>Post History</Button>
-                    <Button color = 'inherit'>Comments</Button>
+                    <Button href="/accounts/userProfile" color = 'inherit'>
+                        Update Profile
+                    </Button>
+                    <Button href="/accounts/userPosts" color = 'inherit'>
+                        User Posts
+                    </Button>
+                    <Button href="/accounts/" color = 'inherit'>Comments</Button>
                     <Button color = 'inherit'>Like/Dislike</Button>
                     <Button color = 'inherit'>Saved Posts</Button>
                     {props.auth && <Button color = 'inherit'>Banned Users</Button>}

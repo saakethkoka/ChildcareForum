@@ -113,8 +113,16 @@ export default class PostBoard extends React.Component {
                           downvotePost={this.downvotePost}
                           updatePost={this.updatePost}
                           upvotePost={this.upvotePost}
+<<<<<<< HEAD
                           postType = {this.props.postType}
                 />
+=======
+                />
+                <Grid xs={3}>
+                    <CreatePostButton addPost={this.addPost}/>
+                </Grid>
+
+>>>>>>> 7a4857e (Added styling to user update)
 
             </Fragment>
         )
