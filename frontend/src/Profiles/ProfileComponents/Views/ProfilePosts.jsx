@@ -7,7 +7,11 @@ export const ProfilePosts = () => {
     return (
         <Fragment>
             <ProfileNavbar/>
+<<<<<<< HEAD
             <PostBoard postType = {"userPostList"}/>
+=======
+            <PostBoard/>
+>>>>>>> 7a4857e (Added styling to user update)
         </Fragment>
         
     );
