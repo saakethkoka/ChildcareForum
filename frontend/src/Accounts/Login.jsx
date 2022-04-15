@@ -15,8 +15,6 @@ export class Login extends React.Component {
     repository = new Repository();
     
     async login(event) {
-        console.log("test")
-        console.log(this.state.username, this.state.password)
 		event.preventDefault();
 		event.stopPropagation();
 
@@ -26,15 +24,13 @@ export class Login extends React.Component {
 		}
 
 		const response = await this.repository.login(this.state.username, this.state.password)
-        console.log(response.status)
 		if (!response || response === 'error') {
 			return;
 		}
         
 		if (response.status) {
-			sessionStorage.setItem("isAuthenticated", "true");
-			//sessionStorage.setItem("userId", response.account.ID);
-            console.log("login works")
+			// sessionStorage.setItem("userID", "true");
+			sessionStorage.setItem("userID", response.userID);
 			this.setState({
 				username: "",
 				password: "",
@@ -48,8 +44,8 @@ export class Login extends React.Component {
 
 
     render(){
-        if (sessionStorage.getItem("isAuthenticated") === "true") {
-			return <Navigate to="/" />;
+        if (sessionStorage.getItem("userID")) {
+			return <Navigate to="/posts" />;
 		}
         const formStyle = {padding: 20, height: '50vh', width: 290, margin: "20px auto"}
         const textStyle = {margin: "10px auto"}
