@@ -16,10 +16,11 @@ const ProfileNavbar = (props) => {
                         Update Profile
                     </Button>
                     <Button href="/accounts/userPosts" color = 'inherit'>
-                        User Posts
+                        Posts
                     </Button>
                     <Button href="/accounts/" color = 'inherit'>Comments</Button>
-                    <Button color = 'inherit'>Like/Dislike</Button>
+                    <Button color = 'inherit'>Likes</Button>
+                    <Button color = 'inherit'>Dislikes</Button>
                     <Button color = 'inherit'>Saved Posts</Button>
                     {props.auth && <Button color = 'inherit'>Banned Users</Button>}
                 </Stack>

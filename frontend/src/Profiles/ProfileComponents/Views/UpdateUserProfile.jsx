@@ -241,7 +241,7 @@ function UserProfile() {
 
               <item>
               <Button variant="contained" color="primary" sx={{ m: 2, width: '15ch' }} onClick={ e => updateProfile(e)}>
-                Submit
+                Update
               </Button>
               </item>
             </Stack>

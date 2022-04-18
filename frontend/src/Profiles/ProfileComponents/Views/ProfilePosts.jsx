@@ -7,7 +7,7 @@ export const ProfilePosts = () => {
     return (
         <Fragment>
             <ProfileNavbar/>
-            <PostBoard/>
+            <PostBoard postType = {"userPostList"}/>
         </Fragment>
         
     );
