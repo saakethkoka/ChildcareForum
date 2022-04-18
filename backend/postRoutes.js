@@ -31,7 +31,7 @@ router.get('/', async (req, res, next) => {
                 postEntry: postRaw[row].postEntry
             });
         }
-        response.json(formattedPosts);
+        res.json(formattedPosts);
     } catch (err) {
         console.error('Problem retrieving discussion board posts', err);
         res.status(500).json({message: err.toString()});
