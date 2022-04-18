@@ -154,6 +154,7 @@ export default class PostBoard extends React.Component {
                           downvotePost={this.downvotePost}
                           updatePost={this.updatePost}
                           upvotePost={this.upvotePost}
+                          postType = {this.props.postType}
                 />
 
             </Fragment>
