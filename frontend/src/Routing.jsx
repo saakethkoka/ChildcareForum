@@ -4,12 +4,13 @@ import PostBoard from "./PostBoard/PostBoard"
 import  UserProfile from './Profiles/ProfileComponents/Views/UpdateUserProfile'
 import {ProfilePosts} from "./Profiles/ProfileComponents//Views/ProfilePosts";
 import ProfileBanned from "./Profiles/ProfileComponents/Views/ProfileBanned"
+import {OtherProfilePosts} from "./Profiles/ProfileComponents/Views/ViewOtherUser/OtherProfilePosts"
 
 export default function Routing(){
     return(
         <Router>
 			<Routes>
-				<Route path="/" exact element={<ProfileBanned />} />
+				<Route path="/user/posts/:userId" exact element={<OtherProfilePosts />} />
                 
                 
                 
