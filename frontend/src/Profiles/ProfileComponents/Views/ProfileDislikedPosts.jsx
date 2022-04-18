@@ -2,7 +2,7 @@ import React, {Fragment} from 'react';
 import PostBoard from '../Common/PostBoard/PostBoard'
 import  ProfileNavbar  from '../UserNavBar'
 
-export const ProfileLikedPosts = () => { 
+export const ProfileDislikedPosts = () => { 
 
     return (
         <Fragment>
