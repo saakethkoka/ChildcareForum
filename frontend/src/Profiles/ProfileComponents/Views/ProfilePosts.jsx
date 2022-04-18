@@ -8,10 +8,14 @@ export const ProfilePosts = () => {
         <Fragment>
             <ProfileNavbar/>
 <<<<<<< HEAD
+<<<<<<< HEAD
             <PostBoard postType = {"userPostList"}/>
 =======
             <PostBoard/>
 >>>>>>> 7a4857e (Added styling to user update)
+=======
+            <PostBoard postType = {"userPostList"}/>
+>>>>>>> be2a641 (updated banned view)
         </Fragment>
         
     );

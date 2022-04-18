@@ -114,6 +114,7 @@ export default class PostBoard extends React.Component {
                           updatePost={this.updatePost}
                           upvotePost={this.upvotePost}
 <<<<<<< HEAD
+<<<<<<< HEAD
                           postType = {this.props.postType}
                 />
 =======
@@ -123,6 +124,10 @@ export default class PostBoard extends React.Component {
                 </Grid>
 
 >>>>>>> 7a4857e (Added styling to user update)
+=======
+                          postType = {this.props.postType}
+                />
+>>>>>>> be2a641 (updated banned view)
 
             </Fragment>
         )
