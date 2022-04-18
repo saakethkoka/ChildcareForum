@@ -8,7 +8,7 @@ const { log, ExpressAPILogMiddleware } = require('@rama41222/node-logger');
 const routes = require('./routes');
 const BSroutes = require('./BSroutes');
 const SWroutes = require('./SWroutes');
-const postRoutes = requrie('./postRoutes');
+const postRoutes = require('./postRoutes');
 
 // set up some configs for express.
 const config = {
