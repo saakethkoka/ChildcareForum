@@ -8,6 +8,7 @@ import ProfileView from "./Profiles/ProfileComponents/Views/ViewOtherUser/OtherP
 import UserProfile from "./Profiles/ProfileComponents/Views/UpdateUserProfile"
 import {ProfilePosts} from "./Profiles/ProfileComponents//Views/ProfilePosts";
 import ProfileBanned from "./Profiles/ProfileComponents/Views/ProfileBanned"
+import {OtherProfilePosts} from "./Profiles/ProfileComponents/Views/ViewOtherUser/OtherProfilePosts"
 
 
 
