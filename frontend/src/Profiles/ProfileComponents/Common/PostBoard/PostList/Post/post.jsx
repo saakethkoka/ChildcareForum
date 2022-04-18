@@ -22,9 +22,13 @@ export default function Post(props) {
 
     let post = props.post;
 <<<<<<< HEAD
+<<<<<<< HEAD
     let postType = props.postType
 =======
 >>>>>>> 7a4857e (Added styling to user update)
+=======
+    let postType = props.postType
+>>>>>>> be2a641 (updated banned view)
 
     let [VotesColor, setVotesColor] = React.useState("warning");
     let [upvoteColor, setUpvoteColor] = React.useState("inherit");
@@ -135,10 +139,15 @@ export default function Post(props) {
                         <ThumbUpIcon/>
                     </Fab>
 <<<<<<< HEAD
+<<<<<<< HEAD
 
                     
 =======
 >>>>>>> 7a4857e (Added styling to user update)
+=======
+
+                    
+>>>>>>> be2a641 (updated banned view)
                     <Fab color={downvoteColor}
                          sx={fab_styles}
                          onClick={handleDownvoteClick}
