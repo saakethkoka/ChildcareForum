@@ -11,7 +11,6 @@ const ProfileNavbar = (props) => {
                     </Button>
                 </Typography>
                 <Stack direction='row' spacing={2}>
-                    {props.auth && <Button color = 'inherit'>Verification Requests</Button>}
                     <Button href="/accounts/userProfile" color = 'inherit'>
                         Update Profile
                     </Button>
@@ -23,6 +22,7 @@ const ProfileNavbar = (props) => {
                     <Button color = 'inherit'>Dislikes</Button>
                     <Button color = 'inherit'>Saved Posts</Button>
                     {props.auth && <Button color = 'inherit'>Banned Users</Button>}
+                    {props.auth && <Button color = 'inherit'>Verification Requests</Button>}
                 </Stack>
             </Toolbar>
         </AppBar>
