@@ -110,6 +110,8 @@ router.put('/:postID', async (req, res, next) => {
         } else {
             queryString += ' restricted = ' + req.body.restricted;
         }
+        queryString += ' WHERE postID = ' + req.params.postID;
+
         const {DBQuery, disconnect} = await connectToDatabase();
         const results = await DBQuery(queryString);
         disconnect();
@@ -125,6 +127,11 @@ router.put('/:postID', async (req, res, next) => {
 router.delete('/:postID', async (req, res, next) => {
     try {
         console.log('Initiating DELETE /discussionBoard/[postID] request');
+        const queryString = 'DELETE FROM discussionBoard WHERE postID = ' + req.params.postID;
+        const {DBQuery, disconnect} = await connectToDatabase();
+        const results = await DBQuery(queryString);
+        disconnect();
+        res.status(200).json(results);
     } catch (err) {
         console.error('Problem deleting record from the discussion board', err);
         res.status(500).json({message: err.toString()});
