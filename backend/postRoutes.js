@@ -16,7 +16,7 @@ router.get('/', async (req, res, next) => {
         const postRaw = JSON.parse(JSON.stringify(results));
         let formattedPosts = [];
         for (const row in postRaw) {
-            const statusQuery = 'SELECT isVerified FROM statusTable WHERE userID = ' + postRaw[row].f_userID;
+            const statusQuery = 'SELECT isVerified, isBanned FROM statusTable WHERE userID = ' + postRaw[row].f_userID;
             const statusResults = await DBQuery(statusQuery);
             const statusRaw = JSON.parse(JSON.stringify(statusResults));
 
@@ -24,17 +24,37 @@ router.get('/', async (req, res, next) => {
             const userResults = await DBQuery(userQuery);
             const userRaw = JSON.parse(JSON.stringify(userResults));
 
+            let userVote;
+            if (typeof request.query.curruserID == 'undefined')
+                userVote = 0;
+            else {
+                const voteValueRaw = await DBQuery('SELECT value FROM postVotes WHERE f_postID = ' + postRaw[row].postID + ' AND f_userID = ' + request.query.curruserID);
+                const voteValueObj = JSON.parse(JSON.stringify(voteValueRaw));
+                if (typeof voteValueObj[0] == 'undefined')
+                    userVote = 0;
+                else
+                    userVote = voteValueObj[0].value;
+            }
+
+            let votes;
+            const voteCountRaw = await DBQuery('SELECT SUM(value) AS total FROM postVotes WHERE f_postID = ' + postRaw[row].postID);
+            const voteCountObj = JSON.parse(JSON.stringify(voteCountRaw))[0];
+            if (voteCountObj.total === null)
+                votes = 0;
+            else
+                votes = voteCountObj.total;
+
             formattedPosts.push({
                 postTitle: postRaw[row].postTitle,
                 postID: postRaw[row].postID,
                 userID: postRaw[row].f_userID,
-                //votes:
-                //userVote:
-                verified: statusRaw[0].isVerified,
+                votes: votes,
+                userVote: userVote,
+                verified: (statusRaw[0].isVerified == 0? 'false': 'true'),
                 date: postRaw[row].date,
-                //restricted:
+                restricted: (postRaw[row].isRestricted == 0? 'false': 'true'),
                 username: userRaw[0].username,
-                //userBanned:
+                userBanned: (statusRaw[0].isBanned == 0? 'false': 'true'),
                 postEntry: postRaw[row].postEntry
             });
         }
