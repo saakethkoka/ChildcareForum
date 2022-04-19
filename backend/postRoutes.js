@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const { request, response } = require('express');
 app.use(bodyParser.json());
 
+//uses curruserID in query
 router.get('/', async (req, res, next) => {
     try {
         console.log('Initiating GET /discussionBoard request');
@@ -69,9 +70,20 @@ router.get('/', async (req, res, next) => {
     next();
 })
 
+//requires curruserID in query
 router.post('/', async (req, res, next) => {
     try {
         console.log('Initiating POST /discussionBoard request');
+        const queryString = 'INSERT INTO discussionBoard (f_userID, date, postTitle, postEntry, isRestricted) VALUES ('
+                            + req.query.curruserID +', \''
+                            + req.body.date + '\', \''
+                            + req.body.postTitle + '\', \''
+                            + req.body.postEntry + '\', '
+                            + req.body.restricted + ')';
+        const {DBQuery, disconnect} = await connectToDatabase();
+        const results = await DBQuery(queryString);
+        disconnect();
+        res.status(201).json(results);
     } catch (err) {
         console.error('Problem adding to the discussion board', err);
         res.status(500).json({message: err.toString()});
@@ -83,6 +95,25 @@ router.post('/', async (req, res, next) => {
 router.put('/:postID', async (req, res, next) => {
     try {
         console.log('Initiating PUT /discussionBoard/[postID] request');
+        
+        let queryString = 'UPDATE discussionBoard SET';
+        if (typeof req.body.title != 'undefined') {
+            queryString += ' title = \'' + req.body.title + '\'';
+            if (typeof req.body.postEntry != 'undefined')
+                queryString += ' AND postEntry = \'' + req.body.postEntry + '\'';
+            if (typeof req.body.restricted != 'undefined')
+                queryString += ' AND restricted = ' + req.body.restricted; 
+        } else if (typeof req.body.postEntry != 'undefined') {
+            queryString += ' postEntry = \'' + req.body.postEntry + '\'';
+            if (typeof req.body.restricted != 'undefined')
+                queryString += ' AND restricted = ' + req.body.restricted;
+        } else {
+            queryString += ' restricted = ' + req.body.restricted;
+        }
+        const {DBQuery, disconnect} = await connectToDatabase();
+        const results = await DBQuery(queryString);
+        disconnect();
+        res.status(200).json(results);
     } catch (err) {
         console.error('Problem updating discussion board record', err);
         res.status(500).json({message: err.toString()});
