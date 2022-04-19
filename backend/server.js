@@ -5,10 +5,16 @@ const mysql = require('mysql');
 const cors = require('cors');
 const { log, ExpressAPILogMiddleware } = require('@rama41222/node-logger');
 // const mysqlConnect = require('./db');
+
 const routes = require('./routes');
 const BSroutes = require('./BSroutes');
 const SWroutes = require('./SWroutes');
 const postRoutes = require('./postRoutes');
+const NSroutes = require('./NSRoutes');
+const DBroutes = require('./DBroutes');
+const ServiceRoutes = require('./ServiceRoutes');
+const userRoutes = require('./userRoutes');
+const govServicesRoutes = require('./govServicesRoutes');
 
 // set up some configs for express.
 const config = {
@@ -32,8 +38,13 @@ app.use(ExpressAPILogMiddleware(logger, { request: true }));
 
 //include routes
 routes(app, logger);
-BSroutes(app, logger);
+//BSroutes(app, logger);
 SWroutes(app, logger);
+//NSroutes(app, logger);
+DBroutes(app, logger);
+ServiceRoutes(app,logger);
+userRoutes(app,logger);
+govServicesRoutes(app,logger);
 
 app.use('/discussionBoard', postRoutes);
 
