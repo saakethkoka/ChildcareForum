@@ -84,7 +84,7 @@ export default function Post(props) {
 
     const handleDialogConfirm = () =>{
         setDialogOpen(false);
-        props.deletePost(post.id);
+        props.deletePost(post.postID);
     }
 
     const handleDialogOpen = () =>{
