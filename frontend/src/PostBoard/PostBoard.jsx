@@ -3,7 +3,7 @@ import {PostList} from "./PostList/PostList";
 import CreatePostButton from "./CreatePostButton/CreatePostButton";
 import Grid from "@mui/material/Grid/Grid";
 import PostFilters from "./PostFilters/PostFilters";
-import {createPost, deletePost, getPosts, searchPosts} from "../kokaAPI"
+import {createPost, deletePost, getPosts, searchPosts, editPost} from "../kokaAPI"
 
 export default class PostBoard extends React.Component {
     constructor(props) {
@@ -115,18 +115,12 @@ export default class PostBoard extends React.Component {
     }
 
     updatePost = (id, title, content, restricted) => {
-        let newPosts = this.state.posts.map(post => {
-            if (post.id === id) {
-                post.title = title;
-                post.content = content;
-                post.restricted = restricted;
-            }
-            return post;
-        });
-        this.setState({
-            posts: newPosts
-        });
-
+        console.log(id, title, content, restricted);
+        editPost(id, title, content, restricted).then(post => {
+            getPosts().then(posts => {
+                this.setState({posts: posts})
+            })
+        })
     }
 
 

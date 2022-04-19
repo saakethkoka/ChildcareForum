@@ -119,3 +119,17 @@ export const deletePost = (postID) => new Promise((resolve, reject) => {
             reject(err);
         });
 });
+
+export const editPost = (postID, postTitle, postEntry, restricted) => new Promise((resolve, reject) => {
+    let params = {
+        title: postTitle,
+        postEntry: postEntry,
+        restricted: restricted ? 1 : 0
+    };
+    axios.put(`${base_url}/discussionBoard/${postID}`, params)
+        .then(res => resolve(res.data))
+        .catch(err =>{
+            alert(err);
+            reject(err);
+        });
+});

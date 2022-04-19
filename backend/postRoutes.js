@@ -124,13 +124,13 @@ router.put('/:postID', async (req, res, next) => {
         if (typeof req.body.title != 'undefined') {
             queryString += ' postTitle = \'' + req.body.title + '\'';
             if (typeof req.body.postEntry != 'undefined')
-                queryString += ' AND postEntry = \'' + req.body.postEntry + '\'';
+                queryString += ' , postEntry = \'' + req.body.postEntry + '\'';
             if (typeof req.body.restricted != 'undefined')
-                queryString += ' AND isRestricted = ' + req.body.restricted; 
+                queryString += ' , isRestricted = ' + req.body.restricted;
         } else if (typeof req.body.postEntry != 'undefined') {
             queryString += ' postEntry = \'' + req.body.postEntry + '\'';
             if (typeof req.body.restricted != 'undefined')
-                queryString += ' AND isRestricted = ' + req.body.restricted;
+                queryString += ' , isRestricted = ' + req.body.restricted;
         } else {
             queryString += ' isRestricted = ' + req.body.restricted;
         }
