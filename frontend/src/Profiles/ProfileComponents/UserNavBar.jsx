@@ -17,12 +17,12 @@ const ProfileNavbar = (props) => {
                     <Button href="/accounts/userPosts" color = 'inherit'>
                         Posts
                     </Button>
-                    <Button href="/accounts/" color = 'inherit'>Comments</Button>
-                    <Button color = 'inherit'>Likes</Button>
-                    <Button color = 'inherit'>Dislikes</Button>
-                    <Button color = 'inherit'>Saved Posts</Button>
-                    {props.auth && <Button color = 'inherit'>Banned Users</Button>}
-                    {props.auth && <Button color = 'inherit'>Verification Requests</Button>}
+                    <Button href="/accounts/comments" color = 'inherit'>Comments</Button>
+                    <Button href="/accounts/liked" color = 'inherit'>Likes</Button>
+                    <Button href="/accounts/disliked" color = 'inherit'>Dislikes</Button>
+                    <Button href="/accounts/saved" color = 'inherit'>Saved Posts</Button>
+                     <Button href="/accounts/ban" color = 'inherit'>Banned Users</Button>
+                     <Button href="/accounts/verification" color = 'inherit'>Verification Requests</Button>
                 </Stack>
             </Toolbar>
         </AppBar>
