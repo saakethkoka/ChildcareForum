@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import './App.css';
 import axios from 'axios';
+import Routing from './Routing';
 import PostBoard from "./PostBoard/PostBoard";
 
 // React functional component
@@ -48,7 +49,7 @@ function App () {
       fetchVals();
     }).catch(err => {
       console.log(err)
-    });;
+    });
     setNumber("");
   }
 
@@ -59,7 +60,7 @@ function App () {
       fetchVals();
     }).catch(err => {
       console.log(err)
-    });;
+    });
   }
 
   // tell app to fetch values from db on first load (if initialized)
@@ -70,22 +71,10 @@ function App () {
   }, [])
 
   return (
-      <PostBoard/>
-
-    // <div className="App">
-    //   <header className="App-header">
-    //     <button onClick={fetchBase} style={{marginBottom: '1rem'}}> {`GET: http://${url}:8000/`} </button>
-    //     <button onClick={reset}> Reset DB </button>
-    //     <form onSubmit={handleSubmit}>
-    //       <input type="text" value={number} onChange={handleChange}/>
-    //       <br/>
-    //       <input type="submit" value="Submit" />
-    //     </form>
-    //     <ul>
-    //       { values.map((value, i) => <li key={i}>{value.value}</li>) }
-    //     </ul>
-    //   </header>
-    // </div>
+      <Fragment>
+        <Routing/>
+        {/*<PostBoard/>*/}
+      </Fragment>
   );
 }
 

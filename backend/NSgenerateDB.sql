@@ -1,4 +1,3 @@
-
 -- Nicole Sood
 -- These the scripts used to generate our database.
 -- It also includes some sample input statements so we have some data to test our apis with
@@ -45,7 +44,7 @@ insert into discussionBoard(f_userID, postTitle, postEntry) VALUES
 ('3', 'CVS out of bandaids?', 'Today i went to CVS for bandaids. So i went to target and got the dino ones');
 
 CREATE TABLE comments(
-    commentID int auto_increment PRIMARY KEY ,
+    commentID int auto_increment PRIMARY KEY,
     f_postID int,
     FOREIGN KEY (f_postID) REFERENCES discussionBoard(postID),
     f_userID int,
