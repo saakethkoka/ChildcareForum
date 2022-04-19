@@ -25,10 +25,10 @@ router.get('/', async (req, res, next) => {
             const userRaw = JSON.parse(JSON.stringify(userResults));
 
             let userVote;
-            if (typeof request.query.curruserID == 'undefined')
+            if (typeof req.query.curruserID == 'undefined')
                 userVote = 0;
             else {
-                const voteValueRaw = await DBQuery('SELECT value FROM postVotes WHERE f_postID = ' + postRaw[row].postID + ' AND f_userID = ' + request.query.curruserID);
+                const voteValueRaw = await DBQuery('SELECT value FROM postVotes WHERE f_postID = ' + postRaw[row].postID + ' AND f_userID = ' + req.query.curruserID);
                 const voteValueObj = JSON.parse(JSON.stringify(voteValueRaw));
                 if (typeof voteValueObj[0] == 'undefined')
                     userVote = 0;
