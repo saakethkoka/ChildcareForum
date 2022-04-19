@@ -1,0 +1,84 @@
+const { request, response } = require('express');
+const express = require('express');
+
+const app = express();
+const port = 3000;
+
+const connectToDatabase = require('./database-helpers');
+
+module.exports = function userRoutes(app, logger){
+    app.post('/newuser', async (request, response) => {
+        try {
+            console.log('Initiating POST /newuser request');
+            // console.log('Request has a body containing:', request.body);
+            // console.log('Username = ', request.body.username,
+            //             'password = ', request.body.password,
+            //             'first_name = ', request.body.first_name,
+            //             'last_name = ', request.body.last_name,
+            //             'email = ', request.body.email);
+            let queryString;
+            if (typeof request.body.email !== 'undefined')
+                queryString = 'INSERT INTO userLogin (username, password, first_name, last_name, email) VALUES (\'' + 
+                                request.body.username + '\', \'' + 
+                                request.body.password + '\', \'' +
+                                request.body.first_name + '\', \'' +
+                                request.body.last_name + '\', \'' +
+                                request.body.email + '\')';
+            else
+                queryString = 'INSERT INTO userLogin (username, password, first_name, last_name) VALUES (\'' + 
+                                request.body.username + '\', \'' + 
+                                request.body.password + '\', \'' +
+                                request.body.first_name + '\', \'' +
+                                request.body.last_name + '\')';
+            const {DBQuery, disconnect} = await connectToDatabase();
+            const results = await DBQuery(queryString);
+            // console.log('Results of INSERT statement:', results);
+            disconnect();
+            response.status(201).json(results);
+        } catch (err) {
+            console.error('There was an error in POST /newuser', err);
+            response.status(500).json({message: err.message});
+        }
+    });
+
+    //login API call
+    //GET /logincheck?username=...&password=...
+    app.get('/logincheck', async (request, response) => {
+        try {
+            console.log('Initiating GET /logincheck request');
+            // console.log('Request query is an object containing:', request.query);
+            // console.log('Username = ', [request.query.username], 'password = ', [request.query.password]);
+            const queryString = 'SELECT password, userID FROM userLogin WHERE username = \'' + request.query.username +'\'';
+            console.log(queryString);
+            const {DBQuery, disconnect} = await connectToDatabase();
+            const dataPacket = await DBQuery(queryString);
+            // console.log('Retrieved data packet:', dataPacket);
+            const targetPassword = JSON.parse(JSON.stringify(dataPacket))[0].password;
+            if (targetPassword == request.query.password){
+                console.log('Log in success!');
+                response.json(JSON.parse(JSON.stringify(dataPacket))[0].userID);
+            } else
+                console.log('Log in failure!');
+            disconnect;
+        } catch (err) {
+            console.error('There was an error in GET /logincheck', err);
+            response.status(500).json({message: err.message});
+        }
+    });
+    
+    
+    app.get('/builduserprofile', async (request, response) => {
+        try {
+            console.log('Initiating GET /builduserprofile request');
+            const {DBQuery, disconnect} = await connectToDatabase();
+            const results = await DBQuery('SELECT username, first_name, last_name, email FROM userLogin');
+            disconnect();
+            response.json(results);
+        } catch (err) {
+            console.error('There was an error in GET /builduserprofile', err);
+            response.status(500).json({message: err.message});
+        }
+    });
+
+
+}
