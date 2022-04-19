@@ -16,7 +16,7 @@ module.exports = function BSroutes(app, logger) {
         response.json(responseBody);
     });
 
-    app.get('/discussionBoard', async (request, response) => {
+    /* app.get('/discussionBoard', async (request, response) => {
         try {
             console.log('Initiating GET /discussionBoard request');
             const {DBQuery, disconnect} = await connectToDatabase();
@@ -70,7 +70,7 @@ module.exports = function BSroutes(app, logger) {
             console.error('There was an error in GET /discussionBoard', err);
             response.status(500).json({message: err.message});
         }
-    });
+    }); */
 
 //Nicole Sood: 
     //Get Services, this will list out the services provided by a specific user profile. 
