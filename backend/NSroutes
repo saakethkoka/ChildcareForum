@@ -1,0 +1,23 @@
+const express = require('express');
+const app = express();
+const port = 3000;
+const connectToDatabase = require('./database-helpers');
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+
+module.exports = function NSroutes(app, logger) {
+    app.get('/getservices', async(request, response) => {
+        try {
+            console.log('Initiating getServices...');
+            const{BDQuery, disconnect}  = await connectToDatabase();
+            const results = await DBQuery('SELECT serviceName FROM addService');
+            disconnect();
+            response.json(results);
+        } catch (err) {
+            console.error('There was an error in GET /getServices', err);
+            response.status(500).json({message: err.message});
+        }
+    });
+}
+}
+

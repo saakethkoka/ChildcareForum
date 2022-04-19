@@ -9,16 +9,19 @@ const { log, ExpressAPILogMiddleware } = require('@rama41222/node-logger');
 const routes = require('./routes');
 const BSroutes = require('./BSroutes');
 const SWroutes = require('./SWroutes');
+
 const NSroutes = require('./NSRoutes');
 const DBroutes = require('./DBroutes');
 const ServiceRoutes = require('./ServiceRoutes');
 const userRoutes = require('./userRoutes');
 const govServicesRoutes = require('./govServicesRoutes');
+const postRoutes = require('./postRoutes');
+
 
 // set up some configs for express.
 const config = {
   name: 'sample-express-app',
-  port: 8000,
+  port: 5000,
   host: '0.0.0.0',
 };
 
@@ -44,6 +47,8 @@ DBroutes(app, logger);
 ServiceRoutes(app,logger);
 userRoutes(app,logger);
 govServicesRoutes(app,logger);
+
+app.use('/discussionBoard', postRoutes);
 
 // connecting the express object to listen on a particular port as defined in the config object.
 app.listen(config.port, config.host, (e) => {
