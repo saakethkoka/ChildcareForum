@@ -272,6 +272,7 @@ module.exports = function SWroutes(app, logger) {
     //     }
     // });
     
+
     app.post('/newuser', async (request, response) => {
         try {
             console.log('Initiating POST /newuser request');
