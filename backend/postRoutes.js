@@ -12,25 +12,34 @@ router.get('/', async (req, res, next) => {
         console.log('Initiating GET /discussionBoard request');
         const {DBQuery, disconnect} = await connectToDatabase();
         const results = await DBQuery('SELECT * FROM discussionBoard');
-        disconnect();
         
         const postRaw = JSON.parse(JSON.stringify(results));
         let formattedPosts = [];
         for (const row in postRaw) {
+            const statusQuery = 'SELECT isVerified FROM statusTable WHERE userID = ' + postRaw[row].f_userID;
+            const statusResults = await DBQuery(statusQuery);
+            const statusRaw = JSON.parse(JSON.stringify(statusResults));
+
+            const userQuery = 'SELECT username FROM userLogin WHERE userID = ' + postRaw[row].f_userID;
+            const userResults = await DBQuery(userQuery);
+            const userRaw = JSON.parse(JSON.stringify(userResults));
+
             formattedPosts.push({
                 postTitle: postRaw[row].postTitle,
                 postID: postRaw[row].postID,
                 userID: postRaw[row].f_userID,
                 //votes:
                 //userVote:
-                //verified:
+                verified: statusRaw[0].isVerified,
                 date: postRaw[row].date,
                 //restricted:
-                //username:
+                username: userRaw[0].username,
                 //userBanned:
                 postEntry: postRaw[row].postEntry
             });
         }
+
+        disconnect();
         res.json(formattedPosts);
     } catch (err) {
         console.error('Problem retrieving discussion board posts', err);
