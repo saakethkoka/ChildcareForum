@@ -127,7 +127,7 @@ export default function Post(props) {
                     <Typography variant="h5" component="div">
                         {post.postTitle}
                         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                            {post.username} - {post.date}
+                            {post.username} - {post.date.substr(0,10)}
                         </Typography>
                     </Typography>
                     <Typography variant="body1">

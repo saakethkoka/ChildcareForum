@@ -2,13 +2,17 @@ import axios from 'axios';
 
 const base_url = 'http://localhost:8000';
 
-export const getPosts = (id) => new Promise((resolve, reject) => {
-    axios.get(`${base_url}/discussionBoard`)
-        .then(res => resolve(res.data))
-        .catch(err =>{
-            alert(err)
-            reject(err)
-        });
+export const getPosts = () => new Promise((resolve, reject) => {
+    const id = sessionStorage.getItem('userID')
+    if(id) {
+        axios.get(`${base_url}/discussionBoard?curruserID=${id}`)
+            .then(res => resolve(res.data))
+            .catch(err => reject(err));
+    } else {
+        axios.get(`${base_url}/discussionBoard`)
+            .then(res => resolve(res.data))
+            .catch(err => reject(err));
+    }
 });
 
 
@@ -77,5 +81,31 @@ export const commentEngadgement = (commentID, value) => new Promise((resolve, re
                 reject(err)
             });
     }
+});
 
+export const createPost = (postTitle, postEntry, restricted) => new Promise((resolve, reject) => {
+    let date = new Date();
+    let dd = String(date.getDate()).padStart(2, '0');
+    let mm = String(date.getMonth() + 1).padStart(2, '0');
+    let yyyy = date.getFullYear();
+
+    date = yyyy + '-' + mm + '-' + dd;
+    let params = {
+        postTitle: postTitle,
+        postEntry: postEntry,
+        restricted: restricted ? 1 : 0,
+        date: date
+    };
+    console.log(params)
+    if (sessionStorage.getItem("userID")){
+        axios.post(`${base_url}/discussionBoard?curruserID=${sessionStorage.getItem("userID")}`, params)
+            .then(res => resolve(res.data))
+            .catch(err =>{
+                alert(err);
+                reject(err);
+            });
+    }
+    else{
+        resolve(1);
+    }
 });
