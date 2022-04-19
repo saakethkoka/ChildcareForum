@@ -7,6 +7,9 @@ import PostBoard from "./PostBoard/PostBoard";
 import ProfileView from "./Profiles/ProfileComponents/Views/ViewOtherUser/OtherProfileView";
 
 
+import ProfileView from "./Profiles/ProfileComponents/Views/ViewOtherUser/OtherProfileView";
+
+
 export default function Routing(){
 	const checkLogin = () =>{
 		console.log()
@@ -19,6 +22,18 @@ export default function Routing(){
     return(
         <Router>
 			<Routes>
+<<<<<<< HEAD
+=======
+				<Route path="/user/profile/:userId" exact element={<ProfileView />} />
+				<Route path="/user/posts/:userId" exact element={<OtherProfilePosts />} />
+                <Route path="/accounts/userProfile" exact element={<UserProfile />} />
+				<Route path="/accounts/userPosts" exact element={<ProfilePosts />} />
+				<Route path="/accounts/ban" exact element={<ProfileBanned />} />
+				
+                
+                
+				
+>>>>>>> a1f1bed (changes)
 
 				<Route path="/" element={checkLogin()} />
 				<Route path="/posts" exact element={<PostBoard />} />
