@@ -98,19 +98,20 @@ router.put('/:postID', async (req, res, next) => {
         
         let queryString = 'UPDATE discussionBoard SET';
         if (typeof req.body.title != 'undefined') {
-            queryString += ' title = \'' + req.body.title + '\'';
+            queryString += ' postTitle = \'' + req.body.title + '\'';
             if (typeof req.body.postEntry != 'undefined')
                 queryString += ' AND postEntry = \'' + req.body.postEntry + '\'';
             if (typeof req.body.restricted != 'undefined')
-                queryString += ' AND restricted = ' + req.body.restricted; 
+                queryString += ' AND isRestricted = ' + req.body.restricted; 
         } else if (typeof req.body.postEntry != 'undefined') {
             queryString += ' postEntry = \'' + req.body.postEntry + '\'';
             if (typeof req.body.restricted != 'undefined')
-                queryString += ' AND restricted = ' + req.body.restricted;
+                queryString += ' AND isRestricted = ' + req.body.restricted;
         } else {
-            queryString += ' restricted = ' + req.body.restricted;
+            queryString += ' isRestricted = ' + req.body.restricted;
         }
         queryString += ' WHERE postID = ' + req.params.postID;
+        console.log(queryString);
 
         const {DBQuery, disconnect} = await connectToDatabase();
         const results = await DBQuery(queryString);
