@@ -45,17 +45,41 @@ router.get('/', async (req, res, next) => {
             else
                 votes = voteCountObj.total;
 
+            let verified;
+            if(statusRaw[0]){
+                verified = (statusRaw[0].isVerified !== 0)
+            }
+            else{
+                verified = false;
+            }
+
+            let restricted;
+            if(statusRaw[0]){
+                restricted = (statusRaw[0].isRestricted !== 0)
+            }
+            else{
+                restricted = false;
+            }
+
+            let userBanned;
+            if(statusRaw[0]){
+                userBanned = (statusRaw[0].isBanned !== 0)
+            }
+            else{
+                userBanned = false;
+            }
+
             formattedPosts.push({
                 postTitle: postRaw[row].postTitle,
                 postID: postRaw[row].postID,
                 userID: postRaw[row].f_userID,
                 votes: votes,
                 userVote: userVote,
-                verified: (statusRaw[0].isVerified == 0? 'false': 'true'),
+                verified,
                 date: postRaw[row].date,
-                restricted: (postRaw[row].isRestricted == 0? 'false': 'true'),
+                restricted,
                 username: userRaw[0].username,
-                userBanned: (statusRaw[0].isBanned == 0? 'false': 'true'),
+                userBanned,
                 postEntry: postRaw[row].postEntry
             });
         }
@@ -100,13 +124,13 @@ router.put('/:postID', async (req, res, next) => {
         if (typeof req.body.title != 'undefined') {
             queryString += ' postTitle = \'' + req.body.title + '\'';
             if (typeof req.body.postEntry != 'undefined')
-                queryString += ' AND postEntry = \'' + req.body.postEntry + '\'';
+                queryString += ' , postEntry = \'' + req.body.postEntry + '\'';
             if (typeof req.body.restricted != 'undefined')
-                queryString += ' AND isRestricted = ' + req.body.restricted; 
+                queryString += ' , isRestricted = ' + req.body.restricted;
         } else if (typeof req.body.postEntry != 'undefined') {
             queryString += ' postEntry = \'' + req.body.postEntry + '\'';
             if (typeof req.body.restricted != 'undefined')
-                queryString += ' AND isRestricted = ' + req.body.restricted;
+                queryString += ' , isRestricted = ' + req.body.restricted;
         } else {
             queryString += ' isRestricted = ' + req.body.restricted;
         }

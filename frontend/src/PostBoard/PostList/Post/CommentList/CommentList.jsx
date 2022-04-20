@@ -4,25 +4,39 @@ import Comment from './Comment/Comment';
 import Grid from "@mui/material/Grid/Grid";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import {getComments, postComment, commentEngadgement} from "../../../../kokaAPI";
 
-const sample_comments = [
-    {author:"john", content: "This is the first comment", userVote: 1, votes: 0, id: 1},
-    {author:"bob", content: "This is the second comment", userVote: 0, votes: 0, id: 2},
-    {author:"bob", content: "This is the third comment", userVote: -1, votes: 0, id: 3},
-    {author:"bob", content: "This is the fourth comment", userVote: 0, votes: 0, id: 4},
-    {author:"bob", content: "This is the fifth comment", userVote: 0, votes: 0, id: 5},
-    {author:"bob", content: "This is the sixth comment", userVote: 0, votes: 0, id: 6},
-    {author:"bob", content: "This isThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first comment the seventh comment", userVote: 0, votes: 0, id: 7},
-    {author:"bob", content: "This is the eighth comment", userVote: 0, votes: 0, id: 8},
-    {author:"bob", content: "This is the ninth comment", userVote: 0, votes: 0, id: 9},
-    {author:"bob", content: "This is the tenth comment", userVote: 0, votes: 0, id: 10},
-]
+// const sample_comments = [
+//     {
+//         author:"john", // username of commenter
+//         content: "This is the first comment", // content of comment
+//         userVote: 1, // What the user (if the user is logged in, else 0) has voted on this post (-1, 0 or 1)
+//         votes: 0, // Net votes on this post (upvotes - downvotes)
+//         id: 1 // Unique id of comment
+//     },
+//     {author:"bob", content: "This is the second comment", userVote: 0, votes: 0, id: 2},
+//     {author:"bob", content: "This is the third comment", userVote: -1, votes: 0, id: 3},
+//     {author:"bob", content: "This is the fourth comment", userVote: 0, votes: 0, id: 4},
+//     {author:"bob", content: "This is the fifth comment", userVote: 0, votes: 0, id: 5},
+//     {author:"bob", content: "This is the sixth comment", userVote: 0, votes: 0, id: 6},
+//     {author:"bob", content: "This isThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first commentThis is the first comment the seventh comment", userVote: 0, votes: 0, id: 7},
+//     {author:"bob", content: "This is the eighth comment", userVote: 0, votes: 0, id: 8},
+//     {author:"bob", content: "This is the ninth comment", userVote: 0, votes: 0, id: 9},
+//     {author:"bob", content: "This is the tenth comment", userVote: 0, votes: 0, id: 10},
+// ]
 
 export default function CommentList(props){
 
     let [comment, setComment] = React.useState("");
-    let [comments, setComments] = React.useState(sample_comments);
+    let [comments, setComments] = React.useState([]);
 
+    useEffect(() => {
+        getComments(props.postId).then(res => {
+            setComments(res);
+        })
+    }, [props.open]);
+
+    
 
     const onCancel = () => {
         // TODO: clear form maybe
@@ -30,15 +44,12 @@ export default function CommentList(props){
     }
 
     const onCommentSubmit = () => {
-        console.log(comment);
-        setComment("");
-        let new_comments = comments.push({
-            author: "bob",
-            content: comment,
-            userVote: 0,
-            votes: 0,
-            id: comments.length + 1
+        postComment(4, props.postId, comment).then(res => {
+            getComments(props.postId).then(res => {
+                setComments(res);
+            })
         });
+        setComment("");
     }
 
 
@@ -46,15 +57,24 @@ export default function CommentList(props){
         let new_comments = comments.map(comment => {
             if(comment.id === id){
                 if(comment.userVote === -1) {
-                    comment.userVote = 1;
-                    comment.votes += 2;
+                    commentEngadgement(id, 1).then(res => {
+                        getComments(props.postId).then(res => {
+                            setComments(res);
+                        })
+                    });
                 } else if(comment.userVote === 0) {
-                    comment.userVote = 1;
-                    comment.votes += 1;
+                    commentEngadgement(id, 1).then(res => {
+                        getComments(props.postId).then(res => {
+                            setComments(res);
+                        })
+                    });
                 }
                 else{
-                    comment.userVote = 0;
-                    comment.votes -= 1;
+                    commentEngadgement(id, 0).then(res => {
+                        getComments(props.postId).then(res => {
+                            setComments(res);
+                        })
+                    });
                 }
             }
             return comment;
@@ -65,16 +85,25 @@ export default function CommentList(props){
     const onDownvote = (id) => {
         let new_comments = comments.map(comment => {
             if(comment.id === id){
-                if(comment.userVote === 1) {
-                    comment.userVote = -1;
-                    comment.votes -= 2;
+                if(comment.userVote === -1) {
+                    commentEngadgement(id, 0).then(res => {
+                        getComments(props.postId).then(res => {
+                            setComments(res);
+                        })
+                    });
                 } else if(comment.userVote === 0) {
-                    comment.userVote = -1;
-                    comment.votes -= 1;
+                    commentEngadgement(id, -1).then(res => {
+                        getComments(props.postId).then(res => {
+                            setComments(res);
+                        })
+                    });
                 }
                 else{
-                    comment.userVote = 0;
-                    comment.votes += 1;
+                    commentEngadgement(id, -1).then(res => {
+                        getComments(props.postId).then(res => {
+                            setComments(res);
+                        })
+                    });
                 }
             }
             return comment;
@@ -96,7 +125,7 @@ export default function CommentList(props){
                         component="div">
                 Comments
             </Typography>
-            {sample_comments.map(comment =>
+            {comments.map(comment =>
                 <Comment key={comment.id}
                          onUpvote={onUpvote}
                          onDownvote={onDownvote}

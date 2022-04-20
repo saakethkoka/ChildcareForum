@@ -30,13 +30,14 @@ module.exports = function voteRoutes(app, logger){
     });
 
 
-    app.post('/newvote', async (request, response) => {
+    app.post('/commentVote', async (request, response) => {
         try {
             console.log('Initiating POST /newvote request');
             queryString = 'INSERT INTO votes (value, f_commentID, f_userID) VALUES ('
-                            + request.query.value + ', '
-                            + request.query.commentID + ', '
-                            + request.query.curruserID + ')';
+                + request.query.value + ', '
+                + request.query.commentID + ', '
+                + request.query.curruserID + ')' +
+                'ON DUPLICATE KEY UPDATE value = ' + request.query.value;
             console.log(queryString);
             const {DBQuery, disconnect} = await connectToDatabase();
             const dataPacket = await DBQuery(queryString);
@@ -94,10 +95,11 @@ module.exports = function voteRoutes(app, logger){
     app.post('/dbnewvote', async (request, response) => {
         try {
             console.log('Initiating POST /dbnewvote request');
-            queryString = 'INSERT INTO votes (value, f_postID, f_userID) VALUES ('
+            queryString = 'INSERT INTO postVotes (value, f_postID, f_userID) VALUES ('
                             + request.query.value + ', '
                             + request.query.postID + ', '
-                            + request.query.curruserID + ')';
+                            + request.query.curruserID + ')' +
+                            'ON DUPLICATE KEY UPDATE value = ' + request.query.value;
             console.log(queryString);
             const {DBQuery, disconnect} = await connectToDatabase();
             const dataPacket = await DBQuery(queryString);
