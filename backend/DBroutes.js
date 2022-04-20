@@ -3,7 +3,7 @@ const app = express();
 const port = 3000;
 const connectToDatabase = require('./database-helpers');
 const bodyParser = require('body-parser');
-const { request, response } = require('express');
+const { request, response, application } = require('express');
 app.use(bodyParser.json());
 
 
@@ -27,7 +27,25 @@ module.exports = function DiscBroutes(app, logger) {
         }
     });
 
-//GET /discussionBoard?postTitle = ... BRAD
+    app.get('/dbvoteorder', async (req, res) => {
+        try {
+            console.log('Intiiating GET /dbvoteorder request');
+        } catch (err) {
+            console.error('There was an error in GET /dbvoteorder', err);
+            res.status(500).json({message: err.message});
+        }
+    });
+
+    app.get('/dbdateorder', async (req, res) => {
+        try {
+            console.log('Intiiating GET /dbvoteorder request');
+        } catch (err) {
+            console.error('There was an error in GET /dbdateorder', err);
+            res.status(500).json({message: err.message});
+        }
+    })
+
+    //GET /discussionBoard?postTitle = ... BRAD
     app.get('/discussionBoard', async (request, response) => {
         try {
             console.log('Initiating GET /discussionBoard request');
@@ -49,7 +67,7 @@ module.exports = function DiscBroutes(app, logger) {
     });
 
 
-//GET /discussionBoard?username = ... BRAD
+    //GET /discussionBoard?username = ... BRAD
     app.get('/discussionBoard', async (request, response) => {
         try {
             console.log('Initiating GET /discussionBoard request');
@@ -85,6 +103,5 @@ module.exports = function DiscBroutes(app, logger) {
         }
     });
     
-
-
+    
 }
