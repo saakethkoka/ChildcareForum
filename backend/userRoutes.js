@@ -178,4 +178,38 @@ module.exports = function userRoutes(app, logger){
         }
     });
 
+    //GET /prices/[userID]
+    app.get('/prices/:userID', async (req, res) => {
+        try {
+
+        } catch (err) {
+            console.error('There was an error in GET /prices/[userID]', err);
+            res.status(500).json({message: err.message});
+        }
+    });
+
+    //PUT /prices/[userID]
+    app.put('/prices/:userID', async (req, res) => {
+        try {
+
+        } catch (err) {
+            console.error('There was an error in GET /prices/[userID]', err);
+            res.status(500).json({message: err.message});
+        }
+    });
+
+    //GET /service/[userID]
+    app.get('/services/:userID', async (req, res) => {
+        try {
+
+        } catch (err) {
+            console.error('There was an error in GET /prices/[userID]', err);
+            res.status(500).json({message: err.message});
+        }
+    });
+
+    //PUT /services/[userID]
+    app.put('/services/:userID', async (req, res) => {
+
+    });
 }
