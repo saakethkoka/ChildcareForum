@@ -76,8 +76,8 @@ router.get('/voteorder', async (req, res, next) => {
         console.log('Initiating GET /discussionBoard/voteorder request');
         const {DBQuery, disconnect} = await connectToDatabase();
         const queryString = 'SELECT postID, discussionBoard.f_userID, date, postTitle, postEntry, IFNULL(SUM(value), 0) AS netvotes FROM discussionBoard'
-                            + 'LEFT JOIN postVotes pV ON discussionBoard.postID = pV.f_postID'
-                            + 'GROUP BY postID ORDER BY netvotes DESC';
+                            + ' LEFT JOIN postVotes pV ON discussionBoard.postID = pV.f_postID'
+                            + ' GROUP BY postID ORDER BY netvotes DESC';
         const results = await DBQuery(queryString);
         
         const postRaw = JSON.parse(JSON.stringify(results));
