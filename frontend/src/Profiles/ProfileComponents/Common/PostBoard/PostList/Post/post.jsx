@@ -21,6 +21,7 @@ import Grid from "@mui/material/Grid/Grid";
 export default function Post(props) {
 
     let post = props.post;
+    let postType = props.postType
 
     let [VotesColor, setVotesColor] = React.useState("warning");
     let [upvoteColor, setUpvoteColor] = React.useState("inherit");
@@ -130,6 +131,8 @@ export default function Post(props) {
                          aria-label="Upvote">
                         <ThumbUpIcon/>
                     </Fab>
+
+                    
                     <Fab color={downvoteColor}
                          sx={fab_styles}
                          onClick={handleDownvoteClick}
