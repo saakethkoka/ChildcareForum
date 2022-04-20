@@ -68,4 +68,63 @@ module.exports = function voteRoutes(app, logger){
             response.status(500).json({message: err.message});
         }
     });
+
+    app.get('/dbvotestatus', async (request, response) => {
+        try {
+            console.log('Initiating GET /dbvotestatus request');
+            queryString = 'SELECT * FROM votes WHERE f_postID = ' + request.query.postID + ' AND f_userID = ' + request.query.curruserID;
+            console.log(queryString);
+            const {DBQuery, disconnect} = await connectToDatabase();
+            const dataPacket = await DBQuery(queryString);
+            const dataObject = JSON.parse(JSON.stringify(dataPacket));
+            disconnect();
+            if (Object.keys(dataObject).length === 0){
+                console.log('post not found');
+                response.status(404).json({message: 'post not found'});
+            } else {
+                console.log('post found');
+                response.json(dataObject[0].value);
+            }
+        } catch (err) {
+            console.error('There was an error in GET /dbvotestatus', err);
+            response.status(500).json({message: err.message});
+        }
+    });
+
+    app.post('/dbnewvote', async (request, response) => {
+        try {
+            console.log('Initiating POST /dbnewvote request');
+            queryString = 'INSERT INTO votes (value, f_postID, f_userID) VALUES ('
+                            + request.query.value + ', '
+                            + request.query.postID + ', '
+                            + request.query.curruserID + ')';
+            console.log(queryString);
+            const {DBQuery, disconnect} = await connectToDatabase();
+            const dataPacket = await DBQuery(queryString);
+            const dataObject = JSON.parse(JSON.stringify(dataPacket));
+            disconnect();
+            response.status(201).json(dataObject);
+        } catch (err) {
+            console.error('There was an error in POST /dbnewvote', err);
+            response.status(500).json({message: err.message});
+        }
+    });
+
+    app.put('/dbupdatevote', async (request, response) => {
+        try {
+            console.log('Initiating PUT /dbupdatevote request');
+            queryString = 'UPDATE votes SET value = ' + request.query.value
+                            + ' WHERE f_userID = ' + request.query.curruserID
+                            + ' AND f_postID = ' + request.query.postID;
+            console.log(queryString);
+            const {DBQuery, disconnect} = await connectToDatabase();
+            const dataPacket = await DBQuery(queryString);
+            const dataObject = JSON.parse(JSON.stringify(dataPacket));
+            disconnect();
+            response.status(200).json(dataObject);
+        } catch (err) {
+            console.error('There was an error in PUT /dbupdatevote', err);
+            response.status(500).json({message: err.message});
+        }
+    });
 }
