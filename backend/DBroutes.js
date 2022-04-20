@@ -14,7 +14,7 @@ module.exports = function DiscBroutes(app, logger) {
         response.json(responseBody);
     });
 
-    app.get('/discussionBoard', async (request, response) => {
+    /* app.get('/discussionBoard', async (request, response) => {
         try {
             console.log('Initiating GET /discussionBoard request');
             const {DBQuery, disconnect} = await connectToDatabase();
@@ -25,28 +25,10 @@ module.exports = function DiscBroutes(app, logger) {
             console.error('There was an error in GET /discussionBoard', err);
             response.status(500).json({message: err.message});
         }
-    });
-
-    app.get('/dbvoteorder', async (req, res) => {
-        try {
-            console.log('Intiiating GET /dbvoteorder request');
-        } catch (err) {
-            console.error('There was an error in GET /dbvoteorder', err);
-            res.status(500).json({message: err.message});
-        }
-    });
-
-    app.get('/dbdateorder', async (req, res) => {
-        try {
-            console.log('Intiiating GET /dbvoteorder request');
-        } catch (err) {
-            console.error('There was an error in GET /dbdateorder', err);
-            res.status(500).json({message: err.message});
-        }
-    })
+    }); */
 
     //GET /discussionBoard?postTitle = ... BRAD
-    app.get('/discussionBoard', async (request, response) => {
+    /* app.get('/discussionBoard', async (request, response) => {
         try {
             console.log('Initiating GET /discussionBoard request');
             console.log('Request query arguments is an object containing:', request.query);
@@ -64,11 +46,10 @@ module.exports = function DiscBroutes(app, logger) {
             console.error('There was an error in GET /discussionBoard', err);
             response.status(500).json({message: err.message});
         }
-    });
-
+    }); */
 
     //GET /discussionBoard?username = ... BRAD
-    app.get('/discussionBoard', async (request, response) => {
+    /* app.get('/discussionBoard', async (request, response) => {
         try {
             console.log('Initiating GET /discussionBoard request');
             console.log('Request query arguements is an object containing:', request.query);
@@ -86,7 +67,7 @@ module.exports = function DiscBroutes(app, logger) {
             console.error('There was an error in GET /discussionBoard', err);
             response.status(500).json({message: err.message});
         }
-    });
+    }); */
 
     app.get('/localboards', async (request, response) => {
         try {
