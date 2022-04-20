@@ -17,7 +17,10 @@ export class PostList extends React.Component{
                   downvotePost={this.props.downvotePost}
                   updatePost={this.props.updatePost}
                   upvotePost={this.props.upvotePost}
+<<<<<<< HEAD
                   postType = {this.props.postType}
+=======
+>>>>>>> ab0c2b8 (Resolved)
             />
         );
         return(
