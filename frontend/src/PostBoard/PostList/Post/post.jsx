@@ -29,8 +29,11 @@ export default function Post(props) {
     let [editDialogOpen, setEditDialogOpen] = React.useState(false);
     let [commentDialogOpen, setCommentDialogOpen] = React.useState(false);
 
+    let [postEffect, setPostEffect] = React.useState("0px 0px 5px 0px rgba(0,0,0,0.3)");
+
     useEffect(() => {
         handleButtonColor();
+        handlePostEffect();
         if(post.userVote === 0){
             setUpvoteColor("inherit");
             setDownvoteColor("inherit");
@@ -44,6 +47,15 @@ export default function Post(props) {
             setDownvoteColor("primary");
         }
     });
+
+    const handlePostEffect = () => {
+        if(post.verified){
+            setPostEffect("0px 0px 10px 0px rgba(255,0,0,3)");
+        }
+        else{
+            setPostEffect("0px 0px 5px 0px rgba(0,0,0,0.3)");
+        }
+    }
 
 
     const handleButtonColor = () => {
@@ -59,11 +71,11 @@ export default function Post(props) {
     }
 
     const handleDownvoteClick = () => {
-        props.downvotePost(post.id);
+        props.downvotePost(post.postID);
     }
 
     const handleUpvoteClick = () => {
-        props.upvotePost(post.id);
+        props.upvotePost(post.postID);
     }
 
     const handleDialogCancel = () =>{
@@ -72,7 +84,7 @@ export default function Post(props) {
 
     const handleDialogConfirm = () =>{
         setDialogOpen(false);
-        props.deletePost(post.id);
+        props.deletePost(post.postID);
     }
 
     const handleDialogOpen = () =>{
@@ -105,7 +117,7 @@ export default function Post(props) {
                 margin: "1rem",
                 padding: 2,
                 backgroundColor: '#fff',
-                boxShadow: '0px 0px 5px 0px rgba(0,0,0,0.3)',
+                boxShadow: postEffect,
             }}>
                 <CardContent sx={{
                     minHeight: 150,
@@ -113,13 +125,13 @@ export default function Post(props) {
                     overflow: 'auto',
                 }}>
                     <Typography variant="h5" component="div">
-                        {post.title}
+                        {post.postTitle}
                         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                            {post.username} - {post.time}
+                            {post.username} - {post.date.substr(0,10)}
                         </Typography>
                     </Typography>
                     <Typography variant="body1">
-                        {post.content}
+                        {post.postEntry}
                     </Typography>
                 </CardContent>
                 <CardActions>
@@ -172,7 +184,7 @@ export default function Post(props) {
                     </Button>
                 </DialogActions>
             </Dialog>
-            <CommentList postId={post.id} open={commentDialogOpen} onClose={handleCommentClose}/>
+            <CommentList postId={post.postID} open={commentDialogOpen} onClose={handleCommentClose}/>
             <EditPost updatePost={props.updatePost} post={post} open={editDialogOpen} onClose={handleEditDialogClose}/>
         </Grid>
     )
