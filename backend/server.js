@@ -6,10 +6,7 @@ const cors = require('cors');
 const { log, ExpressAPILogMiddleware } = require('@rama41222/node-logger');
 // const mysqlConnect = require('./db');
 
-
-const NSroutes = require('./NSRoutes');
 const DBroutes = require('./DBroutes');
-const SWroutes = require('./SWroutes');
 const ServiceRoutes = require('./ServiceRoutes');
 const userRoutes = require('./userRoutes');
 const govServicesRoutes = require('./govServicesRoutes');
@@ -41,15 +38,14 @@ app.use(ExpressAPILogMiddleware(logger, { request: true }));
 //include routes
 //routes(app, logger);
 //BSroutes(app, logger);
-SWroutes(app, logger);
+//SWroutes(app, logger);
 //NSroutes(app, logger);
+commentRoutes(app, logger);
 DBroutes(app, logger);
+govServicesRoutes(app,logger);
 ServiceRoutes(app,logger);
 userRoutes(app,logger);
-govServicesRoutes(app,logger);
 voteRoutes(app, logger);
-commentRoutes(app, logger);
-
 
 app.use('/discussionBoard', postRoutes);
 

@@ -1,10 +1,11 @@
-const { request, response } = require('express');
 const express = require('express');
-
 const app = express();
 const port = 3000;
-
 const connectToDatabase = require('./database-helpers');
+const bodyParser = require('body-parser');
+const { request, response } = require('express');
+app.use(bodyParser.json());
+
 
 module.exports = function ServiceRoutes(app, logger){
     app.get('/services', async(request, response) => {

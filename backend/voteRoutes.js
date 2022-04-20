@@ -5,8 +5,8 @@ const connectToDatabase = require('./database-helpers');
 const bodyParser = require('body-parser');
 const { request, response } = require('express');
 app.use(bodyParser.json());
-module.exports = function voteRoutes(app, logger){
 
+module.exports = function voteRoutes(app, logger){
     app.get('/votestatus', async (request, response) => {
         try {
             console.log('Initiating GET /votestatus request');

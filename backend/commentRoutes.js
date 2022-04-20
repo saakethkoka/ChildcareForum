@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const { request, response } = require('express');
 app.use(bodyParser.json());
 
+
 module.exports = function commentRoutes(app, logger) {
     app.post('/comment', async (request, response) => {
         try {
