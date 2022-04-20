@@ -71,11 +71,11 @@ export default function Post(props) {
     }
 
     const handleDownvoteClick = () => {
-        props.downvotePost(post.id);
+        props.downvotePost(post.postID);
     }
 
     const handleUpvoteClick = () => {
-        props.upvotePost(post.id);
+        props.upvotePost(post.postID);
     }
 
     const handleDialogCancel = () =>{

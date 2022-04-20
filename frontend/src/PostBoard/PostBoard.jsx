@@ -3,7 +3,7 @@ import {PostList} from "./PostList/PostList";
 import CreatePostButton from "./CreatePostButton/CreatePostButton";
 import Grid from "@mui/material/Grid/Grid";
 import PostFilters from "./PostFilters/PostFilters";
-import {createPost, deletePost, getPosts, searchPosts, editPost} from "../kokaAPI"
+import {createPost, deletePost, getPosts, searchPosts, editPost, postEngadgement} from "../kokaAPI"
 
 export default class PostBoard extends React.Component {
     constructor(props) {
@@ -72,17 +72,26 @@ export default class PostBoard extends React.Component {
 
     downvotePost = (id) => {
         let newPosts = this.state.posts.map(post => {
-            if (post.id === id) {
-                if(post.userVote === 1) {
-                    post.userVote = -1;
-                    post.votes -= 2;
+            if (post.postID === id) {
+                if(post.userVote === -1) {
+                    postEngadgement(id, 0).then(post => {
+                        getPosts().then(posts => {
+                            this.setState({posts: posts})
+                        })
+                    })
                 } else if(post.userVote === 0) {
-                    post.userVote = -1;
-                    post.votes -= 1;
+                    postEngadgement(id, -1).then(post => {
+                        getPosts().then(posts => {
+                            this.setState({posts: posts})
+                        })
+                    })
                 }
                 else{
-                    post.userVote = 0;
-                    post.votes += 1;
+                    postEngadgement(id, -1).then(post => {
+                        getPosts().then(posts => {
+                            this.setState({posts: posts})
+                        })
+                    })
                 }
             }
             return post;
@@ -94,17 +103,27 @@ export default class PostBoard extends React.Component {
 
     upvotePost = (id) => {
         let newPosts = this.state.posts.map(post => {
-            if (post.id === id) {
+            if (post.postID === id) {
+                console.log(post.userVote);
                 if(post.userVote === -1) {
-                    post.userVote = 1;
-                    post.votes += 2;
+                    postEngadgement(id, 1).then(post => {
+                        getPosts().then(posts => {
+                            this.setState({posts: posts})
+                        })
+                    })
                 } else if(post.userVote === 0) {
-                    post.userVote = 1;
-                    post.votes += 1;
+                    postEngadgement(id, 1).then(post => {
+                        getPosts().then(posts => {
+                            this.setState({posts: posts})
+                        })
+                    })
                 }
                 else{
-                    post.userVote = 0;
-                    post.votes -= 1;
+                    postEngadgement(id, 0).then(post => {
+                        getPosts().then(posts => {
+                            this.setState({posts: posts})
+                        })
+                    })
                 }
             }
             return post;

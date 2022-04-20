@@ -83,6 +83,17 @@ export const commentEngadgement = (commentID, value) => new Promise((resolve, re
     }
 });
 
+export const postEngadgement = (postID, value) => new Promise((resolve, reject) => {
+    if (sessionStorage.getItem("userID")){
+        axios.post(`${base_url}/dbnewvote?value=${value}&postID=${postID}&curruserID=${sessionStorage.getItem("userID")}`)
+            .then(res => resolve(res.data))
+            .catch(err =>{
+                alert(err)
+                reject(err)
+            });
+    }
+});
+
 export const createPost = (postTitle, postEntry, restricted) => new Promise((resolve, reject) => {
     let date = new Date();
     let dd = String(date.getDate()).padStart(2, '0');
