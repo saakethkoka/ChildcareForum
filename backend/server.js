@@ -15,6 +15,7 @@ const userRoutes = require('./userRoutes');
 const govServicesRoutes = require('./govServicesRoutes');
 const postRoutes = require('./postRoutes');
 const voteRoutes = require('./voteRoutes');
+const commentRoutes = require('./commentRoutes');
 
 
 // set up some configs for express.
@@ -47,6 +48,7 @@ ServiceRoutes(app,logger);
 userRoutes(app,logger);
 govServicesRoutes(app,logger);
 voteRoutes(app, logger);
+commentRoutes(app, logger);
 
 
 app.use('/discussionBoard', postRoutes);
