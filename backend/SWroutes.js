@@ -10,55 +10,55 @@ app.use(bodyParser.json());
 module.exports = function SWroutes(app, logger) {
     //get all boards written by users with a certain city tag
     //GET /localboards?city=...
-    app.get('/localboards', async (request, response) => {
-        try {
-            console.log('Initiating GET /localboards request');
-            queryString = 'SELECT * FROM discussionBoard JOIN userLogin uL on uL.userID = discussionBoard.f_userID WHERE city LIKE \'%' + request.query.city + '%\'';
-            const {DBQuery, disconnect} = await connectToDatabase();
-            const dataPacket = await DBQuery(queryString);
-            const dataObject = JSON.parse(JSON.stringify(dataPacket));
-            disconnect();
-            response.status(200).json(dataObject);
-        } catch (err) {
-            console.error('There was an errror in GET /localboards', err);
-            response.status(500).json({message: err.message});
-        }
-    });
+    // app.get('/localboards', async (request, response) => {
+    //     try {
+    //         console.log('Initiating GET /localboards request');
+    //         queryString = 'SELECT * FROM discussionBoard JOIN userLogin uL on uL.userID = discussionBoard.f_userID WHERE city LIKE \'%' + request.query.city + '%\'';
+    //         const {DBQuery, disconnect} = await connectToDatabase();
+    //         const dataPacket = await DBQuery(queryString);
+    //         const dataObject = JSON.parse(JSON.stringify(dataPacket));
+    //         disconnect();
+    //         response.status(200).json(dataObject);
+    //     } catch (err) {
+    //         console.error('There was an errror in GET /localboards', err);
+    //         response.status(500).json({message: err.message});
+    //     }
+    // });
 
     //get all users with a certain city tag
     //GET /localusers?city=...
-    app.get('/localusers', async (request, response) => {
-        try {
-            console.log('Initiating GET /localusers request');
-            queryString = 'SELECT * FROM userLogin WHERE city LIKE \'%' + request.query.city + '%\'';
-            const {DBQuery, disconnect} = await connectToDatabase();
-            const dataPacket = await DBQuery(queryString);
-            const dataObject = JSON.parse(JSON.stringify(dataPacket));
-            disconnect();
-            response.status(200).json(dataObject);
-        } catch (err) {
-            console.error('There was an errror in GET /localusers', err);
-            response.status(500).json({message: err.message});
-        }
-    });
+    // app.get('/localusers', async (request, response) => {
+    //     try {
+    //         console.log('Initiating GET /localusers request');
+    //         queryString = 'SELECT * FROM userLogin WHERE city LIKE \'%' + request.query.city + '%\'';
+    //         const {DBQuery, disconnect} = await connectToDatabase();
+    //         const dataPacket = await DBQuery(queryString);
+    //         const dataObject = JSON.parse(JSON.stringify(dataPacket));
+    //         disconnect();
+    //         response.status(200).json(dataObject);
+    //     } catch (err) {
+    //         console.error('There was an errror in GET /localusers', err);
+    //         response.status(500).json({message: err.message});
+    //     }
+    // });
 
     //change a user's city tag
     //PUT /usercity?userID=...city=...
-    app.put('/usercity', async (request, response) => {
-        try {
-            console.log('Initiating PUT /usercity request');
-            queryString = 'UPDATE userLogin SET city = ' + request.query.city
-                            + ' WHERE userID = ' + request.query.userID;
-            const {DBQuery, disconnect} = await connectToDatabase();
-            const dataPacket = await DBQuery(queryString);
-            const dataObject = JSON.parse(JSON.stringify(dataPacket));
-            disconnect();
-            response.status(200).json(dataObject);
-        } catch (err) {
-            console.error('There was an errror in PUT /usercity', err);
-            response.status(500).json({message: err.message});
-        }
-    });
+    // app.put('/usercity', async (request, response) => {
+    //     try {
+    //         console.log('Initiating PUT /usercity request');
+    //         queryString = 'UPDATE userLogin SET city = ' + request.query.city
+    //                         + ' WHERE userID = ' + request.query.userID;
+    //         const {DBQuery, disconnect} = await connectToDatabase();
+    //         const dataPacket = await DBQuery(queryString);
+    //         const dataObject = JSON.parse(JSON.stringify(dataPacket));
+    //         disconnect();
+    //         response.status(200).json(dataObject);
+    //     } catch (err) {
+    //         console.error('There was an errror in PUT /usercity', err);
+    //         response.status(500).json({message: err.message});
+    //     }
+    // });
     
     //adding a comment
     //JSON format input:
@@ -147,68 +147,69 @@ module.exports = function SWroutes(app, logger) {
 
     //function to check if a user has previously voted on a comment before
     //GET /votestatus?commentID=...curruserID=...
-    app.get('/votestatus', async (request, response) => {
-        try {
-            console.log('Initiating GET /votestatus request');
-            queryString = 'SELECT * FROM votes WHERE f_commentID = ' + request.query.commentID + ' AND f_userID = ' + request.query.curruserID;
-            console.log(queryString);
-            const {DBQuery, disconnect} = await connectToDatabase();
-            const dataPacket = await DBQuery(queryString);
-            const dataObject = JSON.parse(JSON.stringify(dataPacket));
-            disconnect();
-            if (Object.keys(dataObject).length === 0){
-                console.log('comment not found');
-                response.status(404).json({message: 'comment not found'});
-            } else {
-                console.log('comment found');
-                response.json(dataObject[0].value);
-            }
-        } catch (err) {
-            console.error('There was an error in GET /votestatus', err);
-            response.status(500).json({message: err.message});
-        }
-    });
+    // app.get('/votestatus', async (request, response) => {
+    //     try {
+    //         console.log('Initiating GET /votestatus request');
+    //         queryString = 'SELECT * FROM votes WHERE f_commentID = ' + request.query.commentID + ' AND f_userID = ' + request.query.curruserID;
+    //         console.log(queryString);
+    //         const {DBQuery, disconnect} = await connectToDatabase();
+    //         const dataPacket = await DBQuery(queryString);
+    //         const dataObject = JSON.parse(JSON.stringify(dataPacket));
+    //         disconnect();
+    //         if (Object.keys(dataObject).length === 0){
+    //             console.log('comment not found');
+    //             response.status(404).json({message: 'comment not found'});
+    //         } else {
+    //             console.log('comment found');
+    //             response.json(dataObject[0].value);
+    //         }
+    //     } catch (err) {
+    //         console.error('There was an error in GET /votestatus', err);
+    //         response.status(500).json({message: err.message});
+    //     }
+    // });
 
     //if user has not voted on the given comment before, add a new vote
     //POST /newvote?value=...commentID=...curruserID=....
-    app.post('/newvote', async (request, response) => {
-        try {
-            console.log('Initiating POST /newvote request');
-            queryString = 'INSERT INTO votes (value, f_commentID, f_userID) VALUES ('
-                            + request.query.value + ', '
-                            + request.query.commentID + ', '
-                            + request.query.curruserID + ')';
-            console.log(queryString);
-            const {DBQuery, disconnect} = await connectToDatabase();
-            const dataPacket = await DBQuery(queryString);
-            const dataObject = JSON.parse(JSON.stringify(dataPacket));
-            disconnect();
-            response.status(201).json(dataObject);
-        } catch (err) {
-            console.error('There was an error in POST /newuser', err);
-            response.status(500).json({message: err.message});
-        }
-    });
+    // app.post('/newvote', async (request, response) => {
+    //     try {
+    //         console.log('Initiating POST /newvote request');
+    //         queryString = 'INSERT INTO votes (value, f_commentID, f_userID) VALUES ('
+    //                         + request.query.value + ', '
+    //                         + request.query.commentID + ', '
+    //                         + request.query.curruserID + ')';
+    //         console.log(queryString);
+    //         const {DBQuery, disconnect} = await connectToDatabase();
+    //         const dataPacket = await DBQuery(queryString);
+    //         const dataObject = JSON.parse(JSON.stringify(dataPacket));
+    //         disconnect();
+    //         response.status(201).json(dataObject);
+    //     } catch (err) {
+    //         console.error('There was an error in POST /newuser', err);
+    //         response.status(500).json({message: err.message});
+    //     }
+    // });
 
     //if user has voted on the given comment before, update their vote
     //PUT /updatevote?value=...commentID=...curruserID=...
-    app.put('/updatevote', async (request, response) => {
-        try {
-            console.log('Initiating PUT /updatevote request');
-            queryString = 'UPDATE votes SET value = ' + request.query.value
-                            + ' WHERE f_userID = ' + request.query.curruserID
-                            + ' AND f_commentID = ' + request.query.commentID;
-            console.log(queryString);
-            const {DBQuery, disconnect} = await connectToDatabase();
-            const dataPacket = await DBQuery(queryString);
-            const dataObject = JSON.parse(JSON.stringify(dataPacket));
-            disconnect();
-            response.status(200).json(dataObject);
-        } catch (err) {
-            console.error('There was an error in PUT /updatevote', err);
-            response.status(500).json({message: err.message});
-        }
-    });
+    // app.put('/updatevote', async (request, response) => {
+    //     try {
+    //         console.log('Initiating PUT /updatevote request');
+    //         queryString = 'UPDATE votes SET value = ' + request.query.value
+    //                         + ' WHERE f_userID = ' + request.query.curruserID
+    //                         + ' AND f_commentID = ' + request.query.commentID;
+    //         console.log(queryString);
+    //         const {DBQuery, disconnect} = await connectToDatabase();
+    //         const dataPacket = await DBQuery(queryString);
+    //         const dataObject = JSON.parse(JSON.stringify(dataPacket));
+    //         disconnect();
+    //         response.status(200).json(dataObject);
+    //     } catch (err) {
+    //         console.error('There was an error in PUT /updatevote', err);
+    //         response.status(500).json({message: err.message});
+    //     }
+    // });
+}
 
     //registration API call
     //POST /newuser - takes JSON object request, throws ER_DUP_ENTRY if username isn't unique
@@ -273,81 +274,81 @@ module.exports = function SWroutes(app, logger) {
     // });
     
 
-    app.post('/newuser', async (request, response) => {
-        try {
-            console.log('Initiating POST /newuser request');
-            // console.log('Request has a body containing:', request.body);
-            // console.log('Username = ', request.body.username,
-            //             'password = ', request.body.password,
-            //             'first_name = ', request.body.first_name,
-            //             'last_name = ', request.body.last_name,
-            //             'email = ', request.body.email,
-            //              'city = ', request.body.city);
-            let queryString;
-            if (typeof request.body.email !== 'undefined' && typeof request.body.city !== 'undefined')
-                queryString = 'INSERT INTO userLogin (username, password, first_name, last_name, email, city) VALUES (\'' +
-                    request.body.username + '\', \'' +
-                    request.body.password + '\', \'' +
-                    request.body.first_name + '\', \'' +
-                    request.body.last_name + '\', \'' +
-                    request.body.email + '\', \'' +
-                    request.body.city + '\')';
-            else if (typeof request.body.email !== 'undefined')
-                queryString = 'INSERT INTO userLogin (username, password, first_name, last_name, email) VALUES (\'' +
-                    request.body.username + '\', \'' +
-                    request.body.password + '\', \'' +
-                    request.body.first_name + '\', \'' +
-                    request.body.last_name + '\', \'' +
-                    request.body.email + '\')';
-            else if (typeof request.body.city !== ' undefined')
-                queryString = 'INSERT INTO userLogin (username, password, first_name, last_name, city) VALUES (\'' +
-                    request.body.username + '\', \'' +
-                    request.body.password + '\', \'' +
-                    request.body.first_name + '\', \'' +
-                    request.body.last_name + '\', \'' +
-                    request.body.city + '\')';
-            else
-                queryString = 'INSERT INTO userLogin (username, password, first_name, last_name) VALUES (\'' +
-                    request.body.username + '\', \'' +
-                    request.body.password + '\', \'' +
-                    request.body.first_name + '\', \'' +
-                    request.body.last_name + '\')';
-            const {DBQuery, disconnect} = await connectToDatabase();
-            const results = await DBQuery(queryString);
-            // console.log('Results of INSERT statement:', results);
-            disconnect();
-            response.status(201).json(results);
-        } catch (err) {
-            console.error('There was an error in POST /newuser', err);
-            response.status(500).json({message: err.message});
-        }
-    });
+//     app.post('/newuser', async (request, response) => {
+//         try {
+//             console.log('Initiating POST /newuser request');
+//             // console.log('Request has a body containing:', request.body);
+//             // console.log('Username = ', request.body.username,
+//             //             'password = ', request.body.password,
+//             //             'first_name = ', request.body.first_name,
+//             //             'last_name = ', request.body.last_name,
+//             //             'email = ', request.body.email,
+//             //              'city = ', request.body.city);
+//             let queryString;
+//             if (typeof request.body.email !== 'undefined' && typeof request.body.city !== 'undefined')
+//                 queryString = 'INSERT INTO userLogin (username, password, first_name, last_name, email, city) VALUES (\'' +
+//                     request.body.username + '\', \'' +
+//                     request.body.password + '\', \'' +
+//                     request.body.first_name + '\', \'' +
+//                     request.body.last_name + '\', \'' +
+//                     request.body.email + '\', \'' +
+//                     request.body.city + '\')';
+//             else if (typeof request.body.email !== 'undefined')
+//                 queryString = 'INSERT INTO userLogin (username, password, first_name, last_name, email) VALUES (\'' +
+//                     request.body.username + '\', \'' +
+//                     request.body.password + '\', \'' +
+//                     request.body.first_name + '\', \'' +
+//                     request.body.last_name + '\', \'' +
+//                     request.body.email + '\')';
+//             else if (typeof request.body.city !== ' undefined')
+//                 queryString = 'INSERT INTO userLogin (username, password, first_name, last_name, city) VALUES (\'' +
+//                     request.body.username + '\', \'' +
+//                     request.body.password + '\', \'' +
+//                     request.body.first_name + '\', \'' +
+//                     request.body.last_name + '\', \'' +
+//                     request.body.city + '\')';
+//             else
+//                 queryString = 'INSERT INTO userLogin (username, password, first_name, last_name) VALUES (\'' +
+//                     request.body.username + '\', \'' +
+//                     request.body.password + '\', \'' +
+//                     request.body.first_name + '\', \'' +
+//                     request.body.last_name + '\')';
+//             const {DBQuery, disconnect} = await connectToDatabase();
+//             const results = await DBQuery(queryString);
+//             // console.log('Results of INSERT statement:', results);
+//             disconnect();
+//             response.status(201).json(results);
+//         } catch (err) {
+//             console.error('There was an error in POST /newuser', err);
+//             response.status(500).json({message: err.message});
+//         }
+//     });
 
-    //login API call
-    //GET /logincheck?username=...&password=...
-    app.get('/logincheck', async (request, response) => {
-        try {
-            console.log('Initiating GET /logincheck request');
-            // console.log('Request query is an object containing:', request.query);
-            // console.log('Username = ', [request.query.username], 'password = ', [request.query.password]);
-            const queryString = 'SELECT password, userID FROM userLogin WHERE username = \'' + request.query.username +'\'';
-            //console.log(queryString);
-            const {DBQuery, disconnect} = await connectToDatabase();
-            const dataPacket = await DBQuery(queryString);
-            // console.log('Retrieved data packet:', dataPacket);
-            const targetPassword = JSON.parse(JSON.stringify(dataPacket))[0].password;
-            if (targetPassword == request.query.password){
-                console.log('Log in success!');
-                response.json(JSON.parse(JSON.stringify(dataPacket))[0].userID);
-            } else
-                console.log('Log in failure!');
-            disconnect;
-        } catch (err) {
-            console.error('There was an error in GET /logincheck', err);
-            response.status(500).json({message: err.message});
-        }
-    });
-}
+//     //login API call
+//     //GET /logincheck?username=...&password=...
+//     app.get('/logincheck', async (request, response) => {
+//         try {
+//             console.log('Initiating GET /logincheck request');
+//             // console.log('Request query is an object containing:', request.query);
+//             // console.log('Username = ', [request.query.username], 'password = ', [request.query.password]);
+//             const queryString = 'SELECT password, userID FROM userLogin WHERE username = \'' + request.query.username +'\'';
+//             //console.log(queryString);
+//             const {DBQuery, disconnect} = await connectToDatabase();
+//             const dataPacket = await DBQuery(queryString);
+//             // console.log('Retrieved data packet:', dataPacket);
+//             const targetPassword = JSON.parse(JSON.stringify(dataPacket))[0].password;
+//             if (targetPassword == request.query.password){
+//                 console.log('Log in success!');
+//                 response.json(JSON.parse(JSON.stringify(dataPacket))[0].userID);
+//             } else
+//                 console.log('Log in failure!');
+//             disconnect;
+//         } catch (err) {
+//             console.error('There was an error in GET /logincheck', err);
+//             response.status(500).json({message: err.message});
+//         }
+//     });
+// }
 
     /* app.get('/password', async (request, response) => {
         try {
