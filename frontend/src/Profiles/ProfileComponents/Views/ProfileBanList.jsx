@@ -14,21 +14,32 @@ import CommentIcon from '@mui/icons-material/Comment';
 import {Dialog, DialogActions, DialogTitle} from "@mui/material";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid/Grid";
+import VerifiedIcon from '@mui/icons-material/Verified';
 
 import GavelRoundedIcon from '@mui/icons-material/GavelRounded';
 import CheckBoxRoundedIcon from '@mui/icons-material/CheckBoxRounded';
-
+import CancelIcon from '@mui/icons-material/Cancel';
+import CloseIcon from '@mui/icons-material/Close';
 
 const UserBan = (props) => {
 
     let user = props.user;
-    
-    let [banColor, setBanColor] = React.useState("warning");
-    let [unbanColor, setUpvoteColor] = React.useState("primary");
+    let [verifiedStatus, setVerifiedStatus] = React.useState(false);
+
+
+
 
     useEffect(() => {
-        //handleButtonColor();
+        setVerifiedStatus(user.verified)
     });
+
+
+
+
+
+    const unBan = (id) => {
+        
+    }
 
 
 
@@ -52,7 +63,7 @@ const UserBan = (props) => {
                     overflow: 'auto',
                 }}>
                     <Typography variant="h5" component="div">
-                        {user.username}
+                        {user.username} {verifiedStatus && <VerifiedIcon color = "primary"/>}
                     </Typography>
 
                 </CardContent>
@@ -60,15 +71,9 @@ const UserBan = (props) => {
                 <CardActions>
                     <Fab color="error"
                          sx={fab_styles}
-                         //onClick={}
+                         onClick={e => unBan(e)}
                          aria-label="Ban">
-                        <GavelRoundedIcon/>
-                    </Fab>
-                    <Fab color="primary"
-                         sx={fab_styles}
-                         //onClick={}
-                         aria-label="Unban">
-                        <CheckBoxRoundedIcon/>
+                        <CloseIcon/>
                     </Fab>
                 </CardActions>
             </Card>
