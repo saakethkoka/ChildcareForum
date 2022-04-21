@@ -170,11 +170,11 @@ module.exports = function voteRoutes(app, logger){
                     userID: postRaw[row].f_userID,
                     votes: postRaw[row].netvotes,
                     userVote: userVote,
-                    verified: (statusRaw[0].isVerified == 0? 'false': 'true'),
+                    verified: (statusRaw[0].isVerified == 1),
                     date: postRaw[row].date,
-                    restricted: (postRaw[row].isRestricted == 0? 'false': 'true'),
+                    restricted: (postRaw[row].isRestricted == 1),
                     username: userRaw[0].username,
-                    userBanned: (statusRaw[0].isBanned == 0? 'false': 'true'),
+                    userBanned: (statusRaw[0].isBanned == 1),
                     postEntry: postRaw[row].postEntry
                 });
             }
@@ -227,11 +227,11 @@ module.exports = function voteRoutes(app, logger){
                     userID: postRaw[row].f_userID,
                     votes: postRaw[row].netvotes,
                     userVote: userVote,
-                    verified: (statusRaw[0].isVerified == 0? 'false': 'true'),
+                    verified: (statusRaw[0].isVerified == 1),
                     date: postRaw[row].date,
-                    restricted: (postRaw[row].isRestricted == 0? 'false': 'true'),
+                    restricted: (postRaw[row].isRestricted == 1),
                     username: userRaw[0].username,
-                    userBanned: (statusRaw[0].isBanned == 0? 'false': 'true'),
+                    userBanned: (statusRaw[0].isBanned == 1),
                     postEntry: postRaw[row].postEntry
                 });
             }

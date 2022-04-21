@@ -124,10 +124,10 @@ module.exports = function userRoutes(app, logger){
                 username: userObject[0].username,
                 first_name: userObject[0].first_name,
                 last_name: userObject[0].last_name,
-                userModerator: (userObject[0].userModerator == 0),
-                userDoctor: (userObject[0].userDoctor == 0),
-                userBanned: (userObject[0].userBanned == 0),
-                userVerified: (userObject[0].userVerified == 0),
+                userModerator: (userObject[0].userModerator == 1),
+                userDoctor: (userObject[0].userDoctor == 1),
+                userBanned: (userObject[0].userBanned == 1),
+                userVerified: (userObject[0].userVerified == 1),
                 services: formattedServices
             }
 
