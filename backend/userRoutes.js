@@ -66,7 +66,9 @@ module.exports = function userRoutes(app, logger){
                 const formattedUserInfo = {
                     userID: newUserID,
                     userBanned: userDataObject[0].isBanned,
-                    userModerator: userDataObject[0].isModerator
+                    userDoctor: userDataObject[0].isDoctor,
+                    userModerator: userDataObject[0].isModerator,
+                    userVerified: userDataObject[0].isDoctor
                 };
                 response.status(200).json(formattedUserInfo);
             } else {
