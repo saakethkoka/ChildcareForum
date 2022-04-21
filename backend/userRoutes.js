@@ -56,10 +56,24 @@ module.exports = function userRoutes(app, logger){
             const targetPassword = JSON.parse(JSON.stringify(dataPacket))[0].password;
             if (targetPassword == request.query.password){
                 console.log('Log in success!');
-                response.json(JSON.parse(JSON.stringify(dataPacket))[0].userID);
-            } else
+                
+                const newUserID = JSON.parse(JSON.stringify(dataPacket))[0].userID;
+                const userQueryString = 'SELECT * FROM statusTable WHERE userID = ' + newUserID;
+                const userDataPacket = await DBQuery(userQueryString);
+                const userDataObject = JSON.parse(JSON.stringify(userDataPacket));
+                disconnect;
+
+                const formattedUserInfo = {
+                    userID: newUserID,
+                    userBanned: userDataObject[0].isBanned,
+                    userModerator: userDataObject[0].isModerator
+                };
+                response.status(200).json(formattedUserInfo);
+            } else {
                 console.log('Log in failure!');
-            disconnect;
+                disconnect;
+                response.status(401);
+            }
         } catch (err) {
             console.error('There was an error in GET /logincheck', err);
             response.status(500).json({message: err.message});
