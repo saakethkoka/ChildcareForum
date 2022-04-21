@@ -129,4 +129,22 @@ module.exports = function voteRoutes(app, logger){
             response.status(500).json({message: err.message});
         }
     });
+
+    app.get('/likedPosts/:userID', async (req, res) => {
+        try {
+            console.log('Initiating GET /likedPosts/[userID] request');
+        } catch (err) {
+            console.error('There was a problem retrieving liked posts', err);
+            res.status(500).json({message: err.message});
+        }
+    });
+
+    app.get('/dislikedPosts/:userID', async (req, res) => {
+        try {
+            console.log('Initiating GET /dislikedPosts/[userID] request');
+        } catch (err) {
+            console.error('There was a problem retrieving disliked posts', err);
+            res.status(500).json({message: err.message});
+        }
+    });
 }
