@@ -96,6 +96,48 @@ module.exports = function userRoutes(app, logger){
         }
     });
 
+    //GET /userinfo?userID=...
+    app.get('/userinfo', async (req, res) => {
+        try {
+            console.log('Initiating GET /userinfo request');
+            const {DBQuery, disconnect} = await connectToDatabase();
+            const queryString = 'SELECT username, first_name, last_name, IFNULL(isModerator,0) AS userModerator, IFNULL(isDoctor,0) AS userDoctor, IFNULL(isBanned,0) AS userBanned, IFNULL(isVerified, 0) AS userVerified FROM userLogin'
+                                + ' LEFT JOIN statusTable sT on userLogin.userID = sT.userID'
+                                + ' WHERE userLogin.userID = ' + req.query.userID;
+            const userData = await DBQuery(queryString);
+            const userObject = JSON.parse(JSON.stringify(userData));
+            
+            const serviceQuery = 'SELECT * FROM addService WHERE f_userID = ' + req.query.userID;
+            const serviceData = await DBQuery(serviceQuery);
+            const serviceObject = JSON.parse(JSON.stringify(serviceData));
+            disconnect;
+
+            let formattedServices = [];
+            for (const row in serviceObject) {
+                formattedServices.push({
+                    serviceName: serviceObject[row].serviceName,
+                    price: serviceObject[row].addPrice
+                });
+            }
+
+            formattedInfo = {
+                username: userObject[0].username,
+                first_name: userObject[0].first_name,
+                last_name: userObject[0].last_name,
+                userModerator: (userObject[0].userModerator == 0),
+                userDoctor: (userObject[0].userDoctor == 0),
+                userBanned: (userObject[0].userBanned == 0),
+                userVerified: (userObject[0].userVerified == 0),
+                services: formattedServices
+            }
+
+            res.status(200).json(formattedInfo);
+        } catch (err) {
+            console.error('There was an error in GET /userinfo', err);
+            res.status(500).json({message: err.message});
+        }
+    })
+
     app.get('/localusers', async (request, response) => {
         try {
             console.log('Initiating GET /localusers request');
