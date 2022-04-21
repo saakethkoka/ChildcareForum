@@ -3,11 +3,19 @@ const router = express.Router();
 const app = express();
 const connectToDatabase = require('./database-helpers');
 const bodyParser = require('body-parser');
+const { req, res } = require('express');
 app.use(bodyParser.json());
 
 router.get('/pending', async (req, res, next) => {
     try {
         console.log('Initiating GET /requests/pending request');
+        const {DBQuery, disconnect} = await connectToDatabase();
+        const queryString = 'SELECT * FROM userLogin'
+                            + ' JOIN statusTable sT on userLogin.userID = sT.userID'
+                            + ' WHERE hasRequested = 1';
+        const results = await DBQuery(queryString);
+        disconnect();
+        res.json(results);
     } catch (err) {
         console.error('Issue retrieving pending requests', err);
         res.status(500).json({message: err.toString()});
@@ -59,3 +67,5 @@ router.put('/removepending', async (req, res, next) => {
 
     next();
 })
+
+module.exports = router;
