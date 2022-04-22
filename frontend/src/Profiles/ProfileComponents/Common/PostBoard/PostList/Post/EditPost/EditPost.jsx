@@ -7,8 +7,8 @@ import Grid from "@mui/material/Grid/Grid";
 export default function EditPost(props){
 
 
-    let [title, setTitle] = React.useState(props.post.title);
-    let [content, setContent] = React.useState(props.post.content);
+    let [title, setTitle] = React.useState(props.post.postTitle);
+    let [content, setContent] = React.useState(props.post.postEntry);
     let [restricted, setRestricted] = React.useState(props.post.restricted);
 
     const onCancel = () => {
@@ -16,8 +16,7 @@ export default function EditPost(props){
     }
 
     const onSave = () => {
-        //TODO: save post
-        props.updatePost(props.post.id, title, content, restricted);
+        props.updatePost(props.post.postID, title, content, restricted);
         props.onClose();
     }
 

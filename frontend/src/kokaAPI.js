@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const base_url = 'http://localhost:8000';
+const base_url = 'http://localhost:5000';
 
 export const getPosts = () => new Promise((resolve, reject) => {
     const id = sessionStorage.getItem('userID')
@@ -144,3 +144,12 @@ export const editPost = (postID, postTitle, postEntry, restricted) => new Promis
             reject(err);
         });
 });
+
+
+export const getPostsByID = (userID) => new Promise((resolve, reject) => {
+    axios.get(`${base_url}/discussionBoard/${userID}`)
+        .then(res => resolve(res.data))
+        .catch(err => reject(err));
+});
+
+
