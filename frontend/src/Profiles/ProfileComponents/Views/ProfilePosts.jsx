@@ -1,25 +1,33 @@
-import React, {Fragment} from 'react';
+import React, {Fragment, useEffect, useState } from 'react';
 import PostBoard from '../Common/PostBoard/PostBoard'
 import  ProfileNavbar  from '../UserNavBar'
+import { Repository } from '../../../API/repository'
+import { getPostsByID } from "../../../kokaAPI"
+import { Navigate } from 'react-router-dom'
 
 export const ProfilePosts = () => { 
+    const [posts, setPosts] = useState("")
+
+    useEffect(()=>{
+        getPostsByID(sessionStorage.getItem("userID")).then(posts => {
+            setPosts(posts)
+        })
+        return () => {
+            setPosts({}); 
+          };
+
+    }, []);
+
+
+
 
     return (
         <Fragment>
             <ProfileNavbar/>
-<<<<<<< HEAD
-<<<<<<< HEAD
-            <PostBoard postType = {"userPostList"}/>
-=======
-            <PostBoard/>
->>>>>>> 7a4857e (Added styling to user update)
-=======
-            <PostBoard postType = {"userPostList"}/>
->>>>>>> be2a641 (updated banned view)
+            <PostBoard getPosts = {getPostsByID} userID = {sessionStorage.getItem("userID")}/>
         </Fragment>
         
     );
 
     
 }
-
