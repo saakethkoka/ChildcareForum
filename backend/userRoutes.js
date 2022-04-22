@@ -61,7 +61,7 @@ module.exports = function userRoutes(app, logger){
                 const userQueryString = 'SELECT * FROM statusTable WHERE userID = ' + newUserID;
                 const userDataPacket = await DBQuery(userQueryString);
                 const userDataObject = JSON.parse(JSON.stringify(userDataPacket));
-                disconnect;
+                disconnect();
 
                 const formattedUserInfo = {
                     userID: newUserID,
@@ -73,12 +73,12 @@ module.exports = function userRoutes(app, logger){
                 response.status(200).json(formattedUserInfo);
             } else {
                 console.log('Log in failure!');
-                disconnect;
-                response.status(401);
+                disconnect();
+                response.status(401).json({message: 'Incorrect username or password'});
             }
         } catch (err) {
             console.error('There was an error in GET /logincheck', err);
-            response.status(500).json({message: err.message});
+            response.status(401).json({message: 'Incorrect username or password'});
         }
     });
     

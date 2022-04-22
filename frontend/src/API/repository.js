@@ -24,8 +24,14 @@ export class Repository {
 					});
 				})
 				.catch(err => {
-					error(err);
-					resolve({ status: false });
+					if(err.response.status === 401){
+						reject();
+					}
+					else{
+						error(err);
+						resolve({ status: false });
+					}
+
 				});
 		});
 	}
@@ -38,8 +44,7 @@ export class Repository {
                     resolve(response.data);
                 })
                 .catch(err => {
-                    error(err);
-                    resolve(undefined);
+                    reject();
                 });
         });
     }
