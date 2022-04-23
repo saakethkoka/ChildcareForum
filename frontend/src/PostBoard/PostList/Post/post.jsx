@@ -11,11 +11,12 @@ import EditIcon from '@mui/icons-material/Edit';
 import Fab from "@mui/material/Fab";
 import Chip from "@mui/material/Chip";
 import CommentIcon from '@mui/icons-material/Comment';
-import {Dialog, DialogActions, DialogTitle} from "@mui/material";
+import {Dialog, DialogActions, DialogTitle, Link} from "@mui/material";
 import Button from "@mui/material/Button";
 import CommentList from "./CommentList/CommentList";
 import EditPost from "./EditPost/EditPost";
 import Grid from "@mui/material/Grid/Grid";
+import VerifiedIcon from '@mui/icons-material/Verified';
 
 
 export default function Post(props) {
@@ -143,7 +144,7 @@ export default function Post(props) {
                     <Typography variant="h5" component="div">
                         {post.postTitle}
                         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                            {post.username} - {post.date.substr(0,10)}
+                            <Link href={`/user/profile/${post.userID}`}>{post.username}</Link> {post.verified && <VerifiedIcon color="primary"/>} - {post.date.substr(0,10)}
                         </Typography>
                     </Typography>
                     <Typography variant="body1">
