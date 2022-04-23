@@ -39,12 +39,8 @@ const ProfileNavbar = (props) => {
                     </Button>
                 </Typography>
                 <Stack direction='row' spacing={2}>
-                    <Button href="/accounts/userProfile" color = 'inherit'>
-                        Update Profile
-                    </Button>
-                    <Button href="/accounts/userPosts" color = 'inherit'>
-                        Posts
-                    </Button>
+                    <Button href="/accounts/userProfile" color = 'inherit'>Update Profile</Button>
+                    <Button href="/accounts/userPosts" color = 'inherit'>Posts</Button>
                     <Button href="/accounts/liked" color = 'inherit'>Likes</Button>
                     <Button href="/accounts/disliked" color = 'inherit'>Dislikes</Button>
                     <Button href="/accounts/saved" color = 'inherit'>Saved Posts</Button>

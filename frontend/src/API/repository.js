@@ -20,7 +20,7 @@ export class Repository {
 				.then(response => {
 					resolve({
 						status: "test",
-						userID: response.data
+						userID: response.data.userID
 					});
 				})
 				.catch(err => {

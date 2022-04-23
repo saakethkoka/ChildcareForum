@@ -31,6 +31,7 @@ export class Login extends React.Component {
 		if (response.status) {
 			// sessionStorage.setItem("userID", "true");
 			sessionStorage.setItem("userID", response.userID);
+            console.log(response)
 			this.setState({
 				username: "",
 				password: "",
