@@ -4,6 +4,7 @@ const base_url = 'http://localhost:5000';
 
 export const getPosts = () => new Promise((resolve, reject) => {
     const id = sessionStorage.getItem('userID')
+    console.log(id)
     if(id) {
         axios.get(`${base_url}/discussionBoard?curruserID=${id}`)
             .then(res => resolve(res.data))
@@ -151,5 +152,19 @@ export const getPostsByID = (userID) => new Promise((resolve, reject) => {
         .then(res => resolve(res.data))
         .catch(err => reject(err));
 });
+
+export const getLikedPostsByID = (userID) => new Promise((resolve, reject) => {
+    axios.get(`${base_url}/likedPosts/${userID}`)
+        .then(res => resolve(res.data))
+        .catch(err => reject(err));
+});
+
+
+export const getDislikedPostsByID = (userID) => new Promise((resolve, reject) => {
+    axios.get(`${base_url}/dislikedPosts/${userID}`)
+        .then(res => resolve(res.data))
+        .catch(err => reject(err));
+});
+
 
 
