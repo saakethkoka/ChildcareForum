@@ -45,7 +45,7 @@ export default function Routing(){
 				<Route path="/accounts/ban" exact element ={<ProfileBanned/>}/>
 				<Route path="/user/profile/:userID" exact element = {<ProfileView/>}/>
 				<Route path="/user/posts/:userID" exact element = {<OtherProfilePosts/>}/>
-				<Route path="/vericationdashboard" exact element={<VerificationDashboard />} />
+				<Route path="/verificationDashboard" exact element={<VerificationDashboard />} />
 
 			</Routes>
 		</Router>
