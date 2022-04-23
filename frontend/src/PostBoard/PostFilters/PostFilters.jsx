@@ -17,6 +17,7 @@ export default function PostFilters(props){
 
     const handleSortChange = (event) => {
         setSortVotes(event.target.value);
+        props.filterPosts(event.target.value);
     };
 
     const handleVerifiedPostersChange = (event) => {

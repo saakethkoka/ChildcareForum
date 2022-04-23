@@ -8,7 +8,7 @@ const { request, response } = require('express');
 app.use(bodyParser.json());
 
 //uses curruserID in query
-router.get('/', async (req, res, next) => {
+router.get('/discussionBoard', async (req, res, next) => {
     try {
         console.log('Initiating GET /discussionBoard request');
         const {DBQuery, disconnect} = await connectToDatabase();
@@ -54,8 +54,9 @@ router.get('/', async (req, res, next) => {
             }
 
             let restricted;
-            if(statusRaw[0]){
-                restricted = (statusRaw[0].isRestricted !== 0)
+            if(postRaw[row]){
+                console.log(postRaw[row]);
+                restricted = (postRaw[row].isRestricted !== 0)
             }
             else{
                 restricted = false;
@@ -77,9 +78,9 @@ router.get('/', async (req, res, next) => {
                 userVote: userVote,
                 verified,
                 date: postRaw[row].date,
-                restricted,
+                restricted: restricted,
                 username: userRaw[0].username,
-                userBanned,
+                userBanned: userBanned,
                 postEntry: postRaw[row].postEntry
             });
         }
@@ -94,7 +95,7 @@ router.get('/', async (req, res, next) => {
     next();
 })
 
-router.get('/:userID', async (req, res, next) => {
+router.get('/discussionBoard/:userID', async (req, res, next) => {
     try {
         console.log('Initiating GET /discussionBoard/[userID] request');
         const {DBQuery, disconnect} = await connectToDatabase();
@@ -213,17 +214,41 @@ router.get('/voteorder', async (req, res, next) => {
                     userVote = voteValueObj[0].value;
             }
 
+            let verified;
+            if(statusRaw[0]){
+                verified = (statusRaw[0].isVerified !== 0)
+            }
+            else{
+                verified = false;
+            }
+
+            let restricted;
+            if(statusRaw[0]){
+                restricted = (statusRaw[0].isRestricted !== 0)
+            }
+            else{
+                restricted = false;
+            }
+
+            let userBanned;
+            if(statusRaw[0]){
+                userBanned = (statusRaw[0].isBanned !== 0)
+            }
+            else{
+                userBanned = false;
+            }
+
             formattedPosts.push({
                 postTitle: postRaw[row].postTitle,
                 postID: postRaw[row].postID,
                 userID: postRaw[row].f_userID,
                 votes: postRaw[row].netvotes,
                 userVote: userVote,
-                verified: (statusRaw[0].isVerified == 0? 'false': 'true'),
+                verified: verified,
                 date: postRaw[row].date,
-                restricted: (postRaw[row].isRestricted == 0? 'false': 'true'),
+                restricted: restricted,
                 username: userRaw[0].username,
-                userBanned: (statusRaw[0].isBanned == 0? 'false': 'true'),
+                userBanned: userBanned,
                 postEntry: postRaw[row].postEntry
             });
         }
@@ -276,17 +301,41 @@ router.get('/dateorder', async (req, res, next) => {
             else
                 votes = voteCountObj.total;
 
+            let verified;
+            if(statusRaw[0]){
+                verified = (statusRaw[0].isVerified !== 0)
+            }
+            else{
+                verified = false;
+            }
+
+            let restricted;
+            if(statusRaw[0]){
+                restricted = (statusRaw[0].isRestricted !== 0)
+            }
+            else{
+                restricted = false;
+            }
+
+            let userBanned;
+            if(statusRaw[0]){
+                userBanned = (statusRaw[0].isBanned !== 0)
+            }
+            else{
+                userBanned = false;
+            }
+
             formattedPosts.push({
                 postTitle: postRaw[row].postTitle,
                 postID: postRaw[row].postID,
                 userID: postRaw[row].f_userID,
                 votes: votes,
                 userVote: userVote,
-                verified: (statusRaw[0].isVerified == 0? 'false': 'true'),
+                verified: verified,
                 date: postRaw[row].date,
-                restricted: (postRaw[row].isRestricted == 0? 'false': 'true'),
+                restricted: restricted,
                 username: userRaw[0].username,
-                userBanned: (statusRaw[0].isBanned == 0? 'false': 'true'),
+                userBanned: userBanned,
                 postEntry: postRaw[row].postEntry
             });
         }
@@ -302,7 +351,7 @@ router.get('/dateorder', async (req, res, next) => {
 })
 
 //requires curruserID in query
-router.post('/', async (req, res, next) => {
+router.post('/discussionBoard', async (req, res, next) => {
     try {
         console.log('Initiating POST /discussionBoard request');
         const queryString = 'INSERT INTO discussionBoard (f_userID, date, postTitle, postEntry, isRestricted) VALUES ('
@@ -323,7 +372,7 @@ router.post('/', async (req, res, next) => {
     next();
 })
 
-router.put('/:postID', async (req, res, next) => {
+router.put('/discussionBoard/:postID', async (req, res, next) => {
     try {
         console.log('Initiating PUT /discussionBoard/[postID] request');
         
@@ -356,7 +405,7 @@ router.put('/:postID', async (req, res, next) => {
     next();
 })
 
-router.delete('/:postID', async (req, res, next) => {
+router.delete('/discussionBoard/:postID', async (req, res, next) => {
     try {
         console.log('Initiating DELETE /discussionBoard/[postID] request');
         const queryString = 'DELETE FROM discussionBoard WHERE postID = ' + req.params.postID;

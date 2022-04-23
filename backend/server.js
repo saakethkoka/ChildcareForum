@@ -46,8 +46,7 @@ govServicesRoutes(app,logger);
 ServiceRoutes(app,logger);
 userRoutes(app,logger);
 voteRoutes(app, logger);
-
-app.use('/discussionBoard', postRoutes);
+app.use('/', postRoutes);
 app.use('/requests', requestRoutes);
 
 // connecting the express object to listen on a particular port as defined in the config object.
