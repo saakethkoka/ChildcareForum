@@ -29,8 +29,27 @@ export default function CommentList(props){
 
     let [comment, setComment] = React.useState("");
     let [comments, setComments] = React.useState([]);
+    let [commentingHidden, setCommentingHidden] = React.useState(false);
 
     useEffect(() => {
+        if(sessionStorage.getItem("isBanned") === "1"){
+            setCommentingHidden(true);
+        }
+        if(props.restricted === true && parseInt(sessionStorage.getItem("userID")) !== props.userID){
+            setCommentingHidden(true);
+        }
+        if(sessionStorage.getItem("userModerator") === "1"){
+            setCommentingHidden(false);
+        }
+        if(sessionStorage.getItem("userVerified") === "1"){
+            setCommentingHidden(false);
+        }
+        if(sessionStorage.getItem("userAdmin") === "1"){
+            setCommentingHidden(false);
+        }
+        if(!sessionStorage.getItem("userID")){
+            setCommentingHidden(true);
+        }
         getComments(props.postId).then(res => {
             setComments(res);
         })
@@ -39,12 +58,11 @@ export default function CommentList(props){
     
 
     const onCancel = () => {
-        // TODO: clear form maybe
         props.onClose();
     }
 
     const onCommentSubmit = () => {
-        postComment(4, props.postId, comment).then(res => {
+        postComment(sessionStorage.getItem("userID"), props.postId, comment).then(res => {
             getComments(props.postId).then(res => {
                 setComments(res);
             })
@@ -131,7 +149,7 @@ export default function CommentList(props){
                          onDownvote={onDownvote}
                          comment={comment}/>
             )}
-            <form noValidate autoComplete="off">
+            <form noValidate hidden={commentingHidden} autoComplete="off">
                 <TextField id="comment"
                            label="Comment"
                            variant="outlined"
