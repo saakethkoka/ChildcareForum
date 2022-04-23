@@ -10,13 +10,12 @@ export class Login extends React.Component {
         password: "",
         invalidCred: false,
         jwtValue: "",
+        error: false
     }
 
     repository = new Repository();
     
     async login(event) {
-        console.log("test")
-        console.log(this.state.username, this.state.password)
 		event.preventDefault();
 		event.stopPropagation();
 
@@ -24,32 +23,40 @@ export class Login extends React.Component {
 			this.setState({ invalidCred: true });
 			return;
 		}
+        try{
+            const response = await this.repository.login(this.state.username, this.state.password)
+            if (!response || response === 'error') {
+                return;
+            }
 
-		const response = await this.repository.login(this.state.username, this.state.password)
-        console.log(response.status)
-		if (!response || response === 'error') {
-			return;
-		}
-        
-		if (response.status) {
-			sessionStorage.setItem("isAuthenticated", "true");
-			//sessionStorage.setItem("userId", response.account.ID);
-            console.log("login works")
-			this.setState({
-				username: "",
-				password: "",
-				invalidCred: false
-			});
-		}
-		else {
-			this.setState({ invalidCred: true });
-		}
+            if (response.status) {
+                console.log(response.userID)
+                sessionStorage.setItem("userID", response.userID.userID);
+                sessionStorage.setItem("userBanned", response.userID.userBanned);
+                sessionStorage.setItem("userDoctor", response.userID.userDoctor);
+                sessionStorage.setItem("userModerator", response.userID.userModerator);
+                sessionStorage.setItem("userVerified", response.userID.userVerified);
+                this.setState({
+                    username: "",
+                    password: "",
+                    invalidCred: false
+                });
+            }
+            else {
+                this.setState({ invalidCred: true });
+            }
+        }
+        catch {
+            this.setState({ error: true });
+        }
+
+
 	}
 
 
     render(){
-        if (sessionStorage.getItem("isAuthenticated") === "true") {
-			return <Navigate to="/" />;
+        if (sessionStorage.getItem("userID")) {
+			return <Navigate to="/posts" />;
 		}
         const formStyle = {padding: 20, height: '50vh', width: 290, margin: "20px auto"}
         const textStyle = {margin: "10px auto"}
@@ -61,15 +68,17 @@ export class Login extends React.Component {
                     </Grid>
                     <TextField 
                         label = "Username" 
-                        value={ this.state.username } 
+                        value={ this.state.username }
+                        error={this.state.error}
                         fullWidth required
                         onChange={ e => this.setState({ username: e.target.value })}
                         style = {textStyle}
                     />
                     <TextField 
-                        label = "Password" 
-                        value={ this.state.password } 
+                        label = "Password"
+                        value={ this.state.password }
                         type = 'password'
+                        error={this.state.error}
                         fullWidth required
                         onChange={ e => this.setState({ password: e.target.value })}
                         style = {textStyle}
