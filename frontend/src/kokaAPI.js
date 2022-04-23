@@ -3,7 +3,7 @@ import axios from 'axios';
 const base_url = 'http://localhost:8000';
 
 export const getPosts = (mostVotes) => new Promise((resolve, reject) => {
-    if (mostVotes){
+    if (mostVotes) {
         const id = sessionStorage.getItem('userID');
         if (id) {
             axios.get(`${base_url}/voteorder?curruserID=${id}`)
@@ -14,8 +14,7 @@ export const getPosts = (mostVotes) => new Promise((resolve, reject) => {
                 .then(res => resolve(res.data))
                 .catch(err => reject(err));
         }
-    }
-    else {
+    } else {
         const id = sessionStorage.getItem('userID');
         if (id) {
             axios.get(`${base_url}/dateorder?curruserID=${id}`)
@@ -28,6 +27,19 @@ export const getPosts = (mostVotes) => new Promise((resolve, reject) => {
         }
     }
 });
+// export const getPosts = () => new Promise((resolve, reject) => {
+//     const id = sessionStorage.getItem('userID')
+//     console.log(id)
+//     if(id) {
+//         axios.get(`${base_url}/discussionBoard?curruserID=${id}`)
+//             .then(res => resolve(res.data))
+//             .catch(err => reject(err));
+//     } else {
+//         axios.get(`${base_url}/discussionBoard`)
+//             .then(res => resolve(res.data))
+//             .catch(err => reject(err));
+//     }
+// });
 
 
 export const searchPosts = (searchWord) => new Promise((resolve, reject) => {
@@ -158,3 +170,54 @@ export const editPost = (postID, postTitle, postEntry, restricted) => new Promis
             reject(err);
         });
 });
+
+
+export const getPostsByID = (userID) => new Promise((resolve, reject) => {
+    axios.get(`${base_url}/discussionBoard/${userID}`)
+        .then(res => resolve(res.data))
+        .catch(err => reject(err));
+});
+
+export const getLikedPostsByID = (userID) => new Promise((resolve, reject) => {
+    axios.get(`${base_url}/likedPosts/${userID}`)
+        .then(res => resolve(res.data))
+        .catch(err => reject(err));
+});
+
+
+export const getDislikedPostsByID = (userID) => new Promise((resolve, reject) => {
+    axios.get(`${base_url}/dislikedPosts/${userID}`)
+        .then(res => resolve(res.data))
+        .catch(err => reject(err));
+});
+
+
+export const getUserInfoByID = (userID) => new Promise((resolve, reject) => {
+    axios.get(`${base_url}/userinfo?userID=${userID}`)
+        .then(res => resolve(res.data))
+        .catch(err => reject(err));
+});
+
+
+export const toggleBan = (userID) => new Promise((resolve, reject) => {
+    if (sessionStorage.getItem("userID")){
+        axios.put(`${base_url}/toggleban?userID=${userID}`)
+            .then(res => resolve(res.data))
+            .catch(err =>{
+                alert(err)
+                reject(err)
+            });
+    }
+});
+
+
+export const getBannedUsers = () => new Promise((resolve, reject) => {
+    axios.get(`${base_url}/bannedUsers`)
+        .then(res => resolve(res.data))
+        .catch(err => reject(err));
+});
+
+
+
+
+

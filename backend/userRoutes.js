@@ -110,7 +110,7 @@ module.exports = function userRoutes(app, logger){
             const serviceQuery = 'SELECT * FROM addService WHERE f_userID = ' + req.query.userID;
             const serviceData = await DBQuery(serviceQuery);
             const serviceObject = JSON.parse(JSON.stringify(serviceData));
-            disconnect;
+            disconnect();
 
             let formattedServices = [];
             for (const row in serviceObject) {
@@ -195,6 +195,7 @@ module.exports = function userRoutes(app, logger){
                 return;
             }
             const results = await DBQuery(updateQueryString);
+            disconnect();
             response.status(200).json(results);
         } catch (err) {
             console.error('There was an error in PUT /toggleban', err);
@@ -212,6 +213,7 @@ module.exports = function userRoutes(app, logger){
             const {DBQuery, disconnect} = await connectToDatabase();
             const dataPacket = await DBQuery(queryString);
             const dataObject = JSON.parse(JSON.stringify(dataPacket));
+            disconnect();
             response.status(200).json(dataObject);
         } catch (err) {
             console.error('There was an error in GET /bannedStatus', err);
@@ -229,6 +231,7 @@ module.exports = function userRoutes(app, logger){
             const {DBQuery, disconnect} = await connectToDatabase();
             const dataPacket = await DBQuery(queryString);
             const dataObject = JSON.parse(JSON.stringify(dataPacket));
+            disconnect();
             response.status(200).json(dataObject);
         } catch (err) {
             console.error('There was an error in GET /bannedUsers', err);
