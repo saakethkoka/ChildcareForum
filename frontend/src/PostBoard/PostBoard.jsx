@@ -37,14 +37,14 @@ export default class PostBoard extends React.Component {
     }
 
     setMostVotesFilter = (values) => {
-        this.setState({mostVotesFilter: values})
+        this.setState({mostVotesFilter: values});
         getPosts(values).then(posts => {
             this.setState({posts: posts});
         })
     }
 
     componentDidMount() {
-        getPosts(this.mostVotesFilter).then(posts => {
+        getPosts(this.state.mostVotesFilter).then(posts => {
             this.setState({posts: posts})
         })
     }
@@ -56,7 +56,7 @@ export default class PostBoard extends React.Component {
         // });
 
         createPost(post.title, post.content, post.restricted).then(post => {
-            getPosts(this.mostVotesFilter).then(posts => {
+            getPosts(this.state.mostVotesFilter).then(posts => {
                 this.setState({posts: posts})
             })
         })
@@ -64,9 +64,8 @@ export default class PostBoard extends React.Component {
     }
 
     deletePost = (id) => {
-        console.log(id);
         deletePost(id).then(post => {
-            getPosts(this.mostVotesFilter).then(posts => {
+            getPosts(this.state.mostVotesFilter).then(posts => {
                 this.setState({posts: posts})
             })
         })
@@ -83,20 +82,20 @@ export default class PostBoard extends React.Component {
             if (post.postID === id) {
                 if(post.userVote === -1) {
                     postEngadgement(id, 0).then(post => {
-                        getPosts(this.mostVotesFilter).then(posts => {
+                        getPosts(this.state.mostVotesFilter).then(posts => {
                             this.setState({posts: posts})
                         })
                     })
                 } else if(post.userVote === 0) {
                     postEngadgement(id, -1).then(post => {
-                        getPosts(this.mostVotesFilter).then(posts => {
+                        getPosts(this.state.mostVotesFilter).then(posts => {
                             this.setState({posts: posts})
                         })
                     })
                 }
                 else{
                     postEngadgement(id, -1).then(post => {
-                        getPosts(this.mostVotesFilter).then(posts => {
+                        getPosts(this.state.mostVotesFilter).then(posts => {
                             this.setState({posts: posts})
                         })
                     })
@@ -112,23 +111,22 @@ export default class PostBoard extends React.Component {
     upvotePost = (id) => {
         let newPosts = this.state.posts.map(post => {
             if (post.postID === id) {
-                console.log(post.userVote);
                 if(post.userVote === -1) {
                     postEngadgement(id, 1).then(post => {
-                        getPosts(this.mostVotesFilter).then(posts => {
+                        getPosts(this.state.mostVotesFilter).then(posts => {
                             this.setState({posts: posts})
                         })
                     })
                 } else if(post.userVote === 0) {
                     postEngadgement(id, 1).then(post => {
-                        getPosts(this.mostVotesFilter).then(posts => {
+                        getPosts(this.state.mostVotesFilter).then(posts => {
                             this.setState({posts: posts})
                         })
                     })
                 }
                 else{
                     postEngadgement(id, 0).then(post => {
-                        getPosts(this.mostVotesFilter).then(posts => {
+                        getPosts(this.state.mostVotesFilter).then(posts => {
                             this.setState({posts: posts})
                         })
                     })
@@ -144,7 +142,7 @@ export default class PostBoard extends React.Component {
     updatePost = (id, title, content, restricted) => {
         console.log(id, title, content, restricted);
         editPost(id, title, content, restricted).then(post => {
-            getPosts(this.mostVotesFilter).then(posts => {
+            getPosts(this.state.mostVotesFilter).then(posts => {
                 this.setState({posts: posts})
             })
         })
