@@ -35,6 +35,8 @@ export default function Post(props) {
     let [postEffect, setPostEffect] = React.useState("0px 0px 5px 0px rgba(0,0,0,0.3)");
 
     useEffect(() => {
+        setHideEdit(true);
+        setHideDelete(true);
         handleButtonColor();
         handlePostEffect();
         if(post.userVote === 0){
@@ -50,6 +52,7 @@ export default function Post(props) {
             setDownvoteColor("primary");
         }
         if (parseInt(sessionStorage.getItem("userID")) === (props.post.userID)) {
+            console.log(post.username);
             setHideEdit(false);
             setHideDelete(false);
         }
