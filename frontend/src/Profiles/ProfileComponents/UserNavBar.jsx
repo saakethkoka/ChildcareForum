@@ -31,7 +31,7 @@ const ProfileNavbar = (props) => {
     return (
         <Fragment>
             {!(sessionStorage.getItem("userID")) && <Navigate to = "/login"/>}
-        <AppBar position = 'static'>
+        <AppBar position = 'fixed'>
             <Toolbar>
                 <Typography variant = 'h6' component='div' sx={{ flexGrow: 1}}>
                     <Button href="/" color = 'inherit'>

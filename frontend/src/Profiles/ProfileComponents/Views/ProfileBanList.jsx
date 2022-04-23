@@ -20,6 +20,7 @@ import GavelRoundedIcon from '@mui/icons-material/GavelRounded';
 import CheckBoxRoundedIcon from '@mui/icons-material/CheckBoxRounded';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CloseIcon from '@mui/icons-material/Close';
+import { toggleBan } from '../../../kokaAPI';
 
 const UserBan = (props) => {
 
@@ -27,18 +28,9 @@ const UserBan = (props) => {
     let [verifiedStatus, setVerifiedStatus] = React.useState(false);
 
 
-
-
-    useEffect(() => {
-        setVerifiedStatus(user.verified)
-    });
-
-
-
-
-
-    const unBan = (id) => {
-        
+    const unBan = () => {
+        toggleBan(user.userID)
+        props.refreshBan()
     }
 
 

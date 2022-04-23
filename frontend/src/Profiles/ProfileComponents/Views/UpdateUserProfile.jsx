@@ -8,6 +8,7 @@ import { spacing } from '@mui/system';
 import SendIcon from '@mui/icons-material/Send';
 import CloseIcon from '@mui/icons-material/Close';
 import VerifiedIcon from '@mui/icons-material/Verified';
+import { getUserInfoByID } from '../../../kokaAPI'
 // react-bootstrap components
 
 
@@ -17,11 +18,12 @@ import VerifiedIcon from '@mui/icons-material/Verified';
 
 function UserProfile() {
   const textStyle = {margin: "10px auto"}
-  const formStyle = {padding: 20, height: '105vh', width: '50vh', margin: "20px auto"}
+  const formStyle = {padding: 20, height: '105vh', width: '50vh', margin: "90px auto"}
 
   const testUser = [{id: 1, first_name: "John", last_name: "Doe", email: "test@gmail.com", password: "test123", username: "johndoe"}]
+  const [userInfo, setUserInfo] = useState({})
 
-  const [first_Name, setFirstName] = useState("");
+  const [first_Name, setFirstName] = useState();
   const [last_Name, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
@@ -41,13 +43,12 @@ function UserProfile() {
 
 
   useEffect(() => {
-          setFirstName(testUser[0].first_name)
-          setLastName(testUser[0].last_name)
-          setUsername(testUser[0].username)
-          setEmail(testUser[0].email)
-          setPassword(testUser[0].password)
-          setConfirmPassword(testUser[0].password)
-          setVerificationStatus("verified")
+          getUserInfoByID(sessionStorage.getItem("userID")).then(userInfo => {
+            setUserInfo(userInfo)
+            setFirstName(userInfo.first_name)
+          })
+          setFirstName(userInfo.first_name)
+          console.log("test" + first_Name)
           
   }, []);
 

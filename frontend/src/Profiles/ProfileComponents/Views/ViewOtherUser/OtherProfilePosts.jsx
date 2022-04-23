@@ -2,14 +2,15 @@ import React, {Fragment} from 'react';
 import PostBoard from '../../Common/PostBoard/PostBoard'
 import  OtherProfileNavbar  from './OtherUserNavBar'
 import { useParams } from "react-router-dom"
+import { getPostsByID } from '../../../../kokaAPI';
 
 export const OtherProfilePosts = () => { 
-    const { userId } = useParams();
+    const { userID } = useParams();
 
     return (
         <Fragment>
-            <OtherProfileNavbar/>
-            <PostBoard postType = {"userPostList"} userId = {userId}/>
+            <OtherProfileNavbar userID = {userID}/>
+            <PostBoard getPosts = {getPostsByID} userID = {userID}/>
         </Fragment>
         
     );

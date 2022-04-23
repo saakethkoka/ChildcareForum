@@ -118,6 +118,7 @@ export default function Post(props) {
                 padding: 2,
                 backgroundColor: '#fff',
                 boxShadow: postEffect,
+                
             }}>
                 <CardContent sx={{
                     minHeight: 150,

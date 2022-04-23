@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer } from "react";
 import { TextField, Container, Paper, Card, Stack, Grid, InputAdornment, FormControl, OutlinedInput, FormHelperText, InputLabel, IconButton, Button, Chip, Alert, Typography, Fab } from "@mui/material";
 import BuildIcon from '@mui/icons-material/Build';
 import { Avatar } from "@mui/material";
@@ -9,6 +9,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import GavelRoundedIcon from '@mui/icons-material/GavelRounded';
 import OtherProfileNavbar from "./OtherUserNavBar";
+import { getUserInfoByID, toggleBan } from "../../../../kokaAPI"
+import { useParams } from "react-router-dom"
 // react-bootstrap components
 
 
@@ -18,44 +20,37 @@ import OtherProfileNavbar from "./OtherUserNavBar";
 
 function ProfileView() {
   const textStyle = {margin: "10px auto"}
-  const formStyle = {padding: 20, height: '50vh', width: '50vh', margin: "20px auto"}
+  const formStyle = {padding: 20, height: '50vh', width: '50vh', margin: "90px auto"}
 
-  const testUser = [{id: 1, first_name: "John", last_name: "Doe", email: "test@gmail.com", password: "test123", username: "johndoe", verificationStatus:true, banStatus: false}]
 
-  const [first_Name, setFirstName] = useState("");
-  const [last_Name, setLastName] = useState("");
-  const [username, setUsername] = useState("");
-  const [verificationStatus, setVerificationStatus] = useState("");
-  const [banStatus, setBanStatus]  = useState(false)
+
+  const [userInfo, setUserInfo] = useState({})
+  const { userID } = useParams()
+  const [count, setCount] = useState(0)
+  const refreshBan = () =>{
+    setCount(count + 1)
+  }
 
 
   useEffect(() => {
-          setFirstName(testUser[0].first_name)
-          setLastName(testUser[0].last_name)
-          setUsername(testUser[0].username)
-          setBanStatus(testUser[0].banStatus)
-          setVerificationStatus("verified")
-    
-  }, []);
+          getUserInfoByID(userID).then(userInfo => {setUserInfo(userInfo)})
+  },[count, userID]);
 
   function toggleUserBan(){
-    if(banStatus == true){
-      setBanStatus(false)
-    }
-    else{
-      setBanStatus(true)
-    }
+    toggleBan(userID)
+    getUserInfoByID(userID).then(userInfo => {setUserInfo({...userInfo})})
+    refreshBan()
   }
 
   return (
     <>
-      <OtherProfileNavbar/>
+      <OtherProfileNavbar userID = {userID}/>
       
       <Grid align = 'center'>
         <Paper style = {formStyle} elevation = {12}>
           <Grid align='center'>
               <Typography variant="h5" component="div">
-                        {username} {verificationStatus && <VerifiedIcon color = "primary"/>}
+                        {userInfo.username} {userInfo.userVerified && <VerifiedIcon color = "primary"/>}
               </Typography>
           </Grid>
         <div>
@@ -64,8 +59,9 @@ function ProfileView() {
           
           <TextField sx={{ m: 2, width: '25ch' }} variant="outlined"
             id="outlined-read-only-input"
+            InputLabelProps={{ shrink: true }}
             label="First Name"
-            value={first_Name}
+            value={userInfo.first_name}
             InputProps={{
               readOnly: true,
             }}
@@ -75,8 +71,9 @@ function ProfileView() {
 
           <TextField sx={{ m: 2, width: '25ch' }} variant="outlined"
             id="outlined-read-only-input"
+            InputLabelProps={{ shrink: true }}
             label="Last Name"
-            value={last_Name}
+            value={userInfo.last_name}
             InputProps={{
               readOnly: true,
             }}
@@ -86,17 +83,23 @@ function ProfileView() {
           
             
           <Grid align='center'>
-            {!banStatus && <Fab color="error"
-                //onClick={e => unBan(e)}
+            {(!userInfo.userBanned && sessionStorage.getItem("userModerator")) && <Fab color="error"
                 aria-label="Ban"
                 onClick={e=>toggleUserBan(e)}>
               <GavelRoundedIcon/>
             </Fab>}
-            {banStatus && <item>
-              <Button variant="contained"  color = "error" onClick={e=>toggleUserBan(e)}>
-                Banned
-              </Button>
+            {(userInfo.userBanned && sessionStorage.getItem("userModerator")) && 
+              <item>
+                <Button variant="contained"  color = "error" onClick={e=>toggleUserBan(e)}>
+                  Banned
+                </Button>
               </item>}
+            {(userInfo.userBanned && !sessionStorage.getItem("userModerator")) && 
+            <item>
+              <Button variant="contained"  color = "error" onClick={e=>toggleUserBan(e)} disabled = {true}>
+                Unban
+              </Button>
+            </item>}
           </Grid>
 
         </div>

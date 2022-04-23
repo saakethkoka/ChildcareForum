@@ -167,4 +167,32 @@ export const getDislikedPostsByID = (userID) => new Promise((resolve, reject) =>
 });
 
 
+export const getUserInfoByID = (userID) => new Promise((resolve, reject) => {
+    axios.get(`${base_url}/userinfo?userID=${userID}`)
+        .then(res => resolve(res.data))
+        .catch(err => reject(err));
+});
+
+
+export const toggleBan = (userID) => new Promise((resolve, reject) => {
+    if (sessionStorage.getItem("userID")){
+        axios.put(`${base_url}/toggleban?userID=${userID}`)
+            .then(res => resolve(res.data))
+            .catch(err =>{
+                alert(err)
+                reject(err)
+            });
+    }
+});
+
+
+export const getBannedUsers = () => new Promise((resolve, reject) => {
+    axios.get(`${base_url}/bannedUsers`)
+        .then(res => resolve(res.data))
+        .catch(err => reject(err));
+});
+
+
+
+
 

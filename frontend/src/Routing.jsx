@@ -18,10 +18,12 @@ import { ProfileDislikedPosts } from "./Profiles/ProfileComponents/Views/Profile
 
 
 
+
+
 export default function Routing(){
 	const checkLogin = () =>{
 		console.log()
-		if(!sessionStorage.getItem('userID') || sessionStorage.getItem('userID')==="-1"){
+		if(!sessionStorage.getItem('userID')){
 			return <Login/>
 		}
 		return <PostBoard/>;
@@ -39,6 +41,9 @@ export default function Routing(){
 				<Route path="/accounts/userPosts" exact element = {<ProfilePosts/>}/>
 				<Route path="/accounts/liked" exact element ={<ProfileLikedPosts/>}/>
 				<Route path="/accounts/disliked" exact element ={<ProfileDislikedPosts/>}/>
+				<Route path="/accounts/ban" exact element ={<ProfileBanned/>}/>
+				<Route path="/user/profile/:userID" exact element = {<ProfileView/>}/>
+				<Route path="/user/posts/:userID" exact element = {<OtherProfilePosts/>}/>
 			</Routes>
 		</Router>
     );
