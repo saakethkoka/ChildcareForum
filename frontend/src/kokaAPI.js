@@ -1,20 +1,44 @@
 import axios from 'axios';
 
-const base_url = 'http://localhost:5000';
+const base_url = 'http://localhost:8000';
 
-export const getPosts = () => new Promise((resolve, reject) => {
-    const id = sessionStorage.getItem('userID')
-    console.log(id)
-    if(id) {
-        axios.get(`${base_url}/discussionBoard?curruserID=${id}`)
-            .then(res => resolve(res.data))
-            .catch(err => reject(err));
-    } else {
-        axios.get(`${base_url}/discussionBoard`)
-            .then(res => resolve(res.data))
-            .catch(err => reject(err));
+export const getPosts = (mostVotes) => new Promise((resolve, reject) => {
+    if (mostVotes){
+        const id = sessionStorage.getItem('userID');
+        if (id) {
+            axios.get(`${base_url}/voteorder?curruserID=${id}`)
+                .then(res => resolve(res.data))
+                .catch(err => reject(err));
+        } else {
+            axios.get(`${base_url}/voteorder`)
+                .then(res => resolve(res.data))
+                .catch(err => reject(err));
+        }
     }
-});
+    else {
+        const id = sessionStorage.getItem('userID');
+        if (id) {
+            axios.get(`${base_url}/dateorder?curruserID=${id}`)
+                .then(res => resolve(res.data))
+                .catch(err => reject(err));
+        } else {
+            axios.get(`${base_url}/dateorder`)
+                .then(res => resolve(res.data))
+                .catch(err => reject(err));
+        }
+// export const getPosts = () => new Promise((resolve, reject) => {
+//     const id = sessionStorage.getItem('userID')
+//     console.log(id)
+//     if(id) {
+//         axios.get(`${base_url}/discussionBoard?curruserID=${id}`)
+//             .then(res => resolve(res.data))
+//             .catch(err => reject(err));
+//     } else {
+//         axios.get(`${base_url}/discussionBoard`)
+//             .then(res => resolve(res.data))
+//             .catch(err => reject(err));
+//     }
+// });
 
 
 export const searchPosts = (searchWord) => new Promise((resolve, reject) => {

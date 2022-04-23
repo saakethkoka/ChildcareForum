@@ -28,10 +28,15 @@ export default function Post(props) {
     let [dialogOpen, setDialogOpen] = React.useState(false);
     let [editDialogOpen, setEditDialogOpen] = React.useState(false);
     let [commentDialogOpen, setCommentDialogOpen] = React.useState(false);
+    let [hideEdit, setHideEdit] = React.useState(true);
+    let [hideDelete, setHideDelete] = React.useState(true);
+
 
     let [postEffect, setPostEffect] = React.useState("0px 0px 5px 0px rgba(0,0,0,0.3)");
 
     useEffect(() => {
+        setHideEdit(true);
+        setHideDelete(true);
         handleButtonColor();
         handlePostEffect();
         if(post.userVote === 0){
@@ -46,6 +51,16 @@ export default function Post(props) {
             setUpvoteColor("inherit");
             setDownvoteColor("primary");
         }
+        if (parseInt(sessionStorage.getItem("userID")) === (props.post.userID)) {
+            console.log(post.username);
+            setHideEdit(false);
+            setHideDelete(false);
+        }
+
+        if(parseInt(sessionStorage.getItem("userModerator")) === 1){
+            setHideDelete(false);
+        }
+
     });
 
     const handlePostEffect = () => {
@@ -157,6 +172,7 @@ export default function Post(props) {
                     </Fab>
                     <Fab color="secondary"
                          sx={fab_styles}
+                         hidden={hideEdit}
                          onClick={handleEditDialogOpen}
                          aria-label="Edit">
                         <EditIcon/>
@@ -164,6 +180,7 @@ export default function Post(props) {
                     <Fab color="secondary"
                          sx={fab_styles}
                          onClick={handleDialogOpen}
+                         hidden={hideDelete}
                          aria-label="Delete">
                         <DeleteForeverIcon/>
                     </Fab>
@@ -185,7 +202,7 @@ export default function Post(props) {
                     </Button>
                 </DialogActions>
             </Dialog>
-            <CommentList postId={post.postID} open={commentDialogOpen} onClose={handleCommentClose}/>
+            <CommentList postId={post.postID} restricted={post.restricted} userID={post.userID} open={commentDialogOpen} onClose={handleCommentClose}/>
             <EditPost updatePost={props.updatePost} post={post} open={editDialogOpen} onClose={handleEditDialogClose}/>
         </Grid>
     )
