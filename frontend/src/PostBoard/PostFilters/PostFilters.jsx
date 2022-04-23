@@ -22,6 +22,7 @@ export default function PostFilters(props){
 
     const handleVerifiedPostersChange = (event) => {
         setVerifiedPosters(event.target.value);
+        props.filterVerified(event.target.value);
     };
 
 

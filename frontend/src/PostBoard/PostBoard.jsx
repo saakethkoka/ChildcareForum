@@ -48,15 +48,11 @@ export default class PostBoard extends React.Component {
             }
         })
 
-        // this.state.mostVotesFilter = values;
     }
-    //
-    // setVerifiedFilter = (values) => {
-    //     this.setState({verifiedFilter: values});
-    //     getPosts(mostVotesFilter).then(posts => {
-    //         this.setState({posts: posts});
-    //     })
-    // }
+
+    setVerifiedFilter = (values) => {
+        this.setState({verifiedFilter: values}, this.updatePosts);
+    }
 
     updatePosts = () =>{
         getPosts(this.state.mostVotesFilter).then(posts => {
@@ -166,7 +162,7 @@ export default class PostBoard extends React.Component {
     render() {
         return(
             <Fragment>
-                <PostFilters searchPosts={this.searchPosts} filterPosts={this.setMostVotesFilter}/>
+                <PostFilters searchPosts={this.searchPosts} filterPosts={this.setMostVotesFilter} filterVerified={this.setVerifiedFilter}/>
                 <PostList posts={this.state.posts}
                           deletePost={this.deletePost}
                           downvotePost={this.downvotePost}
