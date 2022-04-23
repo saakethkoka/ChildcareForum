@@ -18,11 +18,20 @@ export class Repository {
 				}
 			})
 				.then(response => {
-					resolve({ status: "test"});
+					resolve({
+						status: "test",
+						userID: response.data
+					});
 				})
 				.catch(err => {
-					error(err);
-					resolve({ status: false });
+					if(err.response.status === 401){
+						reject();
+					}
+					else{
+						error(err);
+						resolve({ status: false });
+					}
+
 				});
 		});
 	}
@@ -35,8 +44,7 @@ export class Repository {
                     resolve(response.data);
                 })
                 .catch(err => {
-                    error(err);
-                    resolve(undefined);
+                    reject();
                 });
         });
     }
