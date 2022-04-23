@@ -217,17 +217,17 @@ module.exports = function voteRoutes(app, logger){
                 const userResults = await DBQuery(userQuery);
                 const userRaw = JSON.parse(JSON.stringify(userResults));
     
-                let userVote;
+                let userVote, currID;
                 if (typeof req.query.curruserID == 'undefined')
+                    currID = req.params.userID;
+                else
+                    currID = req.query.curruserID;
+                const voteValueRaw = await DBQuery('SELECT value FROM postVotes WHERE f_postID = ' + postRaw[row].postID + ' AND f_userID = ' + req.query.curruserID);
+                const voteValueObj = JSON.parse(JSON.stringify(voteValueRaw));
+                if (typeof voteValueObj[0] == 'undefined')
                     userVote = 0;
-                else {
-                    const voteValueRaw = await DBQuery('SELECT value FROM postVotes WHERE f_postID = ' + postRaw[row].postID + ' AND f_userID = ' + req.query.curruserID);
-                    const voteValueObj = JSON.parse(JSON.stringify(voteValueRaw));
-                    if (typeof voteValueObj[0] == 'undefined')
-                        userVote = 0;
-                    else
-                        userVote = voteValueObj[0].value;
-                }
+                else
+                    userVote = voteValueObj[0].value;
 
                 let votes;
                 const voteCountRaw = await DBQuery('SELECT SUM(value) AS total FROM postVotes WHERE f_postID = ' + postRaw[row].postID);
