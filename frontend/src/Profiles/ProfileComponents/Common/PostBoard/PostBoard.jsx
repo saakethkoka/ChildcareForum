@@ -146,7 +146,6 @@ export default class PostBoard extends React.Component {
 
 
     render() {
-        console.log(this.state.posts)
         return(
             <Fragment>
                 <PostFilters searchPosts={this.searchPosts}/>
