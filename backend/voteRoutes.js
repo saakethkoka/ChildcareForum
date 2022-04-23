@@ -154,7 +154,7 @@ module.exports = function voteRoutes(app, logger){
     
                 let userVote;
                 if (typeof req.query.curruserID == 'undefined')
-                    userVote = 0;
+                    userVote = 1;
                 else {
                     const voteValueRaw = await DBQuery('SELECT value FROM postVotes WHERE f_postID = ' + postRaw[row].postID + ' AND f_userID = ' + req.query.curruserID);
                     const voteValueObj = JSON.parse(JSON.stringify(voteValueRaw));
@@ -163,12 +163,20 @@ module.exports = function voteRoutes(app, logger){
                     else
                         userVote = voteValueObj[0].value;
                 }
+
+                let votes;
+                const voteCountRaw = await DBQuery('SELECT SUM(value) AS total FROM postVotes WHERE f_postID = ' + postRaw[row].postID);
+                const voteCountObj = JSON.parse(JSON.stringify(voteCountRaw))[0];
+                if (voteCountObj.total === null)
+                    votes = 0;
+                else
+                    votes = voteCountObj.total;
     
                 formattedPosts.push({
                     postTitle: postRaw[row].postTitle,
                     postID: postRaw[row].postID,
                     userID: postRaw[row].f_userID,
-                    votes: postRaw[row].netvotes,
+                    votes: votes,
                     userVote: userVote,
                     verified: (statusRaw[0].isVerified == 1),
                     date: postRaw[row].date,
@@ -211,7 +219,7 @@ module.exports = function voteRoutes(app, logger){
     
                 let userVote;
                 if (typeof req.query.curruserID == 'undefined')
-                    userVote = 0;
+                    userVote = -1;
                 else {
                     const voteValueRaw = await DBQuery('SELECT value FROM postVotes WHERE f_postID = ' + postRaw[row].postID + ' AND f_userID = ' + req.query.curruserID);
                     const voteValueObj = JSON.parse(JSON.stringify(voteValueRaw));
@@ -220,12 +228,20 @@ module.exports = function voteRoutes(app, logger){
                     else
                         userVote = voteValueObj[0].value;
                 }
+
+                let votes;
+                const voteCountRaw = await DBQuery('SELECT SUM(value) AS total FROM postVotes WHERE f_postID = ' + postRaw[row].postID);
+                const voteCountObj = JSON.parse(JSON.stringify(voteCountRaw))[0];
+                if (voteCountObj.total === null)
+                    votes = 0;
+                else
+                    votes = voteCountObj.total;
     
                 formattedPosts.push({
                     postTitle: postRaw[row].postTitle,
                     postID: postRaw[row].postID,
                     userID: postRaw[row].f_userID,
-                    votes: postRaw[row].netvotes,
+                    votes: votes,
                     userVote: userVote,
                     verified: (statusRaw[0].isVerified == 1),
                     date: postRaw[row].date,

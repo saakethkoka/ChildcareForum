@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Login } from './Accounts/Login'
 import { Register } from './Accounts/Register'
 import PostBoard from "./PostBoard/PostBoard";
+import VerificationDashboard from "./VerificationDashboard/VerificationDashboard";
 
 import ProfileView from "./Profiles/ProfileComponents/Views/ViewOtherUser/OtherProfileView";
 import UserProfile from "./Profiles/ProfileComponents/Views/UpdateUserProfile"
@@ -44,6 +45,8 @@ export default function Routing(){
 				<Route path="/accounts/ban" exact element ={<ProfileBanned/>}/>
 				<Route path="/user/profile/:userID" exact element = {<ProfileView/>}/>
 				<Route path="/user/posts/:userID" exact element = {<OtherProfilePosts/>}/>
+				<Route path="/vericationdashboard" exact element={<VerificationDashboard />} />
+
 			</Routes>
 		</Router>
     );
