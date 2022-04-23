@@ -83,20 +83,20 @@ function ProfileView() {
           
             
           <Grid align='center'>
-            {(!userInfo.userBanned && sessionStorage.getItem("userModerator")) && <Fab color="error"
+            {(!userInfo.userBanned && sessionStorage.getItem("userModerator")) !== "0" && <Fab color="error"
                 aria-label="Ban"
                 onClick={e=>toggleUserBan(e)}>
               <GavelRoundedIcon/>
             </Fab>}
-            {(userInfo.userBanned && sessionStorage.getItem("userModerator")) && 
+            {(userInfo.userBanned && sessionStorage.getItem("userModerator")) !== "0" &&
               <item>
-                <Button variant="contained"  color = "error" onClick={e=>toggleUserBan(e)}>
+                <Button variant="contained"  color = "error" onClick={e=>toggleUserBan(e)} disabled = {true}>
                   Banned
                 </Button>
               </item>}
-            {(userInfo.userBanned && !sessionStorage.getItem("userModerator")) && 
+            {(userInfo.userBanned && sessionStorage.getItem("userModerator")) === "0" &&
             <item>
-              <Button variant="contained"  color = "error" onClick={e=>toggleUserBan(e)} disabled = {true}>
+              <Button variant="contained"  color = "error" onClick={e=>toggleUserBan(e)}>
                 Unban
               </Button>
             </item>}
