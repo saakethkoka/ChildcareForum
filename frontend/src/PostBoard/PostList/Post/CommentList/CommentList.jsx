@@ -62,7 +62,7 @@ export default function CommentList(props){
     }
 
     const onCommentSubmit = () => {
-        postComment(4, props.postId, comment).then(res => {
+        postComment(sessionStorage.getItem("userID"), props.postId, comment).then(res => {
             getComments(props.postId).then(res => {
                 setComments(res);
             })
