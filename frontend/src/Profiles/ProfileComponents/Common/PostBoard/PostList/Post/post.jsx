@@ -114,8 +114,9 @@ export default function Post(props) {
     }
 
     return(
-        <Grid md={6} sm={12} containers>
+        <Grid md={12} sm={12} containers>
             <Card sx={{
+                width: .95,
                 margin: "1rem",
                 padding: 2,
                 backgroundColor: '#fff',
