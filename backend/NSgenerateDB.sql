@@ -22,6 +22,7 @@ CREATE TABLE statusTable(
     isDoctor bool,
     isBanned bool,
     isVerified bool,
+    hasRequested bool,
     FOREIGN KEY (userID) REFERENCES userLogin(userID)
 );
 

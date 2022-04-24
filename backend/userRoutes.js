@@ -56,13 +56,29 @@ module.exports = function userRoutes(app, logger){
             const targetPassword = JSON.parse(JSON.stringify(dataPacket))[0].password;
             if (targetPassword == request.query.password){
                 console.log('Log in success!');
-                response.json(JSON.parse(JSON.stringify(dataPacket))[0].userID);
-            } else
+                
+                const newUserID = JSON.parse(JSON.stringify(dataPacket))[0].userID;
+                const userQueryString = 'SELECT * FROM statusTable WHERE userID = ' + newUserID;
+                const userDataPacket = await DBQuery(userQueryString);
+                const userDataObject = JSON.parse(JSON.stringify(userDataPacket));
+                disconnect();
+
+                const formattedUserInfo = {
+                    userID: newUserID,
+                    userBanned: userDataObject[0].isBanned,
+                    userDoctor: userDataObject[0].isDoctor,
+                    userModerator: userDataObject[0].isModerator,
+                    userVerified: userDataObject[0].isDoctor
+                };
+                response.status(200).json(formattedUserInfo);
+            } else {
                 console.log('Log in failure!');
-            disconnect;
+                disconnect();
+                response.status(401).json({message: 'Incorrect username or password'});
+            }
         } catch (err) {
             console.error('There was an error in GET /logincheck', err);
-            response.status(500).json({message: err.message});
+            response.status(401).json({message: 'Incorrect username or password'});
         }
     });
     
@@ -79,6 +95,48 @@ module.exports = function userRoutes(app, logger){
             response.status(500).json({message: err.message});
         }
     });
+
+    //GET /userinfo?userID=...
+    app.get('/userinfo', async (req, res) => {
+        try {
+            console.log('Initiating GET /userinfo request');
+            const {DBQuery, disconnect} = await connectToDatabase();
+            const queryString = 'SELECT username, first_name, last_name, IFNULL(isModerator,0) AS userModerator, IFNULL(isDoctor,0) AS userDoctor, IFNULL(isBanned,0) AS userBanned, IFNULL(isVerified, 0) AS userVerified FROM userLogin'
+                                + ' LEFT JOIN statusTable sT on userLogin.userID = sT.userID'
+                                + ' WHERE userLogin.userID = ' + req.query.userID;
+            const userData = await DBQuery(queryString);
+            const userObject = JSON.parse(JSON.stringify(userData));
+            
+            const serviceQuery = 'SELECT * FROM addService WHERE f_userID = ' + req.query.userID;
+            const serviceData = await DBQuery(serviceQuery);
+            const serviceObject = JSON.parse(JSON.stringify(serviceData));
+            disconnect();
+
+            let formattedServices = [];
+            for (const row in serviceObject) {
+                formattedServices.push({
+                    serviceName: serviceObject[row].serviceName,
+                    price: serviceObject[row].addPrice
+                });
+            }
+
+            formattedInfo = {
+                username: userObject[0].username,
+                first_name: userObject[0].first_name,
+                last_name: userObject[0].last_name,
+                userModerator: (userObject[0].userModerator == 1),
+                userDoctor: (userObject[0].userDoctor == 1),
+                userBanned: (userObject[0].userBanned == 1),
+                userVerified: (userObject[0].userVerified == 1),
+                services: formattedServices
+            }
+
+            res.status(200).json(formattedInfo);
+        } catch (err) {
+            console.error('There was an error in GET /userinfo', err);
+            res.status(500).json({message: err.message});
+        }
+    })
 
     app.get('/localusers', async (request, response) => {
         try {
@@ -137,6 +195,7 @@ module.exports = function userRoutes(app, logger){
                 return;
             }
             const results = await DBQuery(updateQueryString);
+            disconnect();
             response.status(200).json(results);
         } catch (err) {
             console.error('There was an error in PUT /toggleban', err);
@@ -154,6 +213,7 @@ module.exports = function userRoutes(app, logger){
             const {DBQuery, disconnect} = await connectToDatabase();
             const dataPacket = await DBQuery(queryString);
             const dataObject = JSON.parse(JSON.stringify(dataPacket));
+            disconnect();
             response.status(200).json(dataObject);
         } catch (err) {
             console.error('There was an error in GET /bannedStatus', err);
@@ -171,6 +231,7 @@ module.exports = function userRoutes(app, logger){
             const {DBQuery, disconnect} = await connectToDatabase();
             const dataPacket = await DBQuery(queryString);
             const dataObject = JSON.parse(JSON.stringify(dataPacket));
+            disconnect();
             response.status(200).json(dataObject);
         } catch (err) {
             console.error('There was an error in GET /bannedUsers', err);

@@ -18,6 +18,12 @@ export const Register=()=>{
     const [validPassword, setValidPassword] = useState(true);
     const [complete, setComplete] = useState(false);
 
+    const [firstNameError, setFirstNameError] = useState(false);
+    const [lastNameError, setLastNameError] = useState(false);
+    const [emailError, setEmailError] = useState(false);
+    const [usernameError, setUsernameError] = useState(false);
+    const [passwordError, setPasswordError] = useState(false);
+
 
     const accountRepository = new Repository();
 
@@ -25,6 +31,14 @@ export const Register=()=>{
     function register(event) {
         event.preventDefault();
         event.stopPropagation();
+
+        console.log()
+        const valid_email = validateEmail();
+        setFirstNameError(firstName === "");
+        setLastNameError(lastName === "");
+        setEmailError(valid_email === false);
+        setUsernameError(username === "");
+        setPasswordError(password === "" || password !== passwordConfirm);
 
         if (!(firstName && lastName && email && username && password) || (password !== passwordConfirm)) {
             return;
@@ -37,10 +51,20 @@ export const Register=()=>{
             email,
             password
         };
+        try{
+            accountRepository.register(account)
+                .then(r => setComplete(true))
+                .catch((e)=>{
+                setUsernameError(true);
+                alert("Username already exists");
+            });
 
-        accountRepository.register(account);
+        }
+        catch{
 
-        setComplete(true);
+        }
+
+
         
     }
     
@@ -70,7 +94,8 @@ export const Register=()=>{
                 <form>
                 <TextField 
                         type = "text"
-                        label = "First Name" 
+                        label = "First Name"
+                        error={firstNameError}
                         value={ firstName }
                         onChange={ e => setFirstName(e.target.value) }
                         style = {textStyle}
@@ -79,6 +104,7 @@ export const Register=()=>{
                         type = "text"
                         label = "Last Name" 
                         value={ lastName }
+                        error={lastNameError}
                         onChange={ e => setLastName(e.target.value) }
                         style = {textStyle}
                 />
@@ -86,12 +112,14 @@ export const Register=()=>{
                         type="text"
                         label = "Username" 
                         value={ username }
+                        error={usernameError}
                         onChange={ e => setUsername(e.target.value) }
                         style = {textStyle}
                 />
                 <TextField 
                         label = "Email" 
                         value={ email }
+                        error={emailError}
                         onChange={ e => setEmail(e.target.value) }
                         style = {textStyle}
                         type="email"
@@ -99,6 +127,7 @@ export const Register=()=>{
                 <TextField 
                         label = "Password" 
                         value={ password }
+                        error={passwordError}
                         type="password"
                         onChange={ e => setPassword(e.target.value) }
                         style = {textStyle}
@@ -106,6 +135,7 @@ export const Register=()=>{
                 <TextField 
                         label = "Confrim Password" 
                         value={ passwordConfirm }
+                        error={passwordError}
                         type="password"
                         onChange={ e => setPasswordConfirm(e.target.value) }
                         style = {textStyle}

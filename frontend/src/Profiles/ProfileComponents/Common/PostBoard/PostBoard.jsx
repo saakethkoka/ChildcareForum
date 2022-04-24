@@ -3,13 +3,13 @@ import {PostList} from "./PostList/PostList";
 import CreatePostButton from "./CreatePostButton/CreatePostButton";
 import Grid from "@mui/material/Grid/Grid";
 import PostFilters from "./PostFilters/PostFilters";
-import {createPost, deletePost, getPosts, searchPosts, editPost, postEngadgement} from "../kokaAPI"
+import {createPost, deletePost, getPosts, searchPosts, editPost, postEngadgement} from "../../../../kokaAPI"
 
 export default class PostBoard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            posts: [
+            posts: []
                 // {postTitle:"Hello",
                 //     postID: 1,
                 //     userID: 1,
@@ -31,65 +31,36 @@ export default class PostBoard extends React.Component {
                 //     date: "2019-01-03 12:54",
                 //     username: "Dohn Joe",
                 //     postEntry: "Curabitur non commodo dui, nec ullamcorper erat. Curabitur varius nulla lobortis ipsum lobortis, nec imperdiet dui dignissim. Pellentesque sed iaculis risus. Aenean suscipit in metus sit amet tincidunt. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Morbi maximus facilisis lorem eu venenatis. Nulla molestie risus ac vulputate condimentum. Curabitur at libero orci. In id neque velit. Nulla placerat eget ex non luctus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Aliquam diam risus, feugiat et feugiat ac, iaculis venenatis quam. Maecenas pellentesque nulla nec lacus varius, ac tempor nisl scelerisque."}
-            ],
-            mostVotesFilter: false,
-            verifiedFilter: false
+            
         }
     }
 
-    setMostVotesFilter = (values) => {
-        getPosts(values).then(posts => {
-            if(this.state.verifiedFilter) {
-                let new_posts = posts.filter(post => post.verified === true);
-                console.log(new_posts);
-                this.setState({posts: new_posts, mostVotesFilter: values});
-            } else {
-                this.setState({posts: posts, mostVotesFilter: values});
-            }
-        })
-
-    }
-
-    setVerifiedFilter = (values) => {
-        this.setState({verifiedFilter: values}, this.updatePosts);
-    }
-
-    updatePosts = () =>{
-        getPosts(this.state.mostVotesFilter).then(posts => {
-            if(this.state.verifiedFilter) {
-                let new_posts = posts.filter(post => post.verified === true);
-                console.log(new_posts);
-                this.setState({posts: new_posts});
-            } else {
-                this.setState({posts: posts});
-            }
-        })
-    }
-
     componentDidMount() {
-        getPosts(this.state.mostVotesFilter).then(posts => {
-            if(this.state.verifiedFilter) {
-                let new_posts = posts.filter(post => post.verified === true);
-                console.log(new_posts);
-                this.setState({posts: new_posts});
-            } else {
-                this.setState({posts: posts});
-            }
+        this.props.getPosts(this.props.userID).then(posts => {
+            this.setState({posts: posts})
         })
     }
 
 
     addPost = (post) => {
+        // this.setState({
+        //     posts: [...this.state.posts, post]
+        // });
 
         createPost(post.title, post.content, post.restricted).then(post => {
-            this.updatePosts();
+            this.props.getPosts(this.props.userID).then(posts => {
+                this.setState({posts: posts})
+            })
         })
 
     }
 
     deletePost = (id) => {
+        console.log(id);
         deletePost(id).then(post => {
-            this.updatePosts();
+            this.props.getPosts(this.props.userID).then(posts => {
+                this.setState({posts: posts})
+            })
         })
     }
 
@@ -104,16 +75,22 @@ export default class PostBoard extends React.Component {
             if (post.postID === id) {
                 if(post.userVote === -1) {
                     postEngadgement(id, 0).then(post => {
-                        this.updatePosts();
+                        this.props.getPosts(this.props.userID).then(posts => {
+                            this.setState({posts: posts})
+                        })
                     })
                 } else if(post.userVote === 0) {
                     postEngadgement(id, -1).then(post => {
-                        this.updatePosts();
+                        this.props.getPosts(this.props.userID).then(posts => {
+                            this.setState({posts: posts})
+                        })
                     })
                 }
                 else{
                     postEngadgement(id, -1).then(post => {
-                        this.updatePosts();
+                        this.props.getPosts(this.props.userID).then(posts => {
+                            this.setState({posts: posts})
+                        })
                     })
                 }
             }
@@ -127,18 +104,25 @@ export default class PostBoard extends React.Component {
     upvotePost = (id) => {
         let newPosts = this.state.posts.map(post => {
             if (post.postID === id) {
+                console.log(post.userVote);
                 if(post.userVote === -1) {
                     postEngadgement(id, 1).then(post => {
-                        this.updatePosts();
+                        this.props.getPosts(this.props.userID).then(posts => {
+                            this.setState({posts: posts})
+                        })
                     })
                 } else if(post.userVote === 0) {
                     postEngadgement(id, 1).then(post => {
-                        this.updatePosts();
+                        this.props.getPosts(this.props.userID).then(posts => {
+                            this.setState({posts: posts})
+                        })
                     })
                 }
                 else{
                     postEngadgement(id, 0).then(post => {
-                        this.updatePosts();
+                        this.props.getPosts(this.props.userID).then(posts => {
+                            this.setState({posts: posts})
+                        })
                     })
                 }
             }
@@ -152,7 +136,9 @@ export default class PostBoard extends React.Component {
     updatePost = (id, title, content, restricted) => {
         console.log(id, title, content, restricted);
         editPost(id, title, content, restricted).then(post => {
-            this.updatePosts();
+            this.props.getPosts(this.props.userID).then(posts => {
+                this.setState({posts: posts})
+            })
         })
     }
 
@@ -162,17 +148,14 @@ export default class PostBoard extends React.Component {
     render() {
         return(
             <Fragment>
-                <PostFilters searchPosts={this.searchPosts} filterPosts={this.setMostVotesFilter} filterVerified={this.setVerifiedFilter}/>
+                <PostFilters searchPosts={this.searchPosts}/>
                 <PostList posts={this.state.posts}
                           deletePost={this.deletePost}
                           downvotePost={this.downvotePost}
                           updatePost={this.updatePost}
                           upvotePost={this.upvotePost}
+                          postType = {this.props.postType}
                 />
-                <Grid xs={3}>
-                    <CreatePostButton addPost={this.addPost}/>
-                </Grid>
-
 
             </Fragment>
         )
