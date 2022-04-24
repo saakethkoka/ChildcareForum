@@ -50,7 +50,7 @@ export const searchPosts = (searchWord) => new Promise((resolve, reject) => {
         }
     }
 
-    axios.get(`${base_url}/searchposts`, api_params)
+    axios.get(`${base_url}/newSearchPosts`, api_params)
         .then(res => resolve(res.data))
         .catch(err =>{
             alert(err)
