@@ -101,7 +101,7 @@ module.exports = function userRoutes(app, logger){
         try {
             console.log('Initiating GET /userinfo request');
             const {DBQuery, disconnect} = await connectToDatabase();
-            const queryString = 'SELECT username, first_name, last_name, IFNULL(isModerator,0) AS userModerator, IFNULL(isDoctor,0) AS userDoctor, IFNULL(isBanned,0) AS userBanned, IFNULL(isVerified, 0) AS userVerified FROM userLogin'
+            const queryString = 'SELECT username, first_name, last_name, password, email, IFNULL(isModerator,0) AS userModerator, IFNULL(isDoctor,0) AS userDoctor, IFNULL(isBanned,0) AS userBanned, IFNULL(isVerified, 0) AS userVerified FROM userLogin'
                                 + ' LEFT JOIN statusTable sT on userLogin.userID = sT.userID'
                                 + ' WHERE userLogin.userID = ' + req.query.userID;
             const userData = await DBQuery(queryString);
@@ -124,6 +124,8 @@ module.exports = function userRoutes(app, logger){
                 username: userObject[0].username,
                 first_name: userObject[0].first_name,
                 last_name: userObject[0].last_name,
+                password: userObject[0].password,
+                email: userObject[0].email,
                 userModerator: (userObject[0].userModerator == 1),
                 userDoctor: (userObject[0].userDoctor == 1),
                 userBanned: (userObject[0].userBanned == 1),
