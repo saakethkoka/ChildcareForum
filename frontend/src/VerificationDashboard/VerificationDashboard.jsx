@@ -8,7 +8,12 @@ import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
-import React from "react";
+import React, { Fragment, useEffect } from "react";
+import { getRequests, approveRequestByID, denyRequestByID } from "../kokaAPI"
+import  ProfileNavbar  from '../Profiles/ProfileComponents/UserNavBar'
+import VerifiedIcon from '@mui/icons-material/Verified';
+import { Link } from '@mui/material';
+
 
 let sample_requests = [
     {
@@ -51,7 +56,7 @@ function VerificationRequest(props) {
                     overflow: 'auto',
                 }}>
                     <Typography variant="h5" component="div">
-                        {request.username}
+                        <Link href={`/user/profile/${request.userID}`}>{request.username}</Link> {request.isVerified === "1" && <VerifiedIcon color="primary"/>}
                     </Typography>
                     <Typography variant="body1">
                         {request.request}
@@ -60,13 +65,13 @@ function VerificationRequest(props) {
                 <CardActions>
                     <Fab color="primary"
                          sx={fab_styles}
-                         onClick={() => props.onApprove(request.id)}
+                         onClick={() => props.onApprove(request.userID)}
                          aria-label="Approve">
                         <CheckIcon/>
                     </Fab>
                     <Fab color="error"
                          sx={fab_styles}
-                         onClick={() => props.onDeny(request.id)}
+                         onClick={() => props.onDeny(request.userID)}
                          aria-label="Deny">
                         <CloseIcon/>
                     </Fab>
@@ -82,31 +87,30 @@ function VerificationRequest(props) {
 
 export default function VerificationDashboard(){
 
-    let [requests, setRequests] = React.useState(sample_requests);
+    let [requests, setRequests] = React.useState([]);
+    const [count, setCount] = React.useState(0)
+    const refreshRequest = () =>{
+      setCount(count+1)
+    }
+
+    useEffect(() => {
+        getRequests().then(requests => {setRequests(requests)})
+    }, [count]);
 
     const approve = (id) => {
-        let new_requests = [];
-        for (let i = 0; i < requests.length; i++) {
-            if (requests[i].id !== id) {
-                new_requests.push(requests[i]);
-            }
-        }
-        setRequests(new_requests);
+        approveRequestByID(id)
+        refreshRequest()
     }
 
     const deny = (id) => {
-        let new_requests = [];
-        for (let i = 0; i < requests.length; i++) {
-            if (requests[i].id !== id) {
-                new_requests.push(requests[i]);
-            }
-        }
-        setRequests(new_requests);
+        denyRequestByID(id)
+        refreshRequest()
     }
 
 
     return(
-
+        <Fragment>
+        <ProfileNavbar/>
         <Grid container
               sx={{
                   padding: '1rem',
@@ -121,6 +125,7 @@ export default function VerificationDashboard(){
                                      request={request}/>
             ))}
         </Grid>
+        </Fragment>
     )
 }
 

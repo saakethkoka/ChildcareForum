@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const base_url = 'http://localhost:8000';
+const base_url = 'http://localhost:5000';
 
 export const getPosts = (mostVotes) => new Promise((resolve, reject) => {
     if (mostVotes) {
@@ -216,6 +216,62 @@ export const getBannedUsers = () => new Promise((resolve, reject) => {
         .then(res => resolve(res.data))
         .catch(err => reject(err));
 });
+
+
+export const getStatusByID = (userID) => new Promise((resolve, reject) => {
+    axios.get(`${base_url}/requests/status/${userID}`)
+        .then(res => resolve(res.data))
+        .catch(err => reject(err));
+});
+
+
+export const requestByID = (userID) => new Promise((resolve, reject) => {
+    axios.put(`${base_url}/requests/makepending/${userID}`)
+        .then(res => resolve(res.data))
+        .catch(err =>{
+            alert(err)
+            reject(err)
+        });
+    
+});
+
+export const cancelRequestByID = (userID) => new Promise((resolve, reject) => {
+    axios.put(`${base_url}/requests/removepending/${userID}`)
+        .then(res => resolve(res.data))
+        .catch(err =>{
+            alert(err)
+            reject(err)
+        });
+    
+});
+
+export const getRequests = () => new Promise((resolve, reject) => {
+    axios.get(`${base_url}/requests/pending`)
+        .then(res => resolve(res.data))
+        .catch(err => reject(err));
+});
+
+export const approveRequestByID = (userID) => new Promise((resolve, reject) => {
+    axios.put(`${base_url}/requests/approve/${userID}`)
+        .then(res => resolve(res.data))
+        .catch(err =>{
+            alert(err)
+            reject(err)
+        });
+    
+});
+
+export const denyRequestByID = (userID) => new Promise((resolve, reject) => {
+    axios.put(`${base_url}/requests/reject/${userID}`)
+        .then(res => resolve(res.data))
+        .catch(err =>{
+            alert(err)
+            reject(err)
+        });
+    
+});
+
+
 
 
 

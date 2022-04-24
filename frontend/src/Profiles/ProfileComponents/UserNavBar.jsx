@@ -44,8 +44,8 @@ const ProfileNavbar = (props) => {
                     <Button href="/accounts/liked" color = 'inherit'>Likes</Button>
                     <Button href="/accounts/disliked" color = 'inherit'>Dislikes</Button>
                     <Button href="/accounts/saved" color = 'inherit'>Saved Posts</Button>
-                    <Button href="/accounts/ban" color = 'inherit'>Banned Users</Button>
-                    <Button href="/accounts/verification" color = 'inherit'>Verification Requests</Button>
+                    {sessionStorage.getItem("userModerator") === "1" && <Button href="/accounts/ban" color = 'inherit'>Banned Users</Button>}
+                    {sessionStorage.getItem("userModerator") === "1" && <Button href="/accounts/verification" color = 'inherit'>Verification Requests</Button>}
                     <Tooltip title="Account settings">
                         <IconButton
                             onClick={handleClick}
