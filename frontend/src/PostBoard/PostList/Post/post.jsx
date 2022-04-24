@@ -21,12 +21,12 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-
+import {savePost} from "../../../kokaAPI";
 import VerifiedIcon from '@mui/icons-material/Verified';
 
 const ITEM_HEIGHT = 48;
 // https://mui.com/material-ui/react-menu/
-function LongMenu() {
+function LongMenu(props) {
     let [options, setOptions] = React.useState(["Save Post"]);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
@@ -65,7 +65,7 @@ function LongMenu() {
                 }}
             >
                 {options.map((option) => (
-                    <MenuItem key={option} selected={option === 'Pyxis'} onClick={handleClose}>
+                    <MenuItem key={option} selected={option === 'Pyxis'} onClick={() => savePost(props.postID).then(handleClose()).catch(handleClose())}>
                         {option}
                     </MenuItem>
                 ))}
@@ -182,9 +182,6 @@ export default function Post(props) {
         display: "inline-block"
     }
 
-    const savePost = (post) =>{
-        console.log("save");
-    }
 
     return(
         <Grid md={6} sm={12} containers>
@@ -200,7 +197,7 @@ export default function Post(props) {
                     maxHeight: 300,
                     overflow: 'auto',
                 }}>
-                    <LongMenu/>
+                    <LongMenu postID={post.postID}/>
                     <Typography variant="h5" component="div">
                         {post.postTitle}
                         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
