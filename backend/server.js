@@ -18,7 +18,7 @@ const requestRoutes = require('./requestRoutes');
 // set up some configs for express.
 const config = {
   name: 'sample-express-app',
-  port: 8000,
+  port: 5000,
   host: '0.0.0.0',
 };
 
