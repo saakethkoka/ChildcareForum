@@ -21,6 +21,7 @@ import { ProfileDislikedPosts } from "./Profiles/ProfileComponents/Views/Profile
 
 
 
+
 export default function Routing(){
 	const checkLogin = () =>{
 		console.log()
@@ -45,7 +46,7 @@ export default function Routing(){
 				<Route path="/accounts/ban" exact element ={<ProfileBanned/>}/>
 				<Route path="/user/profile/:userID" exact element = {<ProfileView/>}/>
 				<Route path="/user/posts/:userID" exact element = {<OtherProfilePosts/>}/>
-				<Route path="/verificationDashboard" exact element={<VerificationDashboard />} />
+				<Route path="/accounts/verification" exact element={<VerificationDashboard />} />
 
 			</Routes>
 		</Router>

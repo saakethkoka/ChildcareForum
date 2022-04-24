@@ -8,7 +8,7 @@ import { spacing } from '@mui/system';
 import SendIcon from '@mui/icons-material/Send';
 import CloseIcon from '@mui/icons-material/Close';
 import VerifiedIcon from '@mui/icons-material/Verified';
-import { getUserInfoByID } from '../../../kokaAPI'
+import { getUserInfoByID, getStatusByID, requestByID, cancelRequestByID } from '../../../kokaAPI'
 // react-bootstrap components
 
 
@@ -23,7 +23,7 @@ function UserProfile() {
   const testUser = [{id: 1, first_name: "John", last_name: "Doe", email: "test@gmail.com", password: "test123", username: "johndoe"}]
   const [userInfo, setUserInfo] = useState({})
 
-  const [first_Name, setFirstName] = useState();
+  const [first_Name, setFirstName] = useState("");
   const [last_Name, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
@@ -35,24 +35,50 @@ function UserProfile() {
   const [emptyUsername, setEmptyUsername] = useState(false);
   const [emptyPassword, setEmptyPassword] = useState(false);
   const [emptyConfirmPassword, setEmptyConfirmPassword] = useState(false);
-  const [verificationStatus, setVerificationStatus] = useState("");
+  const [verificationStatus, setVerificationStatus] = useState(false);
+  const [requestStatus, setRequestStatus] = useState(false);
 
   const [emptyStatus, setEmptyStatus] = useState(false);
   const [matchPasswords, setMatchPasswords] = useState(true);
+  const [count, setCount] = useState(0)
+  const refreshRequest = () =>{
+      setCount(count+1)
+      
+  }
 
 
 
   useEffect(() => {
           getUserInfoByID(sessionStorage.getItem("userID")).then(userInfo => {
             setUserInfo(userInfo)
-            setFirstName(userInfo.first_name)
+            const firstName = userInfo.first_name
+            setFirstName(firstName)
+            const lastName = userInfo.last_name
+            setLastName(lastName)
+            const userName = userInfo.username
+            setUsername(userName)
+            const passwordConst = userInfo.password
+            setPassword(passwordConst)
+            setConfirmPassword(passwordConst)
+            const verif = userInfo.userVerified
+            setVerificationStatus(verif)
+            const emailConst = userInfo.email
+            setEmail(emailConst)
           })
-          setFirstName(userInfo.first_name)
-          console.log("test" + first_Name)
           
-  }, []);
+          getStatusByID(sessionStorage.getItem("userID")).then(userInfo => {
+            const requestStatusConst = userInfo.status
+            setRequestStatus(requestStatusConst)
+          })
+          //setFirstName(userInfo.first_name)
+          //setFirstName(userInfo.first_name)
+          //setPassword(userInfo.password)
+          //setConfirmPassword(userInfo.password)
+          
+  }, [count]);
 
   function updateProfile(){
+    console.log(first_Name)
     if (!first_Name || !last_Name || !email || !username || !password || !confirmPassword) {
       setEmptyStatus(true)
       return;
@@ -63,6 +89,16 @@ function UserProfile() {
       return;
     }
     console.log("passed")
+  }
+
+  function request(){
+    requestByID(sessionStorage.getItem("userID"))
+    refreshRequest()
+  }
+
+  function unRequest(){
+    cancelRequestByID(sessionStorage.getItem("userID"))
+    refreshRequest()
   }
 
 
@@ -225,18 +261,18 @@ function UserProfile() {
           </FormControl>
           <Grid align='center'>
             <Stack>
-              {verificationStatus === "notRequested" && <item>
-              <Button variant="contained"  endIcon={<SendIcon />} color = "success">
+              {(requestStatus === false && verificationStatus === false) && <item>
+              <Button variant="contained"  endIcon={<SendIcon />} color = "success" onClick={e=>request(e)}>
                 Request Verification
               </Button>
               </item>}
-              {verificationStatus === "requested" && <item>
-              <Button variant="contained"  endIcon={<SendIcon />} color = "success" disabled>
-                Verification Requested
+              {requestStatus === true && <item>
+              <Button variant="contained"  endIcon={<SendIcon />} color = "success" onClick={e=>unRequest(e)}>
+                Cancel Request
               </Button>
               </item>}
 
-              {verificationStatus === "verified" && <item>
+              {verificationStatus === true && <item>
                 <Chip label="verified" color="success" icon={<VerifiedIcon />} />
               </item>}
 
