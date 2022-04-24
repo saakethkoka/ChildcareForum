@@ -7,6 +7,83 @@ const bodyParser = require('body-parser');
 const { request, response } = require('express');
 app.use(bodyParser.json());
 
+ 
+//saved post APIs
+//saves posts for use to quickly access later
+app.post('/savedPost', async(req, res, next) => {
+    try{
+        console.log('Initiating PUT /savedPosts requests');
+        const queryString = 'INSERT INTO savedPosts (userID, postID) VALUES ('
+                            +req.query.curruserID + ', \''
+                            +req.body.userID +', \''
+                            +req.body.postID +', \'' + ')';
+        const {DBQuery, disconnect} = await connectToDatabase();
+        const results = await DBQuery(queryString);
+        disconnect();
+        res.status(201).json(results);
+        
+    }catch(err){
+        console.error('There was an error saving this post', err);
+        res.status(500).json({message: err.toString});
+    }
+    next();
+})
+
+//gets all saved posts for a specific userID
+app.get('/savedPost', async(req, res, next) => {
+    try{
+        console.log('Initiating GET /savedPosts requests');
+        const {DBQuery, disconnect} = await connectToDatabase();
+
+        const queryID = req.body.userID;
+
+        const results = await DBQuery('SELECT * FROM savedPosts WHERE userID = ' + queryID);
+        disconnect();
+        res.status(201).json(results);
+    }catch(err){
+        console.error('There was an error getting the saved posts', err);
+        res.status(500).json({message: err.toString});
+    }
+    next();
+})
+
+//gets a specific saved post
+app.get('/savedPost', async(req, res, next) => {
+    try{
+        console.log('Initiating GET /savedPost request');
+        const {DBQuery, disconnect} = await connectToDatabase();
+
+        const queryID = req.body.saveID;
+
+        const result = await DBQuery('SELECT * FROM savedPosts WHERE saveID = ' + postRaw[row].f_saveID);
+        disconnect();
+        res.status(201).json(result);
+    }catch(err){
+        console.error('There was an error getting the saved post', err);
+        res.status(500).json({message: err.toString});
+    }
+    next();
+})
+
+//Deletes a specific saved post
+app.delete('/savedPost', async(req, res, next) => {
+    try{
+        console.log('Initiating DELETE /savedPost request');
+        const {DBQuery, disconnect} = await connectToDatabase();
+
+        const queryID = req.body.saveID;
+
+        const result = await DBQuery('DELETE FROM savedPosts WHERE saveID = ' + queryID);
+        disconnect();
+        res.status(201).json(result);
+    }catch(err){
+        console.error('There was an error deleting the saved post', err);
+        res.status(500).json({message: err.toString});
+    }
+    next();
+})
+
+
 //uses curruserID in query
 router.get('/', async (req, res, next) => {
     try {
