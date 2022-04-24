@@ -10,7 +10,7 @@ app.use(bodyParser.json());
  
 //saved post APIs
 //saves posts for use to quickly access later
-app.post('/savedPost', async(req, res, next) => {
+router.post('/savedPost', async(req, res, next) => {
     try{
         console.log('Initiating PUT /savedPosts requests');
         const queryString = 'INSERT INTO savedPosts (userID, postID) VALUES ('
@@ -30,7 +30,7 @@ app.post('/savedPost', async(req, res, next) => {
 })
 
 //gets all saved posts for a specific userID
-app.get('/savedPost', async(req, res, next) => {
+router.get('/savedPost', async(req, res, next) => {
     try{
         console.log('Initiating GET /savedPosts requests');
         const {DBQuery, disconnect} = await connectToDatabase();
@@ -48,7 +48,7 @@ app.get('/savedPost', async(req, res, next) => {
 })
 
 //gets a specific saved post
-app.get('/savedPost', async(req, res, next) => {
+router.get('/savedPost', async(req, res, next) => {
     try{
         console.log('Initiating GET /savedPost request');
         const {DBQuery, disconnect} = await connectToDatabase();
@@ -66,7 +66,7 @@ app.get('/savedPost', async(req, res, next) => {
 })
 
 //Deletes a specific saved post
-app.delete('/savedPost', async(req, res, next) => {
+router.delete('/savedPost', async(req, res, next) => {
     try{
         console.log('Initiating DELETE /savedPost request');
         const {DBQuery, disconnect} = await connectToDatabase();
