@@ -274,6 +274,20 @@ export const denyRequestByID = (userID) => new Promise((resolve, reject) => {
 
 
 
+export const savePost = (postID) => new Promise((resolve, reject) => {
+    if (sessionStorage.getItem("userID")){
+        const data = {
+            curruserID: sessionStorage.getItem("userID"),
+            postID: postID
+        };
+        axios.post(`${base_url}/savedPost`, data)
+            .then(res => resolve(res.data))
+            .catch(err =>{
+                reject(err)
+            });
+    }
+});
+
 
 
 
