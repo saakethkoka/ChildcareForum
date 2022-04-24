@@ -30,6 +30,12 @@ CREATE TABLE postStats(
     numDownvotes INTEGER
 );
 
+CREATE TABLE savedPosts(
+    saveID SERIAL PRIMARY KEY,
+    userID INTEGER REFERENCES userLogin(userID),
+    postID INTEGER REFERENCES discussionBoard(postID)
+);
+
 INSERT INTO userLogin(username, password, first_name, last_name, email)
 VALUES('nicolesood24', 'password1', 'Nicole', 'Sood', 'nicolesemail@gmail.com'),
 ('brad81', 'password1', 'Brad', 'Sigety', 'bradsemail@smu.edu'),
