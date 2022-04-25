@@ -52,8 +52,9 @@ router.put('/approve/:userID', async (req, res, next) => {
         console.log('Initiating PUT /requests/approve/[userID] request');
         const {DBQuery, disconnect} = await connectToDatabase();
         const queryString = 'UPDATE statusTable'
-                            + ' SET isVerified = 1 AND hasRequested = 0'
+                            + ' SET isVerified = 1, hasRequested = 0'
                             + ' WHERE userID = ' + req.params.userID;
+        console.log(queryString);
         const results = await DBQuery(queryString);
         disconnect();
         res.status(200).json(results);
@@ -70,8 +71,9 @@ router.put('/reject/:userID', async (req, res, next) => {
         console.log('Initiating PUT /requests/reject/[userID] request');
         const {DBQuery, disconnect} = await connectToDatabase();
         const queryString = 'UPDATE statusTable'
-                            + ' SET isVerified = 0 AND hasRequested = 0'
+                            + ' SET isVerified = 0, hasRequested = 0'
                             + ' WHERE userID = ' + req.params.userID;
+        console.log(queryString);
         const results = await DBQuery(queryString);
         disconnect();
         res.status(200).json(results);
