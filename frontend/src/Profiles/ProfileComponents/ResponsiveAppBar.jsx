@@ -19,7 +19,8 @@ const pages = [['Update Profile', '/accounts/userProfile'],
     ['Posts', '/accounts/userPosts'],
     ['Likes', '/accounts/liked'],
     ['Dislikes', '/accounts/disliked'],
-    ['Saved Posts', '/accounts/saved']];
+    ['Saved Posts', '/accounts/saved'],
+    ['Request Verification', '/accounts/requestVerification']];
 const settings = ['Logout'];
 
 const ResponsiveAppBar = () => {
@@ -65,10 +66,11 @@ const ResponsiveAppBar = () => {
                     <Typography
                         variant="h6"
                         noWrap
-                        component="div"
-                        sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
+                        component={Link}
+                        to={'/'}
+                        sx={{ mr: 2, display: { xs: 'none', md: 'flex' }, color:"white", textDecoration:"none" }}
                     >
-                        LOGO
+                        HOME
                     </Typography>
 
                     <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>

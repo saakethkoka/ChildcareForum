@@ -225,13 +225,20 @@ export const getStatusByID = (userID) => new Promise((resolve, reject) => {
 });
 
 
-export const requestByID = (userID) => new Promise((resolve, reject) => {
-    axios.put(`${base_url}/requests/makepending/${userID}`)
-        .then(res => resolve(res.data))
-        .catch(err =>{
-            alert(err)
-            reject(err)
-        });
+export const requestByID = (text) => new Promise((resolve, reject) => {
+    const userID = sessionStorage.getItem("userID");
+    const data = {
+        text: text,
+    }
+    if(userID){
+        axios.put(`${base_url}/requests/makepending/${userID}`, data)
+            .then(res => resolve(res.data))
+            .catch(err =>{
+                alert(err)
+                reject(err)
+            });
+    }
+
     
 });
 
