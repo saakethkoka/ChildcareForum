@@ -56,10 +56,12 @@ function VerificationRequest(props) {
                     overflow: 'auto',
                 }}>
                     <Typography variant="h5" component="div">
+                        {request.first_name} {request.last_name} -
                         <Link href={`/user/profile/${request.userID}`}>{request.username}</Link> {request.isVerified === "1" && <VerifiedIcon color="primary"/>}
+
                     </Typography>
                     <Typography variant="body1">
-                        {request.request}
+                        {request.requestText}
                     </Typography>
                 </CardContent>
                 <CardActions>
@@ -98,13 +100,16 @@ export default function VerificationDashboard(){
     }, [count]);
 
     const approve = (id) => {
-        approveRequestByID(id)
-        refreshRequest()
+        approveRequestByID(id).then(getRequests().then(requests => {
+            getRequests().then(requests2 => {setRequests(requests2)});
+        }));
+
     }
 
     const deny = (id) => {
-        denyRequestByID(id)
-        refreshRequest()
+        denyRequestByID(id).then(getRequests().then(requests => {
+            getRequests().then(requests2 => {setRequests(requests2)});
+        }));
     }
 
 
