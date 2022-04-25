@@ -14,18 +14,35 @@ import MenuItem from '@mui/material/MenuItem';
 import {Link} from 'react-router-dom';
 import {Logout} from "@mui/icons-material";
 import { Navigate } from 'react-router-dom';
+import {useEffect} from "react";
 
-const pages = [['Update Profile', '/accounts/userProfile'],
-    ['Posts', '/accounts/userPosts'],
+const pages_default = [['Update Profile', '/accounts/userProfile'],
+    ['My Posts', '/accounts/userPosts'],
     ['Likes', '/accounts/liked'],
     ['Dislikes', '/accounts/disliked'],
     ['Saved Posts', '/accounts/saved'],
     ['Request Verification', '/accounts/requestVerification']];
+
+const pages_admin = [['Update Profile', '/accounts/userProfile'],
+    ['My Posts', '/accounts/userPosts'],
+    ['Likes', '/accounts/liked'],
+    ['Dislikes', '/accounts/disliked'],
+    ['Saved Posts', '/accounts/saved'],
+    ['Verification Requests', '/accounts/verification']];
+
 const settings = ['Logout'];
 
 const ResponsiveAppBar = () => {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
+    const [pages, setPages] = React.useState(pages_default);
+
+    useEffect(() => {
+        if (sessionStorage.getItem("userModerator") === "1") {
+            setPages(pages_admin);
+        }
+    }, []);
+
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
