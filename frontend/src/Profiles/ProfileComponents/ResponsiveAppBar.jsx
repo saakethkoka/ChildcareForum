@@ -28,7 +28,9 @@ const pages_admin = [['Update Profile', '/accounts/userProfile'],
     ['Likes', '/accounts/liked'],
     ['Dislikes', '/accounts/disliked'],
     ['Saved Posts', '/accounts/saved'],
-    ['Verification Requests', '/accounts/verification']];
+    ['Verification Requests', '/accounts/verification'],
+    ['Banned Users', '/accounts/ban'],
+];
 
 const settings = ['Logout'];
 
@@ -135,7 +137,7 @@ const ResponsiveAppBar = () => {
                         component="div"
                         sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
                     >
-                        LOGO
+                        HOME
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         {pages.map((page) => (
