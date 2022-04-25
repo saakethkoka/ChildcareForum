@@ -40,6 +40,7 @@ export default function PostFilters(props){
                 onChange={handleSearchChange}
                 sx={{
                     backgroundColor: '#FFF',
+                    marginTop: 1
                 }}
             />
             <TextField
@@ -47,7 +48,8 @@ export default function PostFilters(props){
                 sx={{
                     backgroundColor: '#FFF',
                     minWidth: 130,
-                    marginLeft: 1
+                    marginLeft: 1,
+                    marginTop: 1
                 }}
                 onChange={handleSortChange}
                 select // tell TextField to render select
@@ -65,7 +67,8 @@ export default function PostFilters(props){
                 sx={{
                     backgroundColor: '#FFF',
                     minWidth: 130,
-                    marginLeft: 1
+                    marginLeft: 1,
+                    marginTop: 1
                 }}
                 onChange={handleVerifiedPostersChange}
                 select // tell TextField to render select
