@@ -37,6 +37,8 @@ export default function VerificationRequest(){
                     <TextField
                         label = "Reason for verification"
                         value={ text }
+                        multiline
+                        minRows={4}
                         fullWidth required
                         onChange={handleChange}
                         style = {textStyle}
