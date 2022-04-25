@@ -63,12 +63,14 @@ module.exports = function userRoutes(app, logger){
                 const userDataObject = JSON.parse(JSON.stringify(userDataPacket));
                 disconnect();
 
+                console.log(userDataObject);
+
                 const formattedUserInfo = {
                     userID: newUserID,
                     userBanned: userDataObject[0].isBanned,
                     userDoctor: userDataObject[0].isDoctor,
                     userModerator: userDataObject[0].isModerator,
-                    userVerified: userDataObject[0].isDoctor
+                    userVerified: userDataObject[0].isVerified
                 };
                 response.status(200).json(formattedUserInfo);
             } else {
