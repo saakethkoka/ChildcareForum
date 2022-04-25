@@ -4,7 +4,7 @@ import CreatePostButton from "./CreatePostButton/CreatePostButton";
 import Grid from "@mui/material/Grid/Grid";
 import PostFilters from "./PostFilters/PostFilters";
 import {createPost, deletePost, getPosts, searchPosts, editPost, postEngadgement} from "../kokaAPI"
-import  ProfileNavbar  from '../Profiles/ProfileComponents/UserNavBar'
+import  ResponsiveAppBar  from '../Profiles/ProfileComponents/ResponsiveAppBar'
 
 export default class PostBoard extends React.Component {
     constructor(props) {
@@ -163,7 +163,7 @@ export default class PostBoard extends React.Component {
     render() {
         return(
             <Fragment>
-                <ProfileNavbar/>
+                <ResponsiveAppBar/>
                 <PostFilters searchPosts={this.searchPosts} filterPosts={this.setMostVotesFilter} filterVerified={this.setVerifiedFilter}/>
                 <PostList posts={this.state.posts}
                           deletePost={this.deletePost}
