@@ -142,17 +142,18 @@ module.exports = function userRoutes(app, logger){
     app.put('/changeuser', async(req, res) => {
         try {
             console.log('Initiating PUT /changeuser request');
-            const queryString = 'UPDATE userLogin SET username = ' + req.params.username
-                                + ', password = ' + req.params.password
-                                + ', first_name = ' + req.params.first_name
-                                + ', last_name = ' + req.params.last_name
-                                + ', email = ' + req.params.email
-                                + ' WHERE userID = ' + req.query.userID;
-        const {DBQuery, disconnect} = await connectToDatabase();
-        const dataPacket = await DBQuery(queryString);
-        const dataObject = JSON.parse(JSON.stringify(dataPacket));
-        disconnect();
-        response.status(200).json(dataObject);
+            const queryString = 'UPDATE userLogin SET username = \'' + req.body.username
+                                + '\', password = \'' + req.body.password
+                                + '\', first_name = \'' + req.body.first_name
+                                + '\', last_name = \'' + req.body.last_name
+                                + '\', email = \'' + req.body.email
+                                + '\' WHERE userID = ' + req.query.userID;
+            console.log(queryString);
+            const {DBQuery, disconnect} = await connectToDatabase();
+            const dataPacket = await DBQuery(queryString);
+            const dataObject = JSON.parse(JSON.stringify(dataPacket));
+            disconnect();
+            res.status(200).json(dataObject);
         } catch (err) {
             console.error('There was an error in PUT /changeuser', err);
             res.status(500).json({message: err.message});
