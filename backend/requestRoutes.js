@@ -3,7 +3,7 @@ const router = express.Router();
 const app = express();
 const connectToDatabase = require('./database-helpers');
 const bodyParser = require('body-parser');
-const { req, res } = require('express');
+const { req, res, query } = require('express');
 app.use(bodyParser.json());
 
 router.get('/pending', async (req, res, next) => {
@@ -52,7 +52,7 @@ router.put('/approve/:userID', async (req, res, next) => {
         console.log('Initiating PUT /requests/approve/[userID] request');
         const {DBQuery, disconnect} = await connectToDatabase();
         const queryString = 'UPDATE statusTable'
-                            + ' SET isVerified = 1, hasRequested = 0'
+                            + ' SET isVerified = 1, hasRequested = 0, requestText = null '
                             + ' WHERE userID = ' + req.params.userID;
         console.log(queryString);
         const results = await DBQuery(queryString);
@@ -71,7 +71,7 @@ router.put('/reject/:userID', async (req, res, next) => {
         console.log('Initiating PUT /requests/reject/[userID] request');
         const {DBQuery, disconnect} = await connectToDatabase();
         const queryString = 'UPDATE statusTable'
-                            + ' SET isVerified = 0, hasRequested = 0'
+                            + ' SET isVerified = 0, hasRequested = 0, requestText = null '
                             + ' WHERE userID = ' + req.params.userID;
         console.log(queryString);
         const results = await DBQuery(queryString);
@@ -85,6 +85,10 @@ router.put('/reject/:userID', async (req, res, next) => {
     next();
 })
 
+//optional request body:
+//{
+//    "text": "here is a message about why I should be verified"
+//}
 router.put('/makepending/:userID', async (req, res, next) => {
     try {
         console.log('Initiating PUT /requests/makepending/[userID] request');
@@ -95,9 +99,11 @@ router.put('/makepending/:userID', async (req, res, next) => {
         if (JSON.stringify(checkRow) === '{}')
             newRow = await DBQuery('INSERT INTO statusTable (userID) VALUES (' + req.params.userID + ')');
 
-        const queryString = 'UPDATE statusTable'
-                            + ' SET hasRequested = 1'
-                            + ' WHERE userID = ' + req.params.userID;
+        let queryString = 'UPDATE statusTable'
+                            + ' SET hasRequested = 1';
+        if (typeof req.body.text != 'undefined')
+            queryString += ', requestText = \'' + req.body.text + '\'';
+        queryString += ' WHERE userID = ' + req.params.userID;
         const results = await DBQuery(queryString);
         disconnect();
         res.status(200).json(results);
@@ -114,7 +120,7 @@ router.put('/removepending/:userID', async (req, res, next) => {
         console.log('Initiating PUT /requests/removepending/[userID] request');
         const {DBQuery, disconnect} = await connectToDatabase();
         const queryString = 'UPDATE statusTable'
-                            + ' SET hasRequested = 0'
+                            + ' SET hasRequested = 0, requestText = null'
                             + ' WHERE userID = ' + req.params.userID;
         const results = await DBQuery(queryString);
         disconnect();
