@@ -90,7 +90,10 @@ const ResponsiveAppBar = () => {
                         to={'/'}
                         sx={{ mr: 2, display: { xs: 'none', md: 'flex' }, color:"white", textDecoration:"none" }}
                     >
-                        HOME
+                        <a href={'/'} style={{textDecoration:"none", color:"white"}} >
+                            <img src="https://saaketh-koka-2021-demo.s3.us-east-2.amazonaws.com/IMG_0035.png"
+                                 width={75}/>
+                        </a>
                     </Typography>
 
                     <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -138,7 +141,10 @@ const ResponsiveAppBar = () => {
                         component="div"
                         sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
                     >
-                        HOME
+                        <a href={'/'} style={{textDecoration:"none", color:"white"}} >
+                            <img src="https://saaketh-koka-2021-demo.s3.us-east-2.amazonaws.com/IMG_0035.png"
+                                 width={75}/>
+                        </a>
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         {pages.map((page) => (
