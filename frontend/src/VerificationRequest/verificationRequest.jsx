@@ -20,6 +20,7 @@ export default function VerificationRequest(){
             console.log('success');
             setText('');
         });
+        alert("Request sent!");
     }
     if (!sessionStorage.getItem("userID")) {
         return <Navigate to="/login" />;
