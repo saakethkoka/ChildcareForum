@@ -163,8 +163,11 @@ router.delete('/savedPost', async(req, res, next) => {
         console.log('Initiating DELETE /savedPost request');
         const {DBQuery, disconnect} = await connectToDatabase();
 
-        const userQueryID = req.body.userID;
-        const postQueryId = req.body.postID;
+        const userQueryID = req.query.userID;
+        const postQueryId = req.query.postID;
+
+        console.log(req.query.userID)
+        console.log(req.query.postID)
 
         const result = await DBQuery('DELETE FROM savedPosts WHERE userID = ' + userQueryID + ' AND postID = ' + postQueryId);
         disconnect();

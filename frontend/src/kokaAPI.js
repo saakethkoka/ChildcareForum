@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const base_url = 'http://localhost:8000';
+const base_url = 'http://localhost:5000';
 
 export const getPosts = (mostVotes) => new Promise((resolve, reject) => {
     if (mostVotes) {
@@ -299,5 +299,38 @@ export const savePost = (postID) => new Promise((resolve, reject) => {
 });
 
 
+export const unSavePost = (postID) => new Promise((resolve, reject) => {
+    if (sessionStorage.getItem("userID")){
+        const userID = sessionStorage.getItem("userID")
+        axios.delete(`${base_url}/savedPost?userID=${userID}&postID=${postID}`)
+            .then(res => resolve(res.data))
+            .catch(err =>{
+                reject(err)
+            });
+    }
+});
+
+
+export const getSavedPostsByID = (userID) => new Promise((resolve, reject) => {
+    if (sessionStorage.getItem("userID")){
+        axios.get(`${base_url}/savedPost?curruserID=${userID}`)
+            .then(res => resolve(res.data))
+            .catch(err =>{
+                reject(err)
+            });
+    }
+});
+
+
+export const updateUser = (account) => new Promise((resolve, reject) => {
+    if (sessionStorage.getItem("userID")){
+        const userID = sessionStorage.getItem("userID")
+        axios.put(`${base_url}/changeuser?userID=${userID}`,  { ...account })
+            .then(res => resolve(res.data))
+            .catch(err =>{
+                reject(err)
+            });
+    }
+});
 
 

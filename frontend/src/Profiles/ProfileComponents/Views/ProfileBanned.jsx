@@ -15,24 +15,10 @@ function ProfileBanned() {
 
     useEffect(() => {
         console.log("test2")
-        getBannedUsers().then(bannedUsers => {setBannedUsers(bannedUsers)})
+        getBannedUsers().then(bannedUsers => {setBannedUsers(bannedUsers)
+        console.log("test3")})
     }, [count]);
 
-
-
-
-    const listItems = [
-        {
-            id: 1,
-            username: "John Doe",
-            verified: true,
-            },
-        {
-            id: 2,
-            username: "Dohn Joe",
-            verified: false
-            }
-    ]
 
     return (
         
