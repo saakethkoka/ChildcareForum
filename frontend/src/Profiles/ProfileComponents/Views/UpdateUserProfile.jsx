@@ -14,7 +14,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { getUserInfoByID, getStatusByID, requestByID, cancelRequestByID, updateUser } from '../../../kokaAPI'
-// react-bootstrap components
+import ResponsiveAppBar from "../ResponsiveAppBar";
+
 
 
 
@@ -120,8 +121,12 @@ function UserProfile() {
     updateUser(account).then(handleClickOpenProfile())
   }
 
-  function request(){
-    requestByID(sessionStorage.getItem("userID")).then(handleCloseVerification)
+  function request(e){
+    e.preventDefault();
+        requestByID(text).then(() => {
+            setText('');
+            handleCloseVerification()
+    });
     refreshRequest()
   }
 
@@ -133,7 +138,7 @@ function UserProfile() {
 
   return (
     <>
-      <UserNavBar/>
+      <ResponsiveAppBar/>
       
       <Grid align = 'center'>
         <Paper style = {formStyle} elevation = {12}>
@@ -306,6 +311,7 @@ function UserProfile() {
                     id="name"
                     type="text"
                     fullWidth
+                    onChange={handleChange}
                     variant="standard"
                   />
                 </DialogContent>
@@ -316,7 +322,7 @@ function UserProfile() {
               </item>
               }
               {requestStatus === true && <item>
-              <Button variant="contained"  endIcon={<SendIcon />} color = "success" onClick={e=>unRequest(e)}>
+              <Button variant="contained"  endIcon={<SendIcon />} color = "success" onClick={e=>unRequest(e)} disabled>
                 Verification Requested
               </Button>
               </item>}
