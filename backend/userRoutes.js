@@ -31,8 +31,9 @@ module.exports = function userRoutes(app, logger){
                                 request.body.first_name + '\', \'' +
                                 request.body.last_name + '\')';
             const {DBQuery, disconnect} = await connectToDatabase();
-            const results = await DBQuery(queryString);
-            // console.log('Results of INSERT statement:', results);
+            let results = await DBQuery(queryString);
+            const userID = results.insertId;
+            results = await DBQuery("INSERT INTO statusTable (userID, isModerator, isDoctor, isBanned, isVerified, hasRequested, requestText) VALUES (" + userID + ", 0, 0, 0, 0, 0, '')");
             disconnect();
             response.status(201).json(results);
         } catch (err) {
