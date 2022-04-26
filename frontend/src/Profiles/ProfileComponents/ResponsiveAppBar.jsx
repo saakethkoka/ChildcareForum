@@ -78,7 +78,7 @@ const ResponsiveAppBar = () => {
     };
 
     return (
-        <AppBar position="static">
+        <AppBar position="fixed">
             {!(sessionStorage.getItem("userID")) && <Navigate to = "/login"/>}
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
