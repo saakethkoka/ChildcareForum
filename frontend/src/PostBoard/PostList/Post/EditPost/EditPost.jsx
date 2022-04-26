@@ -1,6 +1,6 @@
 import {Checkbox, Dialog, FormControlLabel, TextField} from "@mui/material";
 import Button from "@mui/material/Button";
-import React from "react";
+import React, {useEffect} from "react";
 import Grid from "@mui/material/Grid/Grid";
 
 
@@ -19,6 +19,12 @@ export default function EditPost(props){
         props.updatePost(props.post.postID, title, content, restricted);
         props.onClose();
     }
+
+    useEffect(() => {
+        setTitle(props.post.postTitle);
+        setContent(props.post.postEntry);
+        setRestricted(props.post.restricted);
+    }, [props.post]);
 
     return(
         <Dialog open={props.open} onClose={props.onClose}>

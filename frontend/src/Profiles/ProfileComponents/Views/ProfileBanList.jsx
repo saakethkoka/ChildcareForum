@@ -29,8 +29,7 @@ const UserBan = (props) => {
 
 
     const unBan = () => {
-        toggleBan(user.userID)
-        props.refreshBan()
+        toggleBan(user.userID).then(props.refreshBan());
     }
 
 
