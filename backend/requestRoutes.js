@@ -7,6 +7,9 @@ const { req, res, query } = require('express');
 app.use(bodyParser.json());
 
 router.get('/pending', async (req, res, next) => {
+    var delayInMilliseconds = 500
+    setTimeout(function() {
+    }, delayInMilliseconds);
     try {
         console.log('Initiating GET /requests/pending request');
         const {DBQuery, disconnect} = await connectToDatabase();

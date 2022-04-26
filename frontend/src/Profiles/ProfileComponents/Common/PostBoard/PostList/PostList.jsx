@@ -13,11 +13,14 @@ export class PostList extends React.Component{
     render() {
         const listItems = this.props.posts.map((post) =>
             <Post post={post}
+                  key={post.id}
                   deletePost={this.props.deletePost}
                   downvotePost={this.props.downvotePost}
                   updatePost={this.props.updatePost}
                   upvotePost={this.props.upvotePost}
                   postType = {this.props.postType}
+                  saved = {this.props.saved}
+                  removedSavePost = {this.props.removedSavePost}
             />
         );
         return(

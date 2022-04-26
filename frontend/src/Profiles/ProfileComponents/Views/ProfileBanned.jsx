@@ -2,7 +2,11 @@ import  UserBan from './ProfileBanList'
 import { Grid, Button } from '@mui/material'
 import React, { Fragment, useEffect, useState} from 'react';
 import  ProfileNavbar  from '../UserNavBar'
+import ResponsiveAppBar from '../ResponsiveAppBar';
 import { getBannedUsers } from '../../../kokaAPI';
+import { Typography } from '@mui/material';
+import { Divider } from '@mui/material';
+
 
 function ProfileBanned() {
 
@@ -15,33 +19,29 @@ function ProfileBanned() {
 
     useEffect(() => {
         console.log("test2")
-        getBannedUsers().then(bannedUsers => {setBannedUsers(bannedUsers)})
+        getBannedUsers().then(bannedUsers => {setBannedUsers(bannedUsers)
+        console.log("test3")})
     }, [count]);
 
 
-
-
-    const listItems = [
-        {
-            id: 1,
-            username: "John Doe",
-            verified: true,
-            },
-        {
-            id: 2,
-            username: "Dohn Joe",
-            verified: false
-            }
-    ]
-
     return (
         
-        <Grid container>
-                <ProfileNavbar/>
+        <Fragment>
+                <ResponsiveAppBar/>
+                <Typography paddingTop={"10px"} align="center" >
+                <h2>Banned Users</h2>
+                    </Typography>
+                    <Divider>
+                        {getBannedUsers.length===0 && 
+                        <Typography align='center'>
+                            <h6>No Banned Users</h6>
+                        </Typography>
+                        }
+                    </Divider>
                 {bannedUsers.map((user) =>
                     <UserBan user={user} refreshBan = {refreshBan}/>
                 )}
-        </Grid>
+        </Fragment>
     )
 }
 

@@ -8,8 +8,15 @@ import { spacing } from '@mui/system';
 import SendIcon from '@mui/icons-material/Send';
 import CloseIcon from '@mui/icons-material/Close';
 import VerifiedIcon from '@mui/icons-material/Verified';
-import { getUserInfoByID, getStatusByID, requestByID, cancelRequestByID } from '../../../kokaAPI'
-// react-bootstrap components
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import { getUserInfoByID, getStatusByID, requestByID, cancelRequestByID, updateUser, getPostsByID } from '../../../kokaAPI'
+import ResponsiveAppBar from "../ResponsiveAppBar";
+import ShieldIcon from '@mui/icons-material/Shield';
+import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 
 
 
@@ -37,13 +44,34 @@ function UserProfile() {
   const [emptyConfirmPassword, setEmptyConfirmPassword] = useState(false);
   const [verificationStatus, setVerificationStatus] = useState(false);
   const [requestStatus, setRequestStatus] = useState(false);
-
+  const [openProfile, setOpenProfile] = useState(false);
+  const [openVerification, setOpenVerification] = useState(false);
+  const [text, setText] = useState('');
   const [emptyStatus, setEmptyStatus] = useState(false);
   const [matchPasswords, setMatchPasswords] = useState(true);
   const [count, setCount] = useState(0)
+  const [postsLength, setPostsLength] = useState(0)
+  const handleChange = (e) => {
+    setText(e.target.value);
+  }
+  const handleClickOpenProfile = () => {
+    setOpenProfile(true);
+  };
+
+  const handleCloseProfile = () => {
+    setOpenProfile(false);
+  };
+
+  const handleClickOpenVerification = () => {
+    setOpenVerification(true);
+  };
+
+  const handleCloseVerification = () => {
+    setOpenVerification(false);
+  };
+
   const refreshRequest = () =>{
       setCount(count+1)
-      
   }
 
 
@@ -70,10 +98,11 @@ function UserProfile() {
             const requestStatusConst = userInfo.status
             setRequestStatus(requestStatusConst)
           })
-          //setFirstName(userInfo.first_name)
-          //setFirstName(userInfo.first_name)
-          //setPassword(userInfo.password)
-          //setConfirmPassword(userInfo.password)
+
+          getPostsByID(sessionStorage.getItem("userID")).then(posts=>{
+            const postLen = posts.length
+            setPostsLength(postLen)
+          })
           
   }, [count]);
 
@@ -89,10 +118,22 @@ function UserProfile() {
       return;
     }
     console.log("passed")
+    let account = {
+      username: username,
+      first_name: first_Name,
+      last_name: last_Name,
+      email,
+      password
+    };
+    updateUser(account).then(handleClickOpenProfile())
   }
 
-  function request(){
-    requestByID(sessionStorage.getItem("userID"))
+  function request(e){
+    e.preventDefault();
+        requestByID(text).then(() => {
+            setText('');
+            handleCloseVerification()
+    });
     refreshRequest()
   }
 
@@ -104,7 +145,7 @@ function UserProfile() {
 
   return (
     <>
-      <UserNavBar/>
+      <ResponsiveAppBar/>
       
       <Grid align = 'center'>
         <Paper style = {formStyle} elevation = {12}>
@@ -144,7 +185,8 @@ function UserProfile() {
             Passwords must match!
           </Alert>}
 
-
+          {sessionStorage.getItem("userModerator") === "1" && <Chip sx={{ m: 2, width: '25ch' }} icon={<ShieldIcon color = "warning" />} label="Moderator" />}
+          {sessionStorage.getItem("userDoctor") === "1" && <Chip sx={{ m: 2, width: '25ch' }} icon={<LocalHospitalIcon color = "warning" />} label="Doctor" />}
           <FormControl sx={{ m: 2, width: '25ch' }} variant="outlined" required = {true} error = {emptyUsername}>
             <InputLabel >Username</InputLabel>
             <OutlinedInput
@@ -261,14 +303,55 @@ function UserProfile() {
           </FormControl>
           <Grid align='center'>
             <Stack>
-              {(requestStatus === false && verificationStatus === false) && <item>
-              <Button variant="contained"  endIcon={<SendIcon />} color = "success" onClick={e=>request(e)}>
-                Request Verification
-              </Button>
-              </item>}
+              {(requestStatus === false && verificationStatus === false) && 
+              <item>
+                <Button variant="contained"  endIcon={<SendIcon />} color = "success" onClick={handleClickOpenVerification}>
+                  Request Verification
+                </Button>
+                {(postsLength >= 3) && 
+                  <Dialog open={openVerification} onClose={handleCloseVerification}>
+                  <DialogTitle>Request Form</DialogTitle>
+                  {console.log("test1")}
+                  <DialogContent>
+                    <DialogContentText>
+                      Verification Request
+                    </DialogContentText>
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="name"
+                      type="text"
+                      fullWidth
+                      onChange={handleChange}
+                      variant="standard"
+                    />
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={e=>request(e)}>Send</Button>
+                  </DialogActions>
+                </Dialog>}
+                {(postsLength < 3) &&
+                  <Dialog
+                  open={openVerification}
+                  onClose={handleCloseVerification}
+                  aria-labelledby="alert-dialog-title"
+                  aria-describedby="alert-dialog-description"
+                >
+                  <DialogTitle id="alert-dialog-title">
+                    You must make at least 3 posts. You currently have {postsLength} posts.
+                  </DialogTitle>
+                  {console.log("test2")}
+                  <DialogActions>
+                    <Button onClick={handleCloseVerification} autoFocus>
+                      Ok
+                    </Button>
+                  </DialogActions>
+                </Dialog>}
+              </item>
+              }
               {requestStatus === true && <item>
-              <Button variant="contained"  endIcon={<SendIcon />} color = "success" onClick={e=>unRequest(e)}>
-                Cancel Request
+              <Button variant="contained"  endIcon={<SendIcon />} color = "success" onClick={e=>unRequest(e)} >
+                Verification Requested
               </Button>
               </item>}
 
@@ -280,6 +363,21 @@ function UserProfile() {
               <Button variant="contained" color="primary" sx={{ m: 2, width: '15ch' }} onClick={ e => updateProfile(e)}>
                 Update
               </Button>
+              <Dialog
+                open={openProfile}
+                onClose={handleCloseProfile}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+              >
+                <DialogTitle id="alert-dialog-title">
+                  {"Profile has been updated"}
+                </DialogTitle>
+                <DialogActions>
+                  <Button onClick={handleCloseProfile} autoFocus>
+                    Ok
+                  </Button>
+                </DialogActions>
+              </Dialog>
               </item>
             </Stack>
           </Grid>
