@@ -100,16 +100,15 @@ export default function VerificationDashboard(){
     }, [count]);
 
     const approve = (id) => {
-        approveRequestByID(id).then(getRequests().then(requests => {
-            getRequests().then(requests2 => {setRequests(requests2)});
-        }));
-
+        approveRequestByID(id).then(() => {
+            getRequests().then(requests => {setRequests(requests)});
+        })
     }
 
     const deny = (id) => {
-        denyRequestByID(id).then(getRequests().then(requests => {
-            getRequests().then(requests2 => {setRequests(requests2)});
-        }));
+        denyRequestByID(id).then(() => {
+            getRequests().then(requests => {setRequests(requests)});
+        })
     }
 
 

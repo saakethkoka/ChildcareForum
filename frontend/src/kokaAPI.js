@@ -212,9 +212,15 @@ export const toggleBan = (userID) => new Promise((resolve, reject) => {
 
 
 export const getBannedUsers = () => new Promise((resolve, reject) => {
-    axios.get(`${base_url}/bannedUsers`)
-        .then(res => resolve(res.data))
-        .catch(err => reject(err));
+    setTimeout(() =>{
+        axios.get(`${base_url}/bannedUsers`)
+            .then(res => {
+                console.log(res.data);
+                resolve(res.data);
+            })
+            .catch(err => reject(err));
+    }, 500);
+
 });
 
 
