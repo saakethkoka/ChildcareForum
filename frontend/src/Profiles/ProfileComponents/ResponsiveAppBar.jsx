@@ -14,14 +14,15 @@ import MenuItem from '@mui/material/MenuItem';
 import {Link} from 'react-router-dom';
 import {Logout} from "@mui/icons-material";
 import { Navigate } from 'react-router-dom';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import PersonIcon from '@mui/icons-material/Person';
 import {useEffect} from "react";
 
 const pages_default = [['Update Profile', '/accounts/userProfile'],
     ['My Posts', '/accounts/userPosts'],
     ['Likes', '/accounts/liked'],
     ['Dislikes', '/accounts/disliked'],
-    ['Saved Posts', '/accounts/saved'],
-    ['Request Verification', '/accounts/requestVerification']];
+    ['Saved Posts', '/accounts/saved'],];
 
 const pages_admin = [['Update Profile', '/accounts/userProfile'],
     ['My Posts', '/accounts/userPosts'],
@@ -78,7 +79,7 @@ const ResponsiveAppBar = () => {
     };
 
     return (
-        <AppBar position="static">
+        <AppBar position="fixed">
             {!(sessionStorage.getItem("userID")) && <Navigate to = "/login"/>}
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
@@ -153,7 +154,7 @@ const ResponsiveAppBar = () => {
                     <Box sx={{ flexGrow: 0 }}>
                         <Tooltip title="Open settings">
                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                                <Avatar> <PersonIcon/>  </Avatar>
                             </IconButton>
                         </Tooltip>
                         <Menu
@@ -174,6 +175,7 @@ const ResponsiveAppBar = () => {
                         >
                             <MenuItem onClick={logOut}>
                                 <Logout textAlign="center"/>
+                                Logout
                             </MenuItem>
                         </Menu>
                     </Box>

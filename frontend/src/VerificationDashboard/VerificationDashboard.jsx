@@ -13,6 +13,9 @@ import { getRequests, approveRequestByID, denyRequestByID } from "../kokaAPI"
 import  ProfileNavbar  from '../Profiles/ProfileComponents/UserNavBar'
 import VerifiedIcon from '@mui/icons-material/Verified';
 import { Link } from '@mui/material';
+import ResponsiveAppBar from "../Profiles/ProfileComponents/ResponsiveAppBar";
+import { Divider } from '@mui/material';
+
 
 
 let sample_requests = [
@@ -115,7 +118,17 @@ export default function VerificationDashboard(){
 
     return(
         <Fragment>
-        <ProfileNavbar/>
+        <ResponsiveAppBar/>
+        <Typography paddingTop={"10px"} align="center" >
+                <h2>Incoming Requests</h2>
+            </Typography>
+            <Divider>
+                {requests.length===0 && 
+                <Typography align='center'>
+                    <h6>No Requests</h6>
+                </Typography>
+                }
+            </Divider>
         <Grid container
               sx={{
                   padding: '1rem',
@@ -123,7 +136,6 @@ export default function VerificationDashboard(){
                   height: '100%',
               }}
               spacing={1}>
-            {requests.length === 0 && <h1>No requests left to view</h1>}
             {requests.map(request => (
                 <VerificationRequest onApprove={approve}
                                      onDeny={deny}

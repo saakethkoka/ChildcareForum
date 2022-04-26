@@ -41,7 +41,6 @@ export default function Routing(){
 				<Route path="/user/profile/:userID" exact element = {<ProfileView/>}/>
 				<Route path="/user/posts/:userID" exact element = {<OtherProfilePosts/>}/>
 				<Route path="/accounts/verification" exact element={<VerificationDashboard />} />
-				<Route path="/accounts/requestVerification" exact element={<VerificationRequest />} />
 				<Route path="/accounts/saved" exact element={<ProfileSavedPosts />} />
 
 			</Routes>
