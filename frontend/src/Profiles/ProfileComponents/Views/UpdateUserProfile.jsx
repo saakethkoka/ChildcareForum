@@ -13,9 +13,10 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { getUserInfoByID, getStatusByID, requestByID, cancelRequestByID, updateUser } from '../../../kokaAPI'
+import { getUserInfoByID, getStatusByID, requestByID, cancelRequestByID, updateUser, getPostsByID } from '../../../kokaAPI'
 import ResponsiveAppBar from "../ResponsiveAppBar";
-
+import ShieldIcon from '@mui/icons-material/Shield';
+import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 
 
 
@@ -49,6 +50,7 @@ function UserProfile() {
   const [emptyStatus, setEmptyStatus] = useState(false);
   const [matchPasswords, setMatchPasswords] = useState(true);
   const [count, setCount] = useState(0)
+  const [postsLength, setPostsLength] = useState(0)
   const handleChange = (e) => {
     setText(e.target.value);
   }
@@ -95,6 +97,11 @@ function UserProfile() {
           getStatusByID(sessionStorage.getItem("userID")).then(userInfo => {
             const requestStatusConst = userInfo.status
             setRequestStatus(requestStatusConst)
+          })
+
+          getPostsByID(sessionStorage.getItem("userID")).then(posts=>{
+            const postLen = posts.length
+            setPostsLength(postLen)
           })
           
   }, [count]);
@@ -178,7 +185,8 @@ function UserProfile() {
             Passwords must match!
           </Alert>}
 
-
+          {sessionStorage.getItem("userModerator") === "1" && <Chip sx={{ m: 2, width: '25ch' }} icon={<ShieldIcon color = "warning" />} label="Moderator" />}
+          {sessionStorage.getItem("userDoctor") === "1" && <Chip sx={{ m: 2, width: '25ch' }} icon={<LocalHospitalIcon color = "warning" />} label="Doctor" />}
           <FormControl sx={{ m: 2, width: '25ch' }} variant="outlined" required = {true} error = {emptyUsername}>
             <InputLabel >Username</InputLabel>
             <OutlinedInput
@@ -295,34 +303,54 @@ function UserProfile() {
           </FormControl>
           <Grid align='center'>
             <Stack>
-              {(requestStatus === false && verificationStatus === false) && <item>
-              <Button variant="contained"  endIcon={<SendIcon />} color = "success" onClick={handleClickOpenVerification}>
-                Request Verification
-              </Button>
-              <Dialog open={openVerification} onClose={handleCloseVerification}>
-                <DialogTitle>Request Form</DialogTitle>
-                <DialogContent>
-                  <DialogContentText>
-                    Verification Request
-                  </DialogContentText>
-                  <TextField
-                    autoFocus
-                    margin="dense"
-                    id="name"
-                    type="text"
-                    fullWidth
-                    onChange={handleChange}
-                    variant="standard"
-                  />
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={e=>request(e)}>Send</Button>
-                </DialogActions>
-              </Dialog>
+              {(requestStatus === false && verificationStatus === false) && 
+              <item>
+                <Button variant="contained"  endIcon={<SendIcon />} color = "success" onClick={handleClickOpenVerification}>
+                  Request Verification
+                </Button>
+                {(postsLength >= 3) && 
+                  <Dialog open={openVerification} onClose={handleCloseVerification}>
+                  <DialogTitle>Request Form</DialogTitle>
+                  {console.log("test1")}
+                  <DialogContent>
+                    <DialogContentText>
+                      Verification Request
+                    </DialogContentText>
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="name"
+                      type="text"
+                      fullWidth
+                      onChange={handleChange}
+                      variant="standard"
+                    />
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={e=>request(e)}>Send</Button>
+                  </DialogActions>
+                </Dialog>}
+                {(postsLength < 3) &&
+                  <Dialog
+                  open={openVerification}
+                  onClose={handleCloseVerification}
+                  aria-labelledby="alert-dialog-title"
+                  aria-describedby="alert-dialog-description"
+                >
+                  <DialogTitle id="alert-dialog-title">
+                    You must make at least 3 posts. You currently have {postsLength} posts.
+                  </DialogTitle>
+                  {console.log("test2")}
+                  <DialogActions>
+                    <Button onClick={handleCloseVerification} autoFocus>
+                      Ok
+                    </Button>
+                  </DialogActions>
+                </Dialog>}
               </item>
               }
               {requestStatus === true && <item>
-              <Button variant="contained"  endIcon={<SendIcon />} color = "success" onClick={e=>unRequest(e)} disabled>
+              <Button variant="contained"  endIcon={<SendIcon />} color = "success" onClick={e=>unRequest(e)} >
                 Verification Requested
               </Button>
               </item>}

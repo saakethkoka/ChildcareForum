@@ -16,6 +16,9 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import ShieldIcon from '@mui/icons-material/Shield';
+import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
+
 // react-bootstrap components
 
 
@@ -71,7 +74,8 @@ function ProfileView() {
         <div>
 
 
-          
+          {userInfo.userModerator === true && <Chip sx={{ m: 2, width: '25ch' }} icon={<ShieldIcon color = "warning" />} label="Moderator" />}
+          {userInfo.userDoctor === true && <Chip sx={{ m: 2, width: '25ch' }} icon={<LocalHospitalIcon color = "warning" />} label="Doctor" />}
           <TextField sx={{ m: 2, width: '25ch' }} variant="outlined"
             id="outlined-read-only-input"
             InputLabelProps={{ shrink: true }}
