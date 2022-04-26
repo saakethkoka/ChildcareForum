@@ -8,7 +8,12 @@ import { spacing } from '@mui/system';
 import SendIcon from '@mui/icons-material/Send';
 import CloseIcon from '@mui/icons-material/Close';
 import VerifiedIcon from '@mui/icons-material/Verified';
-import { getUserInfoByID, getStatusByID, requestByID, cancelRequestByID } from '../../../kokaAPI'
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import { getUserInfoByID, getStatusByID, requestByID, cancelRequestByID, updateUser } from '../../../kokaAPI'
 // react-bootstrap components
 
 
@@ -37,13 +42,33 @@ function UserProfile() {
   const [emptyConfirmPassword, setEmptyConfirmPassword] = useState(false);
   const [verificationStatus, setVerificationStatus] = useState(false);
   const [requestStatus, setRequestStatus] = useState(false);
-
+  const [openProfile, setOpenProfile] = useState(false);
+  const [openVerification, setOpenVerification] = useState(false);
+  const [text, setText] = useState('');
   const [emptyStatus, setEmptyStatus] = useState(false);
   const [matchPasswords, setMatchPasswords] = useState(true);
   const [count, setCount] = useState(0)
+  const handleChange = (e) => {
+    setText(e.target.value);
+  }
+  const handleClickOpenProfile = () => {
+    setOpenProfile(true);
+  };
+
+  const handleCloseProfile = () => {
+    setOpenProfile(false);
+  };
+
+  const handleClickOpenVerification = () => {
+    setOpenVerification(true);
+  };
+
+  const handleCloseVerification = () => {
+    setOpenVerification(false);
+  };
+
   const refreshRequest = () =>{
       setCount(count+1)
-      
   }
 
 
@@ -70,10 +95,6 @@ function UserProfile() {
             const requestStatusConst = userInfo.status
             setRequestStatus(requestStatusConst)
           })
-          //setFirstName(userInfo.first_name)
-          //setFirstName(userInfo.first_name)
-          //setPassword(userInfo.password)
-          //setConfirmPassword(userInfo.password)
           
   }, [count]);
 
@@ -89,10 +110,18 @@ function UserProfile() {
       return;
     }
     console.log("passed")
+    let account = {
+      username: username,
+      first_name: first_Name,
+      last_name: last_Name,
+      email,
+      password
+    };
+    updateUser(account).then(handleClickOpenProfile())
   }
 
   function request(){
-    requestByID(sessionStorage.getItem("userID"))
+    requestByID(sessionStorage.getItem("userID")).then(handleCloseVerification)
     refreshRequest()
   }
 
@@ -262,13 +291,33 @@ function UserProfile() {
           <Grid align='center'>
             <Stack>
               {(requestStatus === false && verificationStatus === false) && <item>
-              <Button variant="contained"  endIcon={<SendIcon />} color = "success" onClick={e=>request(e)}>
+              <Button variant="contained"  endIcon={<SendIcon />} color = "success" onClick={handleClickOpenVerification}>
                 Request Verification
               </Button>
-              </item>}
+              <Dialog open={openVerification} onClose={handleCloseVerification}>
+                <DialogTitle>Request Form</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    Verification Request
+                  </DialogContentText>
+                  <TextField
+                    autoFocus
+                    margin="dense"
+                    id="name"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                  />
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={e=>request(e)}>Send</Button>
+                </DialogActions>
+              </Dialog>
+              </item>
+              }
               {requestStatus === true && <item>
               <Button variant="contained"  endIcon={<SendIcon />} color = "success" onClick={e=>unRequest(e)}>
-                Cancel Request
+                Verification Requested
               </Button>
               </item>}
 
@@ -280,6 +329,21 @@ function UserProfile() {
               <Button variant="contained" color="primary" sx={{ m: 2, width: '15ch' }} onClick={ e => updateProfile(e)}>
                 Update
               </Button>
+              <Dialog
+                open={openProfile}
+                onClose={handleCloseProfile}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+              >
+                <DialogTitle id="alert-dialog-title">
+                  {"Profile has been updated"}
+                </DialogTitle>
+                <DialogActions>
+                  <Button onClick={handleCloseProfile} autoFocus>
+                    Ok
+                  </Button>
+                </DialogActions>
+              </Dialog>
               </item>
             </Stack>
           </Grid>

@@ -13,6 +13,7 @@ import {OtherProfilePosts} from "./Profiles/ProfileComponents/Views/ViewOtherUse
 import { ProfileLikedPosts } from "./Profiles/ProfileComponents/Views/ProfileLikedPosts";
 import { ProfileDislikedPosts } from "./Profiles/ProfileComponents/Views/ProfileDislikedPosts";
 import VerificationRequest from "./VerificationRequest/verificationRequest";
+import { ProfileSavedPosts } from "./Profiles/ProfileComponents/Views/ProfileSavedPosts";
 
 
 export default function Routing(){
@@ -41,6 +42,7 @@ export default function Routing(){
 				<Route path="/user/posts/:userID" exact element = {<OtherProfilePosts/>}/>
 				<Route path="/accounts/verification" exact element={<VerificationDashboard />} />
 				<Route path="/accounts/requestVerification" exact element={<VerificationRequest />} />
+				<Route path="/accounts/saved" exact element={<ProfileSavedPosts />} />
 
 			</Routes>
 		</Router>

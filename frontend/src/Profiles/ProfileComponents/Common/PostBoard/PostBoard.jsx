@@ -3,7 +3,7 @@ import {PostList} from "./PostList/PostList";
 import CreatePostButton from "./CreatePostButton/CreatePostButton";
 import Grid from "@mui/material/Grid/Grid";
 import PostFilters from "./PostFilters/PostFilters";
-import {createPost, deletePost, getPosts, searchPosts, editPost, postEngadgement} from "../../../../kokaAPI"
+import {createPost, deletePost, getPosts, searchPosts, editPost, postEngadgement, unSavePost} from "../../../../kokaAPI"
 
 export default class PostBoard extends React.Component {
     constructor(props) {
@@ -142,6 +142,15 @@ export default class PostBoard extends React.Component {
         })
     }
 
+    removedSavePost = (postID) => {
+        console.log("temove post")
+        unSavePost(postID).then(post => {
+            this.props.getPosts(this.props.userID).then(posts => {
+                this.setState({posts: posts})
+            })
+        })
+    }
+
 
 
 
@@ -154,7 +163,9 @@ export default class PostBoard extends React.Component {
                           downvotePost={this.downvotePost}
                           updatePost={this.updatePost}
                           upvotePost={this.upvotePost}
+                          removedSavePost = {this.removedSavePost}
                           postType = {this.props.postType}
+                          saved = {this.props.saved}
                 />
 
             </Fragment>
