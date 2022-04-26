@@ -149,6 +149,7 @@ export default function CommentList(props){
                          onDownvote={onDownvote}
                          comment={comment}/>
             )}
+            {commentingHidden && <Typography sx={{padding:"1rem"}}>This Author of this post has restricted commenting</Typography>}
             <form noValidate hidden={commentingHidden} autoComplete="off">
                 <TextField id="comment"
                            label="Comment"

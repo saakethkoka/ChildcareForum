@@ -107,7 +107,6 @@ export default function Post(props) {
         setHideEdit(true);
         setHideDelete(true);
         handleButtonColor();
-        handlePostEffect();
         if(post.userVote === 0){
             setUpvoteColor("inherit");
             setDownvoteColor("inherit");
